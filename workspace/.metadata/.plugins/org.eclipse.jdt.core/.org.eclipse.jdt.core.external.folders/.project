@@ -10,12 +10,12 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>.link0</name>
+			<name>.link2</name>
 			<type>2</type>
-			<location>/Users/agentjwall/.groovy/greclipse/global_dsld_support</location>
+			<location>/Users/clottman/.groovy/greclipse/global_dsld_support</location>
 		</link>
 		<link>
-			<name>.link1</name>
+			<name>.link3</name>
 			<type>2</type>
 			<location>/Applications/Repast Simphony 2.2/eclipse/plugins/org.codehaus.groovy_2.1.5.xx-20130703-1600-e43-RELEASE/plugin_dsld_support</location>
 		</link>
