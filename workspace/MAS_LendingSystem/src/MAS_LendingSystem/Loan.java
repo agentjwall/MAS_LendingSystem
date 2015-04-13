@@ -1,28 +1,26 @@
 package MAS_LendingSystem;
 
 public class Loan {
+	public double interestRate = .08;
 	private double loanAmount; //Value of the entire loan
 	private double principle; //Current value of the loan
 	private double rate; //Interest rate per tick
 	private double payment; //Amount paid every tick
 	private boolean defaulted = false;
 	
-	public Loan(double loanAmount, double interestRate) {
+	public Loan(double loanAmount) {
 		this.loanAmount = this.principle = loanAmount;
-		this.rate = interestRate;
 		this.payment = 0;
 	}
 	
-	public Loan(double loanAmount, double interestRate, double paymentPerTick) {
+	public Loan(double loanAmount, double paymentPerTick) {
 		this.loanAmount = this.principle = loanAmount;
-		this.rate = interestRate;
 		this.payment = paymentPerTick;
 	}
 	
-	public Loan(double loanAmount, double interestRate, int ticksToPayoff) {
+	public Loan(double loanAmount, int ticksToPayoff) {
 		this.loanAmount = this.principle = loanAmount;
-		this.rate = interestRate;
-		this.payment = (interestRate * loanAmount) / ( 1- Math.pow(1 + interestRate, -ticksToPayoff));
+		this.payment = (this.interestRate * loanAmount) / ( 1- Math.pow(1 + this.interestRate, -ticksToPayoff));
 	}
 
 	public double getLoanAmount() {
