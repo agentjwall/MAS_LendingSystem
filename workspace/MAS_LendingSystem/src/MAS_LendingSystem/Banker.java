@@ -15,7 +15,9 @@ public class Banker {
 	public void step() {
 		checkIfDefaulted();
 		if (!this.defaulted) {
-			
+			ArrayList<LoanRequest> reqs = this.receiveLoanRequests();
+			this.acceptLoanRequests(reqs);
+			this.monitorLoans();
 		}
 	}
 	
@@ -47,6 +49,24 @@ public class Banker {
 			}
 			
 		} while (accept);
+	}
+	
+	private void monitorLoans() {
+		for (Loan l: this.loans) {
+			this.acceptPayment(l);
+			this.handleDefault(l);
+		}
+	}
+	
+	//TODO: implement
+	private void acceptPayment(Loan l) {
+		
+	}
+	
+	
+	//TODO: implement
+	private void handleDefault(Loan l) {
+		
 	}
 	
 	private double valueLoan(LoanRequest req) {

@@ -5,7 +5,7 @@ import java.util.List;
 
 import repast.simphony.random.RandomHelper;
 
-// GOAL: to actually spend their desired spending amount.
+
 public class Consumer {
 	static double percentDurable = .7; //0-1 Percent of goods bought that get added to net worth
 	static int costOfLiving = 1000;  // 1000/ month = 12k annually
@@ -110,7 +110,7 @@ public class Consumer {
 	
 	private void updateRisk(Loan l) {
 		if (l.principle == 0) {
-			this.risk  = this.risk / (l.loanAmount / this.netWorth() + 1);
+			this.risk  = this.risk / (l.initialLoanAmount / this.netWorth() + 1);
 		} else {
 			this.risk = this.risk * (l.principle / this.netWorth() + 1);
 		}
