@@ -29,11 +29,17 @@ public class Consumer {
 		this.receiveIncome();
 		this.spendMoney();
 		//make loan payments
+		
 		if (this.doesSplurge()) {
-			
+			if (this.splurgeAmount() < this.cash) { //Pay for splurge purchase if possible
+				this.cash -= this.splurgeAmount();
+				this.observedSplurges = new ArrayList<Double>();
+			} else {
+				this.requestLoan(this.desiredLoanAmount(), this.disposableIncome());
+			}
 		}
 	}
-	
+
 	private void receiveIncome() {
 		this.cash += this.income;
 	}
@@ -45,6 +51,10 @@ public class Consumer {
 	
 	public double netWorth() {
 		return this.cash + this.assets;
+	}
+	
+	public double disposableIncome() {
+		return this.income - this.spending;
 	}
 	
 	private int splurgeDesire() {
@@ -79,8 +89,8 @@ public class Consumer {
 	
 	
 	//TODO: add in multiple loans
-	private double desiredLoanAmount(double splurgeAmount) {
-		return splurgeAmount - this.cash; //+ value needed for other loans (refinancing?)
+	private double desiredLoanAmount() {
+		return this.splurgeAmount() - this.cash; //+ value needed for other loans (refinancing?)
 	}  
 	
 	
@@ -91,7 +101,7 @@ public class Consumer {
 		return new ArrayList<Double>();
 	}
 	//TODO: implement
-	private boolean requestLoan() {
+	private boolean requestLoan(double desiredLoanAmount, double disposableIncome) {
 		//send message to nearest non-rejected bank
 		//wait for request
 		return false;
