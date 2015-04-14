@@ -15,12 +15,16 @@ public class Banker {
 	public void step() {
 		checkIfDefaulted();
 		if (!this.defaulted) {
-			// reqs = receive loan requests from consumers
-			// acceptLoanRequests(reqs);
+			
 		}
 	}
 	
-	//TODO 
+	//TODO: implement
+	private ArrayList<LoanRequest> receiveLoanRequests() {
+		//get all lon requests for this bank
+		return null;
+	}
+	
 	private void acceptLoanRequests(ArrayList<LoanRequest> reqs) {
 		Hashtable<Double, LoanRequest> loanValues = new Hashtable<Double, LoanRequest>();
 		boolean accept = true;
@@ -43,7 +47,6 @@ public class Banker {
 			}
 			
 		} while (accept);
-		return;
 	}
 	
 	private double valueLoan(LoanRequest req) {

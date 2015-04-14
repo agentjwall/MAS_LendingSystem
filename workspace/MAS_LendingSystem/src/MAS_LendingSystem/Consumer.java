@@ -15,6 +15,8 @@ public class Consumer {
 	double income = 0; //Income gained per tick
 	double cash = 0; //Net cash of the 
 	double spending = 0; //Money spent per tick
+	double deltaNetWorth = 0;
+	double splurgeValue = 0;
 	double valueOfDefaults = 0;
 	double risk = 0; //0-1 percent risk of defaulting
 	double desire = 0; //0-1 percent deesire for more netWorth 
@@ -30,12 +32,15 @@ public class Consumer {
 	}
 	
 	private void step() {
+		double netWorth = this.netWorth();
 		this.receiveIncome();
 		this.spendMoney();
 		this.makeLoanPayments();
 		this.receiveNeighborsSplurging();
+		this.deltaNetWorth = this.netWorth() - netWorth;
 		
 		if (this.doesSplurge()) {
+			this.splurgeValue = this.splurgeAmount();
 			
 			if (this.splurgeAmount() < this.cash) { //Pay for splurge purchase if possible
 				
@@ -50,6 +55,8 @@ public class Consumer {
 					this.observedSplurges = new ArrayList<Double>();
 				}
 			}
+		} else {
+			this.splurgeValue = 0;
 		}
 	}
 
@@ -188,4 +195,8 @@ public class Consumer {
 	public double getNetWorth() {
 		return this.netWorth();
 	};
+	
+	public double economicIndicator() {
+		return this.deltaNetWorth + this.spending + this.splurgeValue; 
+	}
 }
