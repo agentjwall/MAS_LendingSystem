@@ -14,6 +14,7 @@ public class Banker {
 	
 	public void step() {
 		checkIfDefaulted();
+		
 		if (!this.defaulted) {
 			ArrayList<LoanRequest> reqs = this.receiveLoanRequests();
 			this.acceptLoanRequests(reqs);
@@ -58,15 +59,15 @@ public class Banker {
 		}
 	}
 	
-	//TODO: implement
 	private void acceptPayment(Loan l) {
-		
+		this.assets += l.acceptPayment();
 	}
 	
-	
-	//TODO: implement
 	private void handleDefault(Loan l) {
-		
+		if (l.defaulted) {
+			this.defaultedAssets += l.principle;
+			this.loans.remove(l);
+		}
 	}
 	
 	private double valueLoan(LoanRequest req) {

@@ -6,6 +6,7 @@ public class Loan {
 	double initialLoanAmount; //Initital value of the loan
 	double principle; //Current value of the loan
 	private double payment; //Amount paid every tick
+	private double paymentsMade = 0; //Money being transfered from consumer to banker
 	boolean defaulted = false;
 	Banker banker;
 	Consumer consumer;
@@ -34,6 +35,16 @@ public class Loan {
 	
 	public double getPayment() {
 		return this.principle < this.payment ? this.principle: this.payment; 
+	}
+	
+	public void makePayment(double payment) {
+		this.paymentsMade += payment;
+	}
+	
+	public double acceptPayment() {
+		payment = this.paymentsMade;
+		this.paymentsMade = 0;
+		return payment;
 	}
 		
 	public void accrueInterest () {

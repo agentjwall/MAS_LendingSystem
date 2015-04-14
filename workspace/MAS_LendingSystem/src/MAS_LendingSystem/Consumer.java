@@ -82,6 +82,7 @@ public class Consumer {
 		
 		if (this.cash > payment && this.risk < RandomHelper.nextDoubleFromTo(0, 1)) {			
 			this.cash -= payment;
+			l.makePayment(payment);
 			
 			if (l.principle == 0) { //Loan is payed off
 				this.updateRisk(l);
