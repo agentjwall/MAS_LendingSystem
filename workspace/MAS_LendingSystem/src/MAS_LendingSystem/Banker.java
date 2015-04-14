@@ -3,6 +3,8 @@ package MAS_LendingSystem;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import repast.simphony.engine.schedule.ScheduledMethod;
+
 public class Banker {
 	double assets = 0; //Total assets currently held by the bank
 	double defaultedAssets = 0; //Total amount of defaulted assets
@@ -11,12 +13,13 @@ public class Banker {
 	ArrayList<Loan> loans = new ArrayList<Loan>(); //Loans currently loaned out 
 	boolean defaulted = false;
 	
+	@ScheduledMethod ( start = 1 , interval = 1)
 	public void step() {
-		checkIfDefaulted();
+		/*getDefaulted();
 		if (!this.defaulted) {
 			// reqs = receive loan requests from consumers
 			// acceptLoanRequests(reqs);
-		}
+		} */
 	}
 	
 	//TODO 
@@ -40,7 +43,7 @@ public class Banker {
 		return accept;
 	}
 	
-	public boolean checkIfDefaulted() {
+	public boolean getDefaulted() {
 		if (assets < defaultedAssets) {
 			this.defaulted = true;
 			return true;
