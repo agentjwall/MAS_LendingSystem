@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
 
+import repast.simphony.engine.schedule.ScheduledMethod;
+
 public class Banker {
 	double assets = 0; //Total assets currently held by the bank
 	double defaultedAssets = 0; //Total amount of defaulted assets
@@ -12,7 +14,9 @@ public class Banker {
 	ArrayList<Loan> loans = new ArrayList<Loan>(); //Loans currently loaned out 
 	boolean defaulted = false;
 	
+	@ScheduledMethod ( start = 1 , interval = 1)
 	public void step() {
+<<<<<<< HEAD
 		checkIfDefaulted();
 		
 		if (!this.defaulted) {
@@ -20,6 +24,13 @@ public class Banker {
 			this.acceptLoanRequests(reqs);
 			this.monitorLoans();
 		}
+=======
+		/*getDefaulted();
+		if (!this.defaulted) {
+			// reqs = receive loan requests from consumers
+			// acceptLoanRequests(reqs);
+		} */
+>>>>>>> master
 	}
 	
 	//TODO: implement
@@ -75,7 +86,7 @@ public class Banker {
 		return riskC < this.riskThreshold? riskC * req.amount: 0;
 	}
 	
-	public boolean checkIfDefaulted() {
+	public boolean getDefaulted() {
 		if (assets < defaultedAssets) {
 			this.defaulted = true;
 			return true;

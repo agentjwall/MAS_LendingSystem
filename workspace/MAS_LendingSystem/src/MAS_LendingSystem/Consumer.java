@@ -6,6 +6,12 @@ import java.util.List;
 import repast.simphony.random.RandomHelper;
 
 
+<<<<<<< HEAD
+=======
+import repast.simphony.engine.schedule.ScheduledMethod;
+
+// GOAL: to actually spend their desired spending amount.
+>>>>>>> master
 public class Consumer {
 	static double percentDurable = .7; //0-1 Percent of goods bought that get added to net worth
 	static int costOfLiving = 1000;  // 1000/ month = 12k annually
@@ -117,8 +123,14 @@ public class Consumer {
 		}
 	}
 	
+<<<<<<< HEAD
 	private int splurgeDesire() {
 		return this.observedSplurges.size() + 1;
+=======
+	@ScheduledMethod ( start = 1 , interval = 1)
+	public void step() {  
+		this.netWorth = this.netWorth + this.income - this.spending + (this.spending * Consumer.percentDurable);
+>>>>>>> master
 	}
 	
 	private int splurgeThreshold() {
