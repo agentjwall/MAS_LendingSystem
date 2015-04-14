@@ -8,7 +8,7 @@
     </entry>
     <entry>
       <string>MAS_LendingSystem.Banker</string>
-      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
+      <string>MAS_LendingSystem.BankerStyle</string>
     </entry>
   </styles>
   <editedStyles>
@@ -18,19 +18,19 @@
     </entry>
     <entry>
       <string>MAS_LendingSystem.Banker</string>
-      <string>MAS_LendingSystem.Banker.style_4.xml</string>
+      <null/>
     </entry>
   </editedStyles>
   <netStyles>
     <entry>
       <string>jung_network</string>
-      <string>repast.simphony.visualizationOGL2D.DefaultEdgeStyleOGL2D</string>
+      <string>repast.simphony.visualization.editedStyle.EditedEdgeStyle2D</string>
     </entry>
   </netStyles>
   <editedNetStyles>
     <entry>
       <string>jung_network</string>
-      <null/>
+      <string>jung_network.style_2.xml</string>
     </entry>
   </editedNetStyles>
   <frequency>ON_NEW</frequency>
@@ -41,7 +41,7 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>646440168</hashCode>
+    <hashCode>1237045083</hashCode>
   </schedParams>
   <layoutClassName>repast.simphony.visualization.visualization2D.layout.FRLayout2D</layoutClassName>
   <layoutProjection>jung_network</layoutProjection>

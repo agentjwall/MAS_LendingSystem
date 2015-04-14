@@ -15,7 +15,7 @@ public class Banker {
 	
 	@ScheduledMethod ( start = 1 , interval = 1)
 	public void step() {
-		/*checkIfDefaulted();
+		/*getDefaulted();
 		if (!this.defaulted) {
 			// reqs = receive loan requests from consumers
 			// acceptLoanRequests(reqs);
@@ -43,7 +43,7 @@ public class Banker {
 		return accept;
 	}
 	
-	public boolean checkIfDefaulted() {
+	public boolean getDefaulted() {
 		if (assets < defaultedAssets) {
 			this.defaulted = true;
 			return true;

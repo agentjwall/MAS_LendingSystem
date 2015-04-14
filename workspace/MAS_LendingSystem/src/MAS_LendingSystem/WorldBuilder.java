@@ -16,22 +16,22 @@ public class WorldBuilder implements ContextBuilder<Object> {
 	public Context<Object> build(Context<Object> context) {
 		context.setId(context_id);
 		 
-		int bankerCount = 10;
-		 for ( int i = 0; i < bankerCount ; i++) {
+		int bankerCount = 40;
+		 for (int i = 0; i < bankerCount; i++) {
 			 context.add(new Banker());
 		 }
 		 
 		 int consumerCount = 400;
-		 for (int i = 0; i < consumerCount ; i++) {
+		 for (int i = 0; i < consumerCount; i++) {
 			 context.add(new Consumer());
 		 }
 	
-		int watts_degree = 10;
+		int watts_degree = 12;
 		double rewiring_probability = .04; // probability that a node in a clustered will be rewired to some other random node
 		WattsBetaSmallWorldGenerator<Object> generator = new WattsBetaSmallWorldGenerator<Object>(
 				rewiring_probability, watts_degree, false);
 		
-		final Network<Object> jung_network = NetworkFactoryFinder
+		NetworkFactoryFinder
 			.createNetworkFactory(null)
 			.createNetwork(jnetwork_id, context, generator, false);
 	
