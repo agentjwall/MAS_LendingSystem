@@ -16,21 +16,13 @@ public class Banker {
 	
 	@ScheduledMethod ( start = 1 , interval = 1)
 	public void step() {
-<<<<<<< HEAD
-		checkIfDefaulted();
 		
 		if (!this.defaulted) {
 			ArrayList<LoanRequest> reqs = this.receiveLoanRequests();
 			this.acceptLoanRequests(reqs);
 			this.monitorLoans();
 		}
-=======
-		/*getDefaulted();
-		if (!this.defaulted) {
-			// reqs = receive loan requests from consumers
-			// acceptLoanRequests(reqs);
-		} */
->>>>>>> master
+
 	}
 	
 	//TODO: implement
