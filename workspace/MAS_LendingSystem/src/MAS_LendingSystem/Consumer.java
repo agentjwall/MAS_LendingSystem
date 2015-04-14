@@ -2,6 +2,8 @@ package MAS_LendingSystem;
 
 import java.util.ArrayList;
 
+import repast.simphony.engine.schedule.ScheduledMethod;
+
 // GOAL: to actually spend their desired spending amount.
 public class Consumer {
 	static double percentDurable = .7; //0-1 Percent of goods bought that get added to net worth
@@ -21,6 +23,7 @@ public class Consumer {
 		//this.income = Dist(Consumer.costOfLiving, 20000)
 	}
 	
+	@ScheduledMethod ( start = 1 , interval = 1)
 	public void step() {  
 		this.netWorth = this.netWorth + this.income - this.spending + (this.spending * Consumer.percentDurable);
 	}
