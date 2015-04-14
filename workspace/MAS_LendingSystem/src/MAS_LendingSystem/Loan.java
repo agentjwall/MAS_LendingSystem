@@ -28,7 +28,6 @@ public class Loan {
 		return 0;
 	}
 
-
 	public double getLoanAmount() {
 		return loanAmount;
 	}

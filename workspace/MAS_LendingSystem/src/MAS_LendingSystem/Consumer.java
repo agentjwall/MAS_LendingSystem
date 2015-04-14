@@ -24,7 +24,7 @@ public class Consumer {
 	//TODO: implement
 	public Consumer() {
 		//this.desiredSpending = Dist(min(costOfLiving, income), income); 
-		//this.income = Dist(Consumer.costOfLiving, 20000)
+		//this.income = Dist(Consumer.costOfLiving, 20000);
 	}
 	
 	private void step() {
@@ -41,7 +41,7 @@ public class Consumer {
 			
 			} else {
 				
-				boolean success = this.requestLoan(this.desiredLoanAmount(), this.disposableIncome());
+				boolean success = this.requestLoan(this.desiredLoanAmount(), this.disposableIncome(), this.loans);
 				
 				if (success) {
 					this.assets += this.splurgeAmount();
@@ -119,9 +119,8 @@ public class Consumer {
 		return splurgeAmount;
 	}
 		
-	//TODO: add in multiple loans
 	private double desiredLoanAmount() {
-		return this.splurgeAmount() - this.cash; //+ value needed for other loans (refinancing?)
+		return this.splurgeAmount() - this.cash;
 	}  
 	
 	//TODO: implement
@@ -131,8 +130,9 @@ public class Consumer {
 		return new ArrayList<Double>();
 	}
 	//TODO: implement
-	private boolean requestLoan(double desiredLoanAmount, double disposableIncome) {
+	private boolean requestLoan(double desiredLoanAmount, double disposableIncome, List<Loan> loans) {
 		//send message to nearest non-rejected bank
+		//(refinance if consumer has one or more loans)
 		//wait for request
 		return false;
 	}
