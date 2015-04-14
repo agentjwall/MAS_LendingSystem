@@ -3,6 +3,7 @@ package MAS_LendingSystem;
 import java.util.ArrayList;
 
 import repast.simphony.engine.schedule.ScheduledMethod;
+import repast.simphony.parameter.Parameter;
 
 // GOAL: to actually spend their desired spending amount.
 public class Consumer {
@@ -41,7 +42,12 @@ public class Consumer {
 		return null;
 	}
 	
+    @Parameter(displayName = "Net Worth", usageName = "netWorth")
 	public double getNetWorth() {
 		return this.netWorth;
 	};
+	public void setNetWorth() {
+		// needs to exist but not do anything (for the parameter)
+	}
+	
 }

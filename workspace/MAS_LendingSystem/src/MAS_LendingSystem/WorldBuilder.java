@@ -17,7 +17,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		context.setId(context_id);
 		 
 		int bankerCount = 40;
-		 for (int i = 0; i < bankerCount; i++) {
+		 for ( int i = 0; i < bankerCount; i++) {
 			 context.add(new Banker());
 		 }
 		 
