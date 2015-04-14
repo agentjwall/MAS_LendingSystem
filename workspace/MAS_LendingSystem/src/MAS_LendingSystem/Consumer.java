@@ -14,8 +14,10 @@ public class Consumer {
 	double income = 0; //Income gained per tick
 	double cash = 0; //Net cash of the 
 	double spending = 0; //Money spent per tick
-	int risk = 0; //0-1 percent risk of defaulting	
-	double assets = 0;
+	double valueOfDefaults = 0;
+	double riskOfDefault = 0; //0-1 percent risk of defaulting
+	double desire = 0; //0-1 percent deesire for more netWorth 
+	double assets = 0; //cahs value of non-cash assets
 	List<Double> observedSplurges = new ArrayList<Double>();
 	List<Loan> loans = new ArrayList<Loan>(); //Loans currently held by agent
 
@@ -28,14 +30,23 @@ public class Consumer {
 	private void step() {
 		this.receiveIncome();
 		this.spendMoney();
-		//make loan payments
+		this.makeLoanPayments();
+		this.receiveNeighborsSplurging();
 		
 		if (this.doesSplurge()) {
+			
 			if (this.splurgeAmount() < this.cash) { //Pay for splurge purchase if possible
+				
 				this.cash -= this.splurgeAmount();
-				this.observedSplurges = new ArrayList<Double>();
+			
 			} else {
-				this.requestLoan(this.desiredLoanAmount(), this.disposableIncome());
+				
+				boolean success = this.requestLoan(this.desiredLoanAmount(), this.disposableIncome());
+				
+				if (success) {
+					this.assets += this.splurgeAmount();
+					this.observedSplurges = new ArrayList<Double>();
+				}
 			}
 		}
 	}
@@ -44,17 +55,38 @@ public class Consumer {
 		this.cash += this.income;
 	}
 	
-	public void spendMoney() {
+	private void spendMoney() {
 		this.cash -= this.spending;
 		this.assets += this.spending * Consumer.percentDurable;
 	}
 	
-	public double netWorth() {
+	private void makeLoanPayments() {
+		for (Loan l: this.loans) {
+			boolean success = this.makeLoanPayment(l);
+			
+			if (!success) {
+				this.valueOfDefaults += l.getPrinciple();
+				this.updateRisk(l.getPrinciple());
+			}
+		}
+	}
+	
+	//TODO: implement (true if success, false if default)
+	private boolean makeLoanPayment(Loan l) {
+		
+		return false;
+	} 
+	
+	private double netWorth() {
 		return this.cash + this.assets;
 	}
 	
-	public double disposableIncome() {
+	private double disposableIncome() {
 		return this.income - this.spending;
+	}
+	
+	private void updateRisk(double defaultValue) {
+		this.riskOfDefault = (defaultValue / this.netWorth() + 1) * this.riskOfDefault;
 	}
 	
 	private int splurgeDesire() {
@@ -62,7 +94,7 @@ public class Consumer {
 	}
 	
 	private int splurgeThreshold() {
-		return (int) Consumer.maximumSplurge * this.risk;
+		return (int) (Consumer.maximumSplurge * this.desire);
 	}
 	
 	private boolean doesSplurge() {
@@ -86,16 +118,14 @@ public class Consumer {
 		
 		return splurgeAmount;
 	}
-	
-	
+		
 	//TODO: add in multiple loans
 	private double desiredLoanAmount() {
 		return this.splurgeAmount() - this.cash; //+ value needed for other loans (refinancing?)
 	}  
 	
-	
 	//TODO: implement
-	private List<Double> receiveNeighborsAvgSplurging() {
+	private List<Double> receiveNeighborsSplurging() {
 		// ask all neighbors what they are spending
 		// return the average of that
 		return new ArrayList<Double>();
@@ -107,11 +137,11 @@ public class Consumer {
 		return false;
 	}
 	
-	private double adjustedRisk(double value) {
+	private double adjustedDesire(double value) {
 		if (value < 0) {
-			return 1-this.risk;
+			return 1-this.desire;
 		} else {
-			return this.risk;
+			return this.desire;
 		}
 	} 
 	
