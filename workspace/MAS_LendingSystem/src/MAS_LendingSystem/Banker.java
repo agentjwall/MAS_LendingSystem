@@ -20,8 +20,7 @@ public class Banker {
 	}
 	
 	//TODO 
-	private ArrayList<Loan> acceptLoanRequests(ArrayList<LoanRequest> reqs) {
-		ArrayList<Loan> accept = new ArrayList<Loan>();
+	private void acceptLoanRequests(ArrayList<LoanRequest> reqs) {
 		Hashtable<LoanRequest, Double> loanValues = new Hashtable<LoanRequest, Double>();
 		for (int i=0; i < reqs.size(); i++) {
 			if (reqs.get(i).requesterRisk > this.riskThreshold) {
@@ -37,7 +36,12 @@ public class Banker {
 		}
 		//Loan newLoan = new Loan(reqs.get(i).amount);
 		//accept.add(newLoan);
-		return accept;
+		return;
+	}
+	
+	private double valueLoan(Loan l) {
+		double riskC = l.consumer.risk;
+		return riskC < this.riskThreshold? riskC * l.loanAmount: 0;
 	}
 	
 	public boolean checkIfDefaulted() {

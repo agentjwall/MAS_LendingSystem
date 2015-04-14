@@ -15,7 +15,7 @@ public class Consumer {
 	double cash = 0; //Net cash of the 
 	double spending = 0; //Money spent per tick
 	double valueOfDefaults = 0;
-	double riskOfDefault = 0; //0-1 percent risk of defaulting
+	double risk = 0; //0-1 percent risk of defaulting
 	double desire = 0; //0-1 percent deesire for more netWorth 
 	double assets = 0; //cahs value of non-cash assets
 	List<Double> observedSplurges = new ArrayList<Double>();
@@ -41,7 +41,7 @@ public class Consumer {
 			
 			} else {
 				
-				boolean success = this.requestLoan(this.desiredLoanAmount(), this.disposableIncome(), this.loans);
+				boolean success = this.requestLoan(this.desiredLoanAmount(), this.disposableIncome());
 				
 				if (success) {
 					this.assets += this.splurgeAmount();
@@ -63,18 +63,33 @@ public class Consumer {
 	private void makeLoanPayments() {
 		for (Loan l: this.loans) {
 			boolean success = this.makeLoanPayment(l);
-			
-			if (!success) {
-				this.valueOfDefaults += l.getPrinciple();
-				this.updateRisk(l.getPrinciple());
-			}
 		}
 	}
 	
 	//TODO: implement (true if success, false if default)
 	private boolean makeLoanPayment(Loan l) {
+		l.accrueInterest();
 		
-		return false;
+		double payment = l.getPayment();
+		
+		if (this.cash > payment && this.risk < RandomHelper.nextDoubleFromTo(0, 1)) {			
+			this.cash -= payment;
+			
+			if (l.principle == 0) {
+				this.updateRisk(l);
+				this.loans.remove(l);
+			}
+			
+			return true;
+			
+		} else { //default 
+			
+			l.defaulted = true;
+			this.valueOfDefaults += l.principle;
+			this.updateRisk(l);
+			
+			return false;
+		}
 	} 
 	
 	private double netWorth() {
@@ -85,8 +100,12 @@ public class Consumer {
 		return this.income - this.spending;
 	}
 	
-	private void updateRisk(double defaultValue) {
-		this.riskOfDefault = (defaultValue / this.netWorth() + 1) * this.riskOfDefault;
+	private void updateRisk(Loan l) {
+		if (l.principle == 0) {
+			this.risk  = this.risk / (l.loanAmount / this.netWorth() + 1);
+		} else {
+			this.risk = this.risk * (l.principle / this.netWorth() + 1);
+		}
 	}
 	
 	private int splurgeDesire() {
@@ -130,7 +149,9 @@ public class Consumer {
 		return new ArrayList<Double>();
 	}
 	//TODO: implement
-	private boolean requestLoan(double desiredLoanAmount, double disposableIncome, List<Loan> loans) {
+	private boolean requestLoan(double desiredLoanAmount, double disposableIncome) {
+		
+		
 		//send message to nearest non-rejected bank
 		//(refinance if consumer has one or more loans)
 		//wait for request
