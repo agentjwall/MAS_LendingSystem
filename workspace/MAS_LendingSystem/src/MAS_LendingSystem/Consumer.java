@@ -10,6 +10,7 @@ public class Consumer {
 	static double percentDurable = .7; //0-1 Percent of goods bought that get added to net worth
 	static int costOfLiving = 1000;  // 1000/ month = 12k annually
 	static int maximumSplurge = 100;
+	static double loanPaymentPercentage = .2; //percent of disposable income that will be payed towards loans
 	
 	double income = 0; //Income gained per tick
 	double cash = 0; //Net cash of the 
@@ -20,6 +21,7 @@ public class Consumer {
 	double assets = 0; //cahs value of non-cash assets
 	List<Double> observedSplurges = new ArrayList<Double>();
 	List<Loan> loans = new ArrayList<Loan>(); //Loans currently held by agent
+	List<Banker> rejectedBanks = new ArrayList<Banker>();
 
 	//TODO: implement
 	public Consumer() {
@@ -41,7 +43,7 @@ public class Consumer {
 			
 			} else {
 				
-				boolean success = this.requestLoan(this.desiredLoanAmount(), this.disposableIncome());
+				boolean success = this.requestLoan();
 				
 				if (success) {
 					this.assets += this.splurgeAmount();
@@ -66,7 +68,6 @@ public class Consumer {
 		}
 	}
 	
-	//TODO: implement (true if success, false if default)
 	private boolean makeLoanPayment(Loan l) {
 		l.accrueInterest();
 		
@@ -75,7 +76,7 @@ public class Consumer {
 		if (this.cash > payment && this.risk < RandomHelper.nextDoubleFromTo(0, 1)) {			
 			this.cash -= payment;
 			
-			if (l.principle == 0) {
+			if (l.principle == 0) { //Loan is payed off
 				this.updateRisk(l);
 				this.loans.remove(l);
 			}
@@ -142,15 +143,33 @@ public class Consumer {
 		return this.splurgeAmount() - this.cash;
 	}  
 	
+	private double desiredPaymentAmount() {
+		return this.disposableIncome() * Consumer.loanPaymentPercentage;
+	}
+	
 	//TODO: implement
 	private List<Double> receiveNeighborsSplurging() {
 		// ask all neighbors what they are spending
 		// return the average of that
 		return new ArrayList<Double>();
 	}
+	
 	//TODO: implement
-	private boolean requestLoan(double desiredLoanAmount, double disposableIncome) {
+	private Banker getNearestAvalibleBank() {
+		Banker nearestBank = null;
 		
+		// for (Banker b : globalBanksList) {
+			// if ( !this.rejectedBanks.contains(b) && (nearestBank == null || b is closer than nearestBank) {
+				//nearestBanker = b;
+			//}
+		//}
+		
+		return nearestBank;
+	}
+	
+	//TODO: implement
+	private boolean requestLoan() {
+		LoanRequest req = new LoanRequest(this.desiredLoanAmount(), this.desiredPaymentAmount(), this.risk, this, this.getNearestAvalibleBank());
 		
 		//send message to nearest non-rejected bank
 		//(refinance if consumer has one or more loans)

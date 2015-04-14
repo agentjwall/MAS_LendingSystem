@@ -1,7 +1,7 @@
 package MAS_LendingSystem;
 
 public class Loan {
-	public static double interestRate = .08;
+	public static double interestRate = .04;
 	
 	double loanAmount; //Value of the entire loan
 	double principle; //Current value of the loan
@@ -9,6 +9,13 @@ public class Loan {
 	boolean defaulted = false;
 	Banker banker;
 	Consumer consumer;
+	
+	public Loan(LoanRequest req) {
+		this.loanAmount = this.principle = req.amount;
+		this.payment = req.payment;
+		this.banker = req.bank;
+		this.consumer = req.requester;
+	}
 	
 	public Loan(double loanAmount) {
 		this.loanAmount = this.principle = loanAmount;

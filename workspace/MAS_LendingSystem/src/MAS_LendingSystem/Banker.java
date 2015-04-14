@@ -1,6 +1,7 @@
 package MAS_LendingSystem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
 
 public class Banker {
@@ -21,27 +22,33 @@ public class Banker {
 	
 	//TODO 
 	private void acceptLoanRequests(ArrayList<LoanRequest> reqs) {
-		Hashtable<LoanRequest, Double> loanValues = new Hashtable<LoanRequest, Double>();
-		for (int i=0; i < reqs.size(); i++) {
-			if (reqs.get(i).requesterRisk > this.riskThreshold) {
-				reqs.remove(i);
-			} else {
-				LoanRequest lr = reqs.get(i);
-				loanValues.put(lr, lr.amount * (1- lr.requesterRisk));
-			}
-		}
-		
-		for (int i = 0; i < reqs.size(); i++) {
+		Hashtable<Double, LoanRequest> loanValues = new Hashtable<Double, LoanRequest>();
+		boolean accept = true;
+		do {
+			LoanRequest l = null;
+			Double lVal = null;
 			
-		}
-		//Loan newLoan = new Loan(reqs.get(i).amount);
-		//accept.add(newLoan);
+			for (LoanRequest req: reqs) {
+				if (this.valueLoan(req) != 0 && (lVal == null || this.valueLoan(req) < lVal)) {		
+					l = req;
+				}
+			}
+			
+			if (this.assets > l.amount) {
+				this.loans.add(new Loan(l));
+				this.assets -= l.amount;
+				reqs.remove(l);
+			} else {
+				accept = false;
+			}
+			
+		} while (accept);
 		return;
 	}
 	
-	private double valueLoan(Loan l) {
-		double riskC = l.consumer.risk;
-		return riskC < this.riskThreshold? riskC * l.loanAmount: 0;
+	private double valueLoan(LoanRequest req) {
+		double riskC = req.requesterRisk;
+		return riskC < this.riskThreshold? riskC * req.amount: 0;
 	}
 	
 	public boolean checkIfDefaulted() {
