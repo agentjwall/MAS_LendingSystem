@@ -22,6 +22,12 @@ public class Loan {
 		this.loanAmount = this.principle = loanAmount;
 		this.payment = (this.interestRate * loanAmount) / ( 1- Math.pow(1 + this.interestRate, -ticksToPayoff));
 	}
+	
+	//TODO: implement
+	public int ticksToPayoff() {
+		return 0;
+	}
+
 
 	public double getLoanAmount() {
 		return loanAmount;
