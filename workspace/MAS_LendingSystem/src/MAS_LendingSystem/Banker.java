@@ -1,6 +1,7 @@
 package MAS_LendingSystem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
 
 import repast.simphony.engine.schedule.ScheduledMethod;
@@ -15,32 +16,72 @@ public class Banker {
 	
 	@ScheduledMethod ( start = 1 , interval = 1)
 	public void step() {
-		/*getDefaulted();
+		
 		if (!this.defaulted) {
-			// reqs = receive loan requests from consumers
-			// acceptLoanRequests(reqs);
-		} */
+			ArrayList<LoanRequest> reqs = this.receiveLoanRequests();
+			this.acceptLoanRequests(reqs);
+			this.monitorLoans();
+		}
+
 	}
 	
-	//TODO 
-	private ArrayList<Loan> acceptLoanRequests(ArrayList<LoanRequest> reqs) {
-		ArrayList<Loan> accept = new ArrayList<Loan>();
-		Hashtable<LoanRequest, Double> loanValues = new Hashtable<LoanRequest, Double>();
-		for (int i=0; i < reqs.size(); i++) {
-			if (reqs.get(i).requesterRisk > this.riskThreshold) {
-				reqs.remove(i);
-			} else {
-				LoanRequest lr = reqs.get(i);
-				loanValues.put(lr, lr.amount * (1- lr.requesterRisk));
-			}
+	//TODO: implement
+	private ArrayList<LoanRequest> receiveLoanRequests() {
+		//get all lon requests for this bank
+		return null;
+	}
+	
+	private void acceptLoanRequests(ArrayList<LoanRequest> reqs_arg) {
+		ArrayList<LoanRequest> reqs;
+		if (reqs_arg == null) {
+			reqs = new ArrayList<LoanRequest>();
+		} else {
+			reqs = reqs_arg;
 		}
-		
-		for (int i = 0; i < reqs.size(); i++) {
+		Hashtable<Double, LoanRequest> loanValues = new Hashtable<Double, LoanRequest>();
+		boolean accept = true;
+		do {
+			LoanRequest l = null;
+			Double lVal = null;
 			
+			for (LoanRequest req: reqs) {
+				if (this.valueLoan(req) != 0 && (lVal == null || this.valueLoan(req) < lVal)) {		
+					l = req;
+				}
+			}
+			
+			if (l != null && this.assets > l.amount) {
+				this.loans.add(new Loan(l));
+				this.assets -= l.amount;
+				reqs.remove(l);
+			} else {
+				accept = false;
+			}
+			
+		} while (accept);
+	}
+	
+	private void monitorLoans() {
+		for (Loan l: this.loans) {
+			this.acceptPayment(l);
+			this.handleDefault(l);
 		}
-		//Loan newLoan = new Loan(reqs.get(i).amount);
-		//accept.add(newLoan);
-		return accept;
+	}
+	
+	private void acceptPayment(Loan l) {
+		this.assets += l.acceptPayment();
+	}
+	
+	private void handleDefault(Loan l) {
+		if (l.defaulted) {
+			this.defaultedAssets += l.principle;
+			this.loans.remove(l);
+		}
+	}
+	
+	private double valueLoan(LoanRequest req) {
+		double riskC = req.requesterRisk;
+		return riskC < this.riskThreshold? riskC * req.amount: 0;
 	}
 	
 	public boolean getDefaulted() {

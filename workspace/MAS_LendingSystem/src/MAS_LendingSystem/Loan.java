@@ -1,61 +1,53 @@
 package MAS_LendingSystem;
 
 public class Loan {
-	public double interestRate = .08;
-	private double loanAmount; //Value of the entire loan
-	private double principle; //Current value of the loan
-	private double rate; //Interest rate per tick
+	public static double interestRate = .04;
+	
+	double initialLoanAmount; //Initital value of the loan
+	double principle; //Current value of the loan
 	private double payment; //Amount paid every tick
-	private boolean defaulted = false;
+	private double paymentsMade = 0; //Money being transfered from consumer to banker
+	boolean defaulted = false;
+	Banker banker;
+	Consumer consumer;
+	
+	public Loan(LoanRequest req) {
+		this.initialLoanAmount = this.principle = req.amount;
+		this.payment = req.payment;
+		this.banker = req.bank;
+		this.consumer = req.requester;
+	}
 	
 	public Loan(double loanAmount) {
-		this.loanAmount = this.principle = loanAmount;
+		this.initialLoanAmount = this.principle = loanAmount;
 		this.payment = 0;
 	}
 	
 	public Loan(double loanAmount, double paymentPerTick) {
-		this.loanAmount = this.principle = loanAmount;
+		this.initialLoanAmount = this.principle = loanAmount;
 		this.payment = paymentPerTick;
 	}
 	
 	public Loan(double loanAmount, int ticksToPayoff) {
-		this.loanAmount = this.principle = loanAmount;
+		this.initialLoanAmount = this.principle = loanAmount;
 		this.payment = (this.interestRate * loanAmount) / ( 1- Math.pow(1 + this.interestRate, -ticksToPayoff));
 	}
-
-	public double getLoanAmount() {
-		return loanAmount;
-	}
-
-	public double getPrinciple() {
-		return principle;
-	}
-
-	public double getRate() {
-		return rate;
-	}
-
+	
 	public double getPayment() {
+		return this.principle < this.payment ? this.principle: this.payment; 
+	}
+	
+	public void makePayment(double payment) {
+		this.paymentsMade += payment;
+	}
+	
+	public double acceptPayment() {
+		payment = this.paymentsMade;
+		this.paymentsMade = 0;
 		return payment;
 	}
-	
-	public boolean makePayment(double payment) {
 		
-		double principle = this.principle * (1 + rate) - payment;
-		
-		if (principle < 0) {
-			return false;
-		} else {
-			this.principle = principle;
-			return true;
-		}
-	}
-	
-	public void defaultOnLoan() {
-		this.defaulted = true;
-	}
-	
-	public boolean isDefaulted() {
-		return this.defaulted;
+	public void accrueInterest () {
+		this.principle = this.principle * (1 + Loan.interestRate) - this.payment;
 	}
 }
