@@ -15,6 +15,12 @@ public class Banker {
 	ArrayList<Loan> loans = new ArrayList<Loan>(); //Loans currently loaned out 
 	boolean defaulted = false;
 	
+	public Banker(double assets, double riskThreshold, double startingDefaultedAssets) {
+		this.assets = assets;
+		this.riskThreshold = riskThreshold;
+		this.defaultedAssets = startingDefaultedAssets;
+	}
+	
 	@ScheduledMethod ( start = 1 , interval = 1)
 	public void step() {
 		
