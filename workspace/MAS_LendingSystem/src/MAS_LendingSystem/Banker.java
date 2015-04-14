@@ -15,11 +15,11 @@ public class Banker {
 	
 	@ScheduledMethod ( start = 1 , interval = 1)
 	public void step() {
-		checkIfDefaulted();
+		/*checkIfDefaulted();
 		if (!this.defaulted) {
 			// reqs = receive loan requests from consumers
 			// acceptLoanRequests(reqs);
-		}
+		} */
 	}
 	
 	//TODO 
