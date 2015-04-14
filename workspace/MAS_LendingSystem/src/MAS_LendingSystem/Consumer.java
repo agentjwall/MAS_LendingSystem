@@ -114,7 +114,7 @@ public class Consumer {
 		
 		double modifier = RandomHelper.nextDoubleFromTo(-1, 1);
 		splurgeAmount /= this.observedSplurges.size();
-		splurgeAmount *= this.adjustedRisk(modifier) * modifier;
+		splurgeAmount *= this.adjustedDesire(modifier) * modifier;
 		
 		return splurgeAmount;
 	}
