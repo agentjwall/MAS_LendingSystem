@@ -3,8 +3,6 @@ package MAS_LendingSystem;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.opengis.filter.spatial.Within;
-
 import repast.simphony.query.space.graph.NetPathWithin;
 import repast.simphony.random.RandomHelper;
 import repast.simphony.space.graph.Network;
@@ -14,7 +12,7 @@ import repast.simphony.parameter.Parameter;
 import repast.simphony.context.Context;
 
 
-public class Consumer {
+public class Consumer extends AgentClass {
 	static double percentDurable = .7; //0-1 Percent of goods bought that get added to net worth
 	static int maximumSplurge = 100;
 	static double loanPaymentPercentage = .2; //percent of disposable income that will be payed towards loans

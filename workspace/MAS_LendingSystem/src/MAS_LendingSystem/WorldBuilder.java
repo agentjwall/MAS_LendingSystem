@@ -20,7 +20,6 @@ import repast.simphony.context.space.graph.*;
 
 public class WorldBuilder implements ContextBuilder<Object> {
 	public static final String jnetwork_id = "jung_network";
-	public static final String context_id = "MAS_LendingSystem";
 	public static final String PARAMETER_NUM_YEARS = "numYears";
 	
 	//final GridValueLayer foodValueLayer = new GridValueLayer();
@@ -49,7 +48,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
     private static int uniqueId = 0;
 	
 	public Context<Object> build(Context<Object> context) {
-		context.setId(context_id);
+		context.setId(Constants.CONTEXT_ID);
 		//context.addProjection(grid);
 		//context.addValueLayer(worldStyle);
 		

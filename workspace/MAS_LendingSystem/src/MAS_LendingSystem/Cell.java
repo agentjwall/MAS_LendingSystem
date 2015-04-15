@@ -10,7 +10,7 @@ public class Cell {
 	private Banker banker = null;
 	private Consumer consumer = null;
 	
-	private Set<GridValueLayer> neghborhood = new HashSet<GridValueLayer>();
+	private Set<GridValueLayer> neighborhood = new HashSet<GridValueLayer>();
 	private final int x;
 	private final int y;
 	
@@ -43,6 +43,7 @@ public class Cell {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public Class getType() {
 		if (this.banker != null) {
 			return Banker.class;
