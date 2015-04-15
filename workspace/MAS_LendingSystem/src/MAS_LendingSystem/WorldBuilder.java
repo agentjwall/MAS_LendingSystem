@@ -20,7 +20,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
     public static final String PARAMETER_CONSUMER_COUNT = "consumerCount";
     public static final String PARAMETER_REWIRING_PROBABILITY = "rewiringProbability";
     public static final String PARAMETER_MEAN_DEGREE = "meanDegree";
-
+    public static final String PARAMETER_NUM_YEARS = "numYears";
     
 	
 	public Context<Object> build(Context<Object> context) {
@@ -32,7 +32,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final int consumerCount = ((Integer) parameters.getValue(PARAMETER_CONSUMER_COUNT)).intValue();
 		final double rewiringProbability = ((Double) parameters.getValue(PARAMETER_REWIRING_PROBABILITY)).doubleValue(); 
 		final int meanDegree = ((Integer) parameters.getValue(PARAMETER_MEAN_DEGREE)).intValue(); 
-
+		final int numYears = ((Integer) parameters.getValue(PARAMETER_NUM_YEARS)).intValue();
 		 DistributionsAdapter incomeGenerator = new DistributionsAdapter(DistributionsAdapter.makeDefaultGenerator());		
 		 for ( int i = 0; i < bankerCount; i++) {
 			 double riskThreshold = RandomHelper.nextDoubleFromTo(0, 1);
@@ -47,7 +47,9 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		// rewiringProbability = probability that a node in a clustered will be rewired to some other random node
 		WattsBetaSmallWorldGenerator<Object> generator = new WattsBetaSmallWorldGenerator<Object>(
 				rewiringProbability, meanDegree, false);
-		
+
+		RunEnvironment.getInstance().endAt(numYears * 12);
+
 		NetworkFactoryFinder
 			.createNetworkFactory(null)
 			.createNetwork(jnetwork_id, context, generator, false);
