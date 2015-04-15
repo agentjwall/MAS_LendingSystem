@@ -48,7 +48,7 @@ public class ScheduleDispatcher {
         	c.afterBanker();
          }
          
-         this.updateBackground(bankers, consumers);
+         //this.updateBackground(bankers, consumers);
          		
 	}
 	
