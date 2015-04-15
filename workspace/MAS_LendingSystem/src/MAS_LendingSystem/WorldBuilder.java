@@ -20,8 +20,6 @@ public class WorldBuilder implements ContextBuilder<Object> {
 	// network parameters
     public static final String PARAMETER_BANKER_COUNT = "bankerCount";
     public static final String PARAMETER_CONSUMER_COUNT = "consumerCount";
-    public static final String PARAMETER_REWIRING_PROBABILITY = "rewiringProbability";
-    public static final String PARAMETER_MEAN_DEGREE = "meanDegree";
 
     // consumer parameters
     public static final String PARAMETER_COST_OF_LIVING = "costOfLiving";
@@ -34,10 +32,10 @@ public class WorldBuilder implements ContextBuilder<Object> {
 
     // banker parameters
     public static final String PARAMETER_BANKER_RISK = "meanBankerRisk";
-	
-    private static int uniqueId = 0;
-    
+	    
+    //TODO: add parameters
     public static final int neighborhoodCount = 12;
+    public static final double sharedNeighborhoodProbability = 0;
     
 	public Context<Object> build(Context<Object> context) {
 		context.setId(Constants.CONTEXT_ID);
@@ -56,14 +54,14 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final double meanConsumerRisk = ((Double) parameters.getValue(PARAMETER_CONSUMER_RISK)).doubleValue();
 		final double meanConsumerDesire = ((Double) parameters.getValue(PARAMETER_CONSUMER_DESIRE)).doubleValue();
 		final double meanBankerRisk = ((Double) parameters.getValue(PARAMETER_BANKER_RISK)).doubleValue();
-				
+		
 		int consumersPerNeighborhood = consumerCount / neighborhoodCount;
 		int consumersPerNeighborhoodR = consumerCount - consumersPerNeighborhood * neighborhoodCount;
 		int bankersPerNeighborhood = bankerCount / neighborhoodCount;
 		int bankersPerNeighborhoodR = bankerCount - bankersPerNeighborhood * neighborhoodCount;
 		
-		int[] gridDim = getGridDim(parameters);
-		int[] neighborhoodDim = getNeighborhoodDim(parameters);
+		int[] gridDim = getGridDim(bankerCount, consumerCount);
+		int[] neighborhoodDim = getNeighborhoodDim(bankerCount, consumerCount);
 		
 		/* *** Create grid *** */
 		Grid<Object> grid = GridFactoryFinder.createGridFactory(null)
@@ -75,7 +73,8 @@ public class WorldBuilder implements ContextBuilder<Object> {
 												gridDim)); 							// int[] grid dimensions
 		
 		for (int i=0; i < neighborhoodCount; i++) {
-			Neighborhood n = new Neighborhood("neighborhood_"+i, false, gridDim); //TODO: does this have to be the size of the grid or neighborhood?
+			//TODO: does this have to be the size of the grid or neighborhood?
+			Neighborhood n = new Neighborhood("neighborhood_"+i, false, gridDim); 
 			
 			
 			for (int j=0; j < neighborhoodDim[0]; j++) {
@@ -99,7 +98,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 				double spending = getNormalDist(costOfLiving, income, meanSpending);
 				double risk = getNormalDist(0, 1, meanConsumerRisk);
 				double desire = getNormalDist(0, 1, meanConsumerDesire);
-				Consumer c = new Consumer(stampId(), income, spending, risk, desire);
+				Consumer c = new Consumer(income, spending, risk, desire);
 				Cell  cell = n.getEmptyCell();
 				cell.setAgent(c);
 				context.add(c);
@@ -118,8 +117,8 @@ public class WorldBuilder implements ContextBuilder<Object> {
 			for (int j=0; j < bankers; j++) {
 				double riskThreshold = getNormalDist(0, 1, meanBankerRisk);
 				double assets = getNormalDist(100000, 200000, meanAssets);
-				Banker b = new Banker(stampId(), assets, riskThreshold);
-				Cell cell = n.getEmptyCell();
+				Banker b = new Banker(assets, riskThreshold);
+				Cell  cell = n.getEmptyCell();
 				cell.setAgent(b);
 				context.add(b);
 				int[] coords = cell.getCoordinates();
@@ -130,14 +129,14 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		}								
 		
 		RunEnvironment.getInstance().endAt(numYears * 12);
-		context.add(new ScheduleDispatcher(uniqueId));
+		context.add(new ScheduleDispatcher());
 		return context;
 	}
 
 
 	public double getNormalDist(double min, double max, double mean) {
 		double trueMean = min + (mean * (max-min));
-		Normal n = RandomHelper.createNormal(mean, 1);
+		Normal n = RandomHelper.createNormal(trueMean, 1);
 		double val = n.nextDouble();
 		
 		if (val < min) {
@@ -149,9 +148,9 @@ public class WorldBuilder implements ContextBuilder<Object> {
 	}
 	
 	
-	private int[] getGridDim(Parameters parameters) {
+	private int[] getGridDim(int bankerCount, int consumerCount) {
 		int elements = neighborhoodCount;
-		int[] neighborhood = getNeighborhoodDim(parameters);
+		int[] neighborhood = getNeighborhoodDim(bankerCount, consumerCount);
 		int[] grid = getDim(elements);
 
 		int x = neighborhood[0] * grid[0];
@@ -161,27 +160,25 @@ public class WorldBuilder implements ContextBuilder<Object> {
 	}
 	
 	
-	private int[] getNeighborhoodDim(Parameters parameters) {
-		int bankers = ((Integer) parameters.getValue(PARAMETER_BANKER_COUNT)).intValue();
-		int consumers = ((Integer) parameters.getValue(PARAMETER_CONSUMER_COUNT)).intValue();
-		int elements = (bankers + consumers) / neighborhoodCount; 
-		if ((bankers % neighborhoodCount) != 0) {
+	private int[] getNeighborhoodDim(int bankerCount, int consumerCount) {
+		int elements = (bankerCount + consumerCount) / neighborhoodCount; 
+		if ((bankerCount % neighborhoodCount) != 0) {
 			elements++;
 		}
-		if ((consumers % neighborhoodCount) != 0) {
+		if ((consumerCount % neighborhoodCount) != 0) {
 			elements++;
 		}
 		
 		return getDim(elements);
 	}
 	
+	// gets box dimension required for the provided number of elements 
 	private int[] getDim(int elements) {
 		int xDim = (int) Math.ceil(Math.sqrt(elements));
 		int yDim = xDim; 
 		while (xDim * (yDim - 1) >= elements) {
 			yDim--;
 		}
-			
 		return new int[]{xDim, yDim};
 	}
 	
@@ -204,13 +201,5 @@ public class WorldBuilder implements ContextBuilder<Object> {
         	return null;
         }
         return masterContext;
-	}
-	
-	
-	
-	private static int stampId() {
-		uniqueId ++;
-		return uniqueId - 1;
-	}
-	
+	}	
 }

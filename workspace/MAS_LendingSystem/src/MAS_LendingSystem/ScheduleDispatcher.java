@@ -9,15 +9,7 @@ import repast.simphony.util.collections.IndexedIterable;
 import repast.simphony.valueLayer.ValueLayer;
 
 public class ScheduleDispatcher {
-
-
-	static private int idCount;
 	
-	public ScheduleDispatcher(int idCount) {
-		ScheduleDispatcher.idCount = idCount;
-	}
-	
-
 	public int prevPositiveBankAssets;
 	public int prevConsumerSpending;
 	public int monthsInDecline;
@@ -92,9 +84,4 @@ public class ScheduleDispatcher {
 	        }
 	        return masterContext;
 		}
-		
-		static int idCount() {
-			return idCount;
-		}
-
 }

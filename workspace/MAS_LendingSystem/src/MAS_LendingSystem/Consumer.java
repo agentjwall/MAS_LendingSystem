@@ -17,7 +17,6 @@ public class Consumer extends AgentClass {
 	static int maximumSplurge = 100;
 	static double loanPaymentPercentage = .2; //percent of disposable income that will be payed towards loans
 	
-	int id;
 	double income = 0; //Income gained per tick
 	double cash = 0; //Net cash of the 
 	double spending = 0; //Money spent per tick
@@ -33,8 +32,7 @@ public class Consumer extends AgentClass {
 	List<Loan> loans = new ArrayList<Loan>(); //Loans currently held by agent
 	List<Banker> rejectedBanks = new ArrayList<Banker>();
 	
-	public Consumer(int id, double income, double spending, double risk, double desire) {
-		this.id = id;
+	public Consumer(double income, double spending, double risk, double desire) {
 		this.income = income;
 		this.spending = spending;
 		this.risk = risk;
@@ -94,7 +92,7 @@ public class Consumer extends AgentClass {
 	
 	private void makeLoanPayments() {
 		for (Loan l: this.loans) {
-			boolean success = this.makeLoanPayment(l);
+			this.makeLoanPayment(l);  //TODO should this return whether any payments defaulted?
 		}
 	}
 	
@@ -226,11 +224,11 @@ public class Consumer extends AgentClass {
 	}
 	
 	private Banker getNearestAvalibleBank(Object o, boolean[] visited) {
-		visited[this.id] = true;
 		Banker nearestBank = null;
 		
-		/* 
+		/*
 		 * TODO replace with grid implementation
+		visited[this.id] = true;
 		Context<Object> context = (Context<Object>) ContextUtils.getContext(this);
 		Network network = (Network) context.getProjection(WorldBuilder.jnetwork_id);
 		Iterable<Object> banks = network.getAdjacent(o);

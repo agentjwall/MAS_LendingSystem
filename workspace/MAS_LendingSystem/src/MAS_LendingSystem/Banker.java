@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class Banker extends AgentClass {
 	
-	int id;
 	double assets = 0; //Total assets currently held by the bank
 	double defaultedAssets = 0; //Total amount of defaulted assets
 	double notesReceivable = 0; //Assets currently loaned out 
@@ -13,8 +12,7 @@ public class Banker extends AgentClass {
 	ArrayList<Loan> loans = new ArrayList<Loan>(); //Loans currently loaned out 
 	boolean defaulted = false;
 	
-	public Banker(int id, double assets, double riskThreshold) {
-		this.id = id;
+	public Banker(double assets, double riskThreshold) {
 		this.assets = assets;
 		this.riskThreshold = riskThreshold;
 	}
