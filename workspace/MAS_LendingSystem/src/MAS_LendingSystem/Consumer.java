@@ -60,7 +60,7 @@ public class Consumer {
 			if (this.splurgeAmount() < this.cash) { //Pay for splurge purchase if possible
 				
 				this.cash -= this.splurgeAmount();
-			
+				System.out.println("splurge bought!");
 			} else {
 				
 				Banker b = this.getNearestAvalibleBank();
@@ -203,39 +203,33 @@ public class Consumer {
 	
 	
 	private Banker getNearestAvalibleBank() {
-		Context<Object> context = ScheduleDispatcher.getContext();
-		if (context == null) {
-			return null;
-		}
-		
-		IndexedIterable<Object> wbs = context.getObjects(WorldBuilder.class);
-		if (wbs.size() == 0) {
-			return null;
-		} else {
-			int ct = ((WorldBuilder) wbs.get(0)).idCt();
-			return this.getNearestAvalibleBank(this, new boolean[ct]); 
-		}
+		int ct = ScheduleDispatcher.idCount();
+		System.out.println(ct);
+		boolean[] visited = new boolean[ct];
+		return this.getNearestAvalibleBank(this, visited); 
+
 	}
 	
 	private Banker getNearestAvalibleBank(Object o, boolean[] visited) {
+		visited[this.id] = true;
 		Banker nearestBank = null;
 		
 		Context<Object> context = (Context<Object>) ContextUtils.getContext(this);
 		Network network = (Network) context.getProjection(WorldBuilder.jnetwork_id);
 		Iterable<Object> banks = network.getAdjacent(o);
 		
+		System.out.println();
+		
 		for(Object b : banks) {
-			if (b.getClass() == Banker.class && !this.rejectedBanks.contains((Banker) b)) {
+			if (b instanceof Banker && !this.rejectedBanks.contains((Banker) b)) {
 				nearestBank = (Banker) b;
 				break;
-			} else {
-				visited[((Consumer) b).id] = true;
 			}
 		}
 		
 		if (nearestBank == null) {
 			for(Object b : banks) {
-				if (visited[((Consumer) b).id] != true) {
+				if (b instanceof Consumer && visited[((Consumer) b).id] != true) {
 					nearestBank = this.getNearestAvalibleBank(b, visited);
 					if (nearestBank != null) {
 						break;

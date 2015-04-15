@@ -80,7 +80,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 			.createNetworkFactory(null)
 			.createNetwork(jnetwork_id, context, generator, false);
 	
-		context.add(new ScheduleDispatcher());
+		context.add(new ScheduleDispatcher(uniqueId));
 		return context;
 	}
 
@@ -167,10 +167,6 @@ public class WorldBuilder implements ContextBuilder<Object> {
 	private static int stampId() {
 		uniqueId ++;
 		return uniqueId - 1;	
-	}
-	
-	public int idCt() {
-		return uniqueId;
 	}
 	
 }

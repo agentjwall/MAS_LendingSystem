@@ -42,6 +42,7 @@ public class Banker {
 		} else {
 			reqs = new ArrayList<LoanRequest>(reqs_arg);
 		}
+		System.out.println("reviewing "+reqs.size()+" loans");
 		Hashtable<Double, LoanRequest> loanValues = new Hashtable<Double, LoanRequest>();
 		boolean accept = true;
 		do {

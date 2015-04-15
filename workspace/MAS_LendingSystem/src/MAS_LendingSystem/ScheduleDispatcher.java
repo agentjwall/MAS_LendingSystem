@@ -7,6 +7,12 @@ import repast.simphony.util.collections.IndexedIterable;
 
 public class ScheduleDispatcher {
 
+	static private int idCount;
+	
+	public ScheduleDispatcher(int idCount) {
+		this.idCount = idCount;
+	}
+	
 	/* A single step function is used for the entire world in order
 	 * to facilitate synchronization of actions.
 	 * Called synchronously on every tick of the simulation. 
@@ -71,6 +77,10 @@ public class ScheduleDispatcher {
 	        	return null;
 	        }
 	        return masterContext;
+		}
+		
+		static int idCount() {
+			return idCount;
 		}
 
 }
