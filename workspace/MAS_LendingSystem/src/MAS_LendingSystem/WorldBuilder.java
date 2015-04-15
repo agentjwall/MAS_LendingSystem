@@ -4,29 +4,19 @@ import cern.jet.random.Normal;
 import repast.simphony.context.Context;
 import repast.simphony.dataLoader.ContextBuilder;
 import repast.simphony.engine.schedule.ScheduledMethod;
-import repast.simphony.space.graph.Network;
-import repast.simphony.space.graph.UndirectedJungNetwork;
-import repast.simphony.valueLayer.GridValueLayer;
-import repast.simphony.valueLayer.ValueLayer;
-import repast.simphony.context.space.graph.NetworkFactory;
-import repast.simphony.context.space.graph.NetworkFactoryFinder;
-import repast.simphony.context.space.graph.WattsBetaSmallWorldGenerator;
 import repast.simphony.engine.environment.*;
 import repast.simphony.parameter.Parameters;
 import repast.simphony.random.*;
-import repast.simphony.space.grid.Grid;
-import repast.simphony.util.collections.IndexedIterable;
-import repast.simphony.context.space.graph.*;
+import repast.simphony.space.grid.*;
+import repast.simphony.context.space.grid.GridFactoryFinder;
 
-public class WorldBuilder implements ContextBuilder<Object> {
-	public static final String jnetwork_id = "jung_network";
-	public static final String PARAMETER_NUM_YEARS = "numYears";
-	
+public class WorldBuilder implements ContextBuilder<Object> {	
 	//final GridValueLayer foodValueLayer = new GridValueLayer();
 	//public static ValueLayer worldStyle =  (ValueLayer) new WorldStyle();
 	
 	public int monthsDeclining = 0;
 	
+	public static final String PARAMETER_NUM_YEARS = "numYears";
 	// network parameters
     public static final String PARAMETER_BANKER_COUNT = "bankerCount";
     public static final String PARAMETER_CONSUMER_COUNT = "consumerCount";
@@ -52,12 +42,10 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		//context.addProjection(grid);
 		//context.addValueLayer(worldStyle);
 		
+		 /* *** Get parameters *** */		
 		final Parameters parameters = RunEnvironment.getInstance().getParameters();
-
 		final int bankerCount = ((Integer) parameters.getValue(PARAMETER_BANKER_COUNT)).intValue();
 		final int consumerCount = ((Integer) parameters.getValue(PARAMETER_CONSUMER_COUNT)).intValue();
-		final double rewiringProbability = ((Double) parameters.getValue(PARAMETER_REWIRING_PROBABILITY)).doubleValue(); 
-		final int meanDegree = ((Integer) parameters.getValue(PARAMETER_MEAN_DEGREE)).intValue(); 
 		final int numYears = ((Integer) parameters.getValue(PARAMETER_NUM_YEARS)).intValue();
 		final double costOfLiving = ((Double) parameters.getValue(PARAMETER_COST_OF_LIVING)).doubleValue();
 		final double maxIncome = ((Double) parameters.getValue(PARAMETER_MAX_INCOME)).doubleValue();
@@ -67,12 +55,35 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final double meanConsumerRisk = ((Double) parameters.getValue(PARAMETER_CONSUMER_RISK)).doubleValue();
 		final double meanConsumerDesire = ((Double) parameters.getValue(PARAMETER_CONSUMER_DESIRE)).doubleValue();
 		final double meanBankerRisk = ((Double) parameters.getValue(PARAMETER_BANKER_RISK)).doubleValue();
+		// TODO remove these parameters
+		final double rewiringProbability = ((Double) parameters.getValue(PARAMETER_REWIRING_PROBABILITY)).doubleValue(); 
+		final int meanDegree = ((Integer) parameters.getValue(PARAMETER_MEAN_DEGREE)).intValue(); 
 		
-
+		 /* *** Create grid *** */
+		// hard-coded now, TODO use Nick's actual methods
+		int[] dimensions = {1, 2};
+		// creates a grid and adds it to the context
+		Grid<Object> grid = GridFactoryFinder.createGridFactory(null)
+								.createGrid(Constants.GRID_ID, context, 
+										new GridBuilderParameters<Object>(
+												new StrictBorders(),				// no wrap-around on corners of grid
+												new SimpleGridAdder<Object>(),		// simply adds an object to the grid w/o other action
+												true, 								// each cell is multi-occupancy
+												dimensions)); 						// int[] grid dimensions
+		
+		
+		/* *** Generate agents *** */
+		//TODO replace with real x/y calculations
+		//TODO question: not sure if instances of AgentClass need to be passed the grid when instantiated.
+				// in stupidmodel they are but idk why that's necessary
+		int x = 0;
+		int y = 0;
 		 for (int i = 0; i < bankerCount; i++) {
 			 double riskThreshold = getNormalDist(0, 1, meanBankerRisk);
 			 double assets = getNormalDist(100000, 200000, meanAssets);
-			 context.add(new Banker(stampId(), assets, riskThreshold));
+			 AgentClass newAgent = new Banker(stampId(), assets, riskThreshold);
+			 context.add(newAgent);
+			 grid.moveTo(newAgent, x, y);
 		 }
 		 
 		 for (int i = 0; i < consumerCount; i++) {
@@ -81,19 +92,12 @@ public class WorldBuilder implements ContextBuilder<Object> {
 			 double spending = getNormalDist(costOfLiving, income, meanSpending);
 			 double risk = getNormalDist(0, 1, meanConsumerRisk);
 			 double desire = getNormalDist(0, 1, meanConsumerDesire);
-			 
-			 context.add(new Consumer(stampId(), income, spending, risk, desire));
-		 }
-
-		// rewiringProbability = probability that a node in a clustered will be rewired to some other random node
-		WattsBetaSmallWorldGenerator<Object> generator = new WattsBetaSmallWorldGenerator<Object>(
-				rewiringProbability, meanDegree, false);
-
+			 AgentClass newAgent = new Consumer(stampId(), income, spending, risk, desire);
+			 context.add(newAgent);
+			 grid.moveTo(newAgent, x, y);
+		 }												
+		
 		RunEnvironment.getInstance().endAt(numYears * 12);
-		NetworkFactoryFinder
-			.createNetworkFactory(null)
-			.createNetwork(jnetwork_id, context, generator, false);
-	
 		context.add(new ScheduleDispatcher(uniqueId));
 		return context;
 	}
