@@ -7,8 +7,7 @@ import repast.simphony.valueLayer.GridValueLayer;
 
 public class Cell {
 
-	private Banker banker = null;
-	private Consumer consumer = null;
+	private AgentClass agent = null;
 	
 	private Set<GridValueLayer> neighborhood = new HashSet<GridValueLayer>();
 	private final int x;
@@ -19,24 +18,20 @@ public class Cell {
 		this.y = y;
 	}
 	
-	public boolean setContents(Banker banker) {
-		if (this.banker == null && this.consumer == null) {
-			this.banker = banker;
+	public boolean setAgent(AgentClass agent) {
+		if (this.agent != null) {
+			this.agent = agent;
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean setContents(Consumer consumer) {
-		if (this.banker == null && this.consumer == null) {
-			this.consumer = consumer;
-			return true;
-		}
-		return false;
+	public Object getAgent() {
+		return this.agent;
 	}
 	
 	public boolean isEmpty(){
-		if (this.banker == null && this.consumer == null) {
+		if (this.agent != null) {
 			return true;
 		} else {
 			return false;
@@ -45,20 +40,10 @@ public class Cell {
 	
 	@SuppressWarnings("rawtypes")
 	public Class getType() {
-		if (this.banker != null) {
+		if (this.agent instanceof Banker) {
 			return Banker.class;
-		} else if (this.consumer != null) {
+		} else if (this.agent instanceof Consumer) {
 			return Consumer.class;
-		} else {
-			return null;
-		}
-	}
-	
-	public Object getContents() {
-		if (this.banker != null) {
-			return this.banker;
-		} else if (this.consumer != null) {
-			return this.consumer;
 		} else {
 			return null;
 		}
