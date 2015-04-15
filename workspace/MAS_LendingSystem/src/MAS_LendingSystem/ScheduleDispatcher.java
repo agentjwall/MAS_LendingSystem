@@ -1,11 +1,15 @@
 package MAS_LendingSystem;
 
+import java.util.Collection;
+
 import repast.simphony.context.Context;
 import repast.simphony.engine.environment.RunState;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.util.collections.IndexedIterable;
+import repast.simphony.valueLayer.ValueLayer;
 
 public class ScheduleDispatcher {
+
 
 	static private int idCount;
 	
@@ -13,19 +17,24 @@ public class ScheduleDispatcher {
 		this.idCount = idCount;
 	}
 	
+
+	public int prevPositiveBankAssets;
+	public int prevConsumerSpending;
+	public int monthsInDecline;
+
 	/* A single step function is used for the entire world in order
 	 * to facilitate synchronization of actions.
 	 * Called synchronously on every tick of the simulation. 
 	 */
 	@ScheduledMethod ( start = 1 , interval = 1)
 	public void step() {
-		Context<Object> context = this.getContext();
+		Context<Object> context = ScheduleDispatcher.getContext();
 		if (context == null) {
 			return;
 		}
          IndexedIterable<Object> bankers = context.getObjects(Banker.class);
          IndexedIterable<Object> consumers = context.getObjects(Consumer.class);
-         
+
          for (int i = 0; i < consumers.size(); i++) {
         	 Consumer c = (Consumer) consumers.get(i);
         	 c.beforeBanker();
@@ -45,17 +54,22 @@ public class ScheduleDispatcher {
 	
 	// TODO Maddy
 	public void updateBackground(IndexedIterable<Object> bankers, IndexedIterable<Object> consumers) {
+		Context<Object> context = this.getContext();
+		if (context == null) {
+			return;
+		}
+
+		Collection<ValueLayer> layers = context.getValueLayers(); 
+		
 		// figure out if consumer spending has increased or decreased
-		// see pseudocode on the whiteboard
-		
-		/*
-		 *   for (int i = 0; i < consumers.size(); i++) {
+		int totalConsumerSpending = 0;
+		for (int i = 0; i < consumers.size(); i++) {
         	 	Consumer c = (Consumer) consumers.get(i);
-        	 	// call whatever you need on consumer to figure out if economy is in decline
+        	 	totalConsumerSpending += (c.spending + c.currentSplurge);
          	}
-		 */
+		int percentChangeCS = (totalConsumerSpending - prevConsumerSpending)/prevConsumerSpending;
 		
-		// get rid of the bankers parameter if you don't need it
+		
 	}
 	
 		// returns the context if simulation is started & correctly initialized

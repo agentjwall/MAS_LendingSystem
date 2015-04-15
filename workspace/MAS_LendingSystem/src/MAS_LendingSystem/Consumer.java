@@ -116,7 +116,7 @@ public class Consumer {
 			this.cash -= payment;
 			l.makePayment(payment);
 			
-			if (l.principle == 0) { //Loan is payed off
+			if (l.principle == 0) { //Loan is paid off
 				this.updateRisk(l);
 				this.loans.remove(l);
 			}
@@ -205,11 +205,13 @@ public class Consumer {
 	}
 	
 	
+
 	private Banker getNearestAvalibleBank() {
 //		int ct = ScheduleDispatcher.idCount();
 //		System.out.println(ct);
 //		boolean[] visited = new boolean[ct];
 //		return this.getNearestAvalibleBank(this, visited); 
+
 
 		Context<Object> context = ScheduleDispatcher.getContext();
 		if (context == null) {
