@@ -43,49 +43,6 @@ public class Consumer {
 		this.desire = desire;
 	}
 	
-	//TODO: depricate
-	@ScheduledMethod ( start = 1 , interval = 1)
-	private void step() {
-		double netWorth = this.netWorth();
-		this.receiveIncome();
-		this.spendMoney();
-		this.makeLoanPayments();
-		this.receiveNeighborsSplurging();
-		this.deltaNetWorth = this.netWorth() - netWorth;
-		
-		if (this.loanPending != null && this.loanAccepted != null) {
-			
-			if (this.loanAccepted) {
-				this.loanPending = null;
-				this.loanAccepted = null;
-				this.assets += this.splurgeAmount();
-				this.observedSplurges = new ArrayList<Double>();
-			} else {
-				this.rejectedBanks.add(this.loanPending);
-				this.loanPending = null;
-				this.loanAccepted = null;
-			}
-			
-		}
-		
-		if (this.loanPending == null && this.doesSplurge()) {
-			this.currentSplurge = this.splurgeAmount();
-			
-			if (this.splurgeAmount() < this.cash) { //Pay for splurge purchase if possible
-				
-				this.cash -= this.splurgeAmount();
-			
-			} else {
-				
-				Banker b = this.getNearestAvalibleBank();
-				boolean success = this.requestLoan(b);
-				
-			}
-		} else {
-			this.currentSplurge = 0;
-		}
-	}
-	
 	public void beforeBanker() {
 		double netWorth = this.netWorth();
 		this.receiveIncome();
@@ -271,7 +228,7 @@ public class Consumer {
 		return nearestBank;
 	}
 	
-
+	// Consumer requests a loan from banker
 	private boolean requestLoan(Banker bank) {
 		LoanRequest req = new LoanRequest(this.desiredLoanAmount(), this.desiredPaymentAmount(), this.risk, this, bank);
 		bank.receiveLoanRequests(req);
