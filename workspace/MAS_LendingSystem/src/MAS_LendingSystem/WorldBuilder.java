@@ -80,7 +80,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 				for (int k=0; k < neighborhoodDim[1]; k++) {
 					int x = (i * neighborhoodDim[0]) % gridDim[0] + j;
 					int y = ((i * neighborhoodDim[0]) / gridDim[0]) * neighborhoodDim[1] + k;
-					System.out.println(x+","+y +":"+i);
+					//System.out.println(x+","+y +":"+i);
 					n.addCell(new Cell(x, y, n));
 				}
 			}
