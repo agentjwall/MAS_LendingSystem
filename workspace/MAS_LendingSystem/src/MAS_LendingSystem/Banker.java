@@ -83,6 +83,10 @@ public class Banker {
 	
 	private void acceptPayment(Loan l) {
 		this.assets += l.acceptPayment();
+		
+		if (l.principle <= 0) { //Loan is payed off
+			this.loans.remove(l);
+		}
 	}
 	
 	private void handleDefault(Loan l) {
