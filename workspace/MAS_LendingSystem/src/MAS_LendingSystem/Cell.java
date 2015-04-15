@@ -38,6 +38,10 @@ public class Cell {
 		return this.agent;
 	}
 	
+	public Set<Neighborhood> getNeighborhoods() {
+		return this.neighborhood;
+	}
+	
 	public int[] getCoordinates() {
 		return new int[] {this.x, this.y};
 	}

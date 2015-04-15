@@ -2,13 +2,16 @@ package MAS_LendingSystem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-import repast.simphony.query.space.graph.NetPathWithin;
+import repast.simphony.parameter.Parameter;
+import repast.simphony.query.space.grid.*;
 import repast.simphony.random.RandomHelper;
 import repast.simphony.space.graph.Network;
+import repast.simphony.space.grid.*;
 import repast.simphony.util.ContextUtils;
+import repast.simphony.util.SimUtilities;
 import repast.simphony.util.collections.IndexedIterable;
-import repast.simphony.parameter.Parameter;
 import repast.simphony.context.Context;
 
 
@@ -197,6 +200,22 @@ public class Consumer extends AgentClass {
 	
 
 	private Banker getNearestAvalibleBank() {
+		//List<repast.simphony.query.space.grid.GridCell<Banker>> cells = new GridCellNgh<Banker>(
+        //         getGrid(), here, Banker.class, 0, 0).getNeighborhood(false);
+	/*	Set<Neighborhood> neighborhoods = this.getNeighborhoods();
+		List<Banker> banks = new ArrayList<Banker>();
+		for (Neighborhood n: neighborhoods) {
+			banks.addAll(n.getBankers());
+		}
+		if (banks.size() > 0) {
+			SimUtilities.shuffle(banks, RandomHelper.getUniform());
+			return banks.get(0);
+		} else {
+			Context<Object> context = getContext();
+			IndexedIterable<Object> bankers = context.getObjects(Banker.class);
+			
+		} */
+		 
 //		int ct = ScheduleDispatcher.idCount();
 //		System.out.println(ct);
 //		boolean[] visited = new boolean[ct];
@@ -208,7 +227,6 @@ public class Consumer extends AgentClass {
 		if (context == null) {
 			return null;
 		}
-        IndexedIterable<Object> bankers = context.getObjects(Banker.class);
         Network network = (Network) context.getProjection(WorldBuilder.jnetwork_id);
         for (int dist=10; dist < 30; dist+= 10) {
         	NetPathWithin npw = new NetPathWithin(network, this, dist);
@@ -222,12 +240,12 @@ public class Consumer extends AgentClass {
         */
         return null;
 	}
-	
+
+	/*
+	 * TODO replace with grid implementation
 	private Banker getNearestAvalibleBank(Object o, boolean[] visited) {
 		Banker nearestBank = null;
 		
-		/*
-		 * TODO replace with grid implementation
 		visited[this.id] = true;
 		Context<Object> context = (Context<Object>) ContextUtils.getContext(this);
 		Network network = (Network) context.getProjection(WorldBuilder.jnetwork_id);
@@ -251,9 +269,9 @@ public class Consumer extends AgentClass {
 				}
 			}
 		}
-		*/
+		
 		return nearestBank;
-	}
+	} */
 	
 	// Consumer requests a loan from banker
 	private boolean requestLoan(Banker bank) {
