@@ -58,10 +58,9 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final double meanBankerRisk = ((Double) parameters.getValue(PARAMETER_BANKER_RISK)).doubleValue();
 				
 		int consumersPerNeighborhood = consumerCount / neighborhoodCount;
-		int consumersPerNeighborhoodR = consumersPerNeighborhood * neighborhoodCount - consumerCount;
-		
+		int consumersPerNeighborhoodR = consumerCount - consumersPerNeighborhood * neighborhoodCount;
 		int bankersPerNeighborhood = bankerCount / neighborhoodCount;
-		int bankersPerNeighborhoodR = bankersPerNeighborhood * neighborhoodCount - bankerCount;
+		int bankersPerNeighborhoodR = bankerCount - bankersPerNeighborhood * neighborhoodCount;
 		
 		int[] gridDim = getGridDim(parameters);
 		int[] neighborhoodDim = getNeighborhoodDim(parameters);

@@ -3,22 +3,22 @@
   <type>2D</type>
   <styles>
     <entry>
-      <string>MAS_LendingSystem.Banker</string>
-      <string>repast.simphony.visualizationOGL2D.DefaultStyleOGL2D</string>
+      <string>MAS_LendingSystem.Consumer</string>
+      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
     <entry>
-      <string>MAS_LendingSystem.Consumer</string>
-      <string>repast.simphony.visualizationOGL2D.DefaultStyleOGL2D</string>
+      <string>MAS_LendingSystem.Banker</string>
+      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
   </styles>
   <editedStyles>
     <entry>
-      <string>MAS_LendingSystem.Banker</string>
-      <null/>
+      <string>MAS_LendingSystem.Consumer</string>
+      <string>MAS_LendingSystem.Consumer.style_5.xml</string>
     </entry>
     <entry>
-      <string>MAS_LendingSystem.Consumer</string>
-      <null/>
+      <string>MAS_LendingSystem.Banker</string>
+      <string>MAS_LendingSystem.Banker.style_5.xml</string>
     </entry>
   </editedStyles>
   <netStyles/>
@@ -31,7 +31,7 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>-1573887256</hashCode>
+    <hashCode>-1200171191</hashCode>
   </schedParams>
   <layoutClassName>foo.bar.baz</layoutClassName>
   <layoutProjection>grid</layoutProjection>
