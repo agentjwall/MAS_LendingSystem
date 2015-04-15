@@ -1,28 +1,37 @@
 package MAS_LendingSystem;
 
 import cern.jet.random.Normal;
-import cern.jet.random.engine.RandomEngine;
 import repast.simphony.context.Context;
 import repast.simphony.dataLoader.ContextBuilder;
 import repast.simphony.engine.environment.*;
-import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.parameter.Parameters;
 import repast.simphony.random.*;
-import repast.simphony.space.graph.Network;
-import repast.simphony.space.graph.UndirectedJungNetwork;
-import repast.simphony.util.collections.IndexedIterable;
 import repast.simphony.context.space.graph.*;
 
 public class WorldBuilder implements ContextBuilder<Object> {
 	public static final String jnetwork_id = "jung_network";
 	public static final String context_id = "MAS_LendingSystem";
+	public static final String PARAMETER_NUM_YEARS = "numYears";
+	
+	// network parameters
     public static final String PARAMETER_BANKER_COUNT = "bankerCount";
     public static final String PARAMETER_CONSUMER_COUNT = "consumerCount";
     public static final String PARAMETER_REWIRING_PROBABILITY = "rewiringProbability";
     public static final String PARAMETER_MEAN_DEGREE = "meanDegree";
-    public static final String PARAMETER_NUM_YEARS = "numYears";
+
+    // consumer parameters
+    public static final String PARAMETER_COST_OF_LIVING = "costOfLiving";
+    public static final String PARAMETER_MAX_INCOME = "maxIncome";
+    public static final String PARAMETER_MEAN_ASSETS = "meanAssets";
+    public static final String PARAMETER_MEAN_INCOME = "meanForIncomeDist";
+    public static final String PARAMETER_MEAN_SPENDING = "meanSpending";
+    public static final String PARAMETER_CONSUMER_RISK = "meanConsumerRisk";
+    public static final String PARAMETER_CONSUMER_DESIRE = "meanConsumerDesire";
     
-	
+    // banker parameters
+    public static final String PARAMETER_BANKER_RISK = "meanBankerRisk";
+
+    
 	public Context<Object> build(Context<Object> context) {
 		context.setId(context_id);
 		 
@@ -33,24 +42,27 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final double rewiringProbability = ((Double) parameters.getValue(PARAMETER_REWIRING_PROBABILITY)).doubleValue(); 
 		final int meanDegree = ((Integer) parameters.getValue(PARAMETER_MEAN_DEGREE)).intValue(); 
 		final int numYears = ((Integer) parameters.getValue(PARAMETER_NUM_YEARS)).intValue();
+		final double costOfLiving = ((Double) parameters.getValue(PARAMETER_COST_OF_LIVING)).doubleValue();
+		final double maxIncome = ((Double) parameters.getValue(PARAMETER_MAX_INCOME)).doubleValue();
+		final double meanAssets = ((Double) parameters.getValue(PARAMETER_MEAN_ASSETS)).doubleValue();
+		final double meanIncome = ((Double) parameters.getValue(PARAMETER_MEAN_INCOME)).doubleValue();
+		final double meanSpending = ((Double) parameters.getValue(PARAMETER_MEAN_SPENDING)).doubleValue();
+		final double meanConsumerRisk = ((Double) parameters.getValue(PARAMETER_CONSUMER_RISK)).doubleValue();
+		final double meanConsumerDesire = ((Double) parameters.getValue(PARAMETER_CONSUMER_DESIRE)).doubleValue();
+		final double meanBankerRisk = ((Double) parameters.getValue(PARAMETER_BANKER_RISK)).doubleValue();
 		
-		final int costOfLiving = 1000;
-		final int maxIncome = 20000;
-		
-		DistributionsAdapter distributionGenerator = new DistributionsAdapter(DistributionsAdapter.makeDefaultGenerator());
-
-		 for ( int i = 0; i < bankerCount; i++) {
-			 double riskThreshold = RandomHelper.nextDoubleFromTo(0, 1);
-			 double assets = getNormalDist(100000, 200000);
-
+		 for (int i = 0; i < bankerCount; i++) {
+			 double riskThreshold = getNormalDist(0, 1, meanBankerRisk);
+			 double assets = getNormalDist(100000, 200000, meanAssets);
 			 context.add(new Banker(assets, riskThreshold));
 		 }
 		 
 		 for (int i = 0; i < consumerCount; i++) {
-			 double income = distributionGenerator.nextBurr2(.5,5,12);
-			 double spending = getNormalDist(costOfLiving, income);
-			 double risk = RandomHelper.nextDoubleFromTo(0, 1);
-			 double desire = RandomHelper.nextDoubleFromTo(0, 1);
+			 // Normal distribution with variable min, max, and mean used to approximate a Burr distribution
+			 double income = getNormalDist(costOfLiving, maxIncome, meanIncome);
+			 double spending = getNormalDist(costOfLiving, income, meanSpending);
+			 double risk = getNormalDist(0, 1, meanConsumerRisk);
+			 double desire = getNormalDist(0, 1, meanConsumerDesire);
 			 
 			 context.add(new Consumer(income, spending, risk, desire));
 		 }
@@ -68,8 +80,8 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		return context;
 	}
 
-	public double getNormalDist(double min, double max) {
-		Normal n = RandomHelper.createNormal(0.5, 1);
+	public double getNormalDist(double min, double max, double mean) {
+		Normal n = RandomHelper.createNormal(mean, 1);
 		double val = n.nextDouble();
 		
 		if (val < 0) {
