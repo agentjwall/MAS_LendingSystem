@@ -32,6 +32,10 @@ public class Consumer {
 	List<Loan> loans = new ArrayList<Loan>(); //Loans currently held by agent
 	List<Banker> rejectedBanks = new ArrayList<Banker>();
 
+	public Consumer() {
+		
+	}
+	
 	public Consumer(double income, double spending, double risk, double desire) {
 		this.income = income;
 		this.spending = spending;
