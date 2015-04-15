@@ -24,22 +24,10 @@
 						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
 		/>
-				<parameter name="meanDegree" displayName="Mean Degree" type="int" 
-						defaultValue="12" 
-						isReadOnly="false" 
-						converter="MAS_LendingSystem.RoundDownConverter"
-									
-		/>
 				<parameter name="bankerCount" displayName="Banker Count" type="int" 
 						defaultValue="40" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
-									
-		/>
-				<parameter name="rewiringProbability" displayName="Rewiring Probability (Watts Beta)" type="double" 
-						defaultValue="0.04" 
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
 		/>
 				<parameter name="meanForIncomeDist" displayName="Mean for Consumer Income Dist" type="double" 
@@ -71,7 +59,7 @@
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
-		></parameter>
+		/>
 				<parameter name="numYears" displayName="Years" type="int" 
 						defaultValue="20" 
 						isReadOnly="false" 

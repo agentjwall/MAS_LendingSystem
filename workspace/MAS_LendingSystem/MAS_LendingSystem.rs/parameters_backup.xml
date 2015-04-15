@@ -18,6 +18,12 @@
 						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
 		/>
+				<parameter name="meanBankerRisk" displayName="Mean Bank Risk (0 to 1)" type="double" 
+						defaultValue="0.5" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
 				<parameter name="meanDegree" displayName="Mean Degree" type="int" 
 						defaultValue="12" 
 						isReadOnly="false" 
@@ -60,12 +66,12 @@
 						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
 		/>
-				<parameter name="maxIncome" displayName="Max Income" type="int" 
+				<parameter name="maxIncome" displayName="Max Income" type="double" 
 						defaultValue="20000" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
-		/>
+		></parameter>
 				<parameter name="numYears" displayName="Years" type="int" 
 						defaultValue="20" 
 						isReadOnly="false" 

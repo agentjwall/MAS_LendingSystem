@@ -41,7 +41,6 @@ public class WorldBuilder implements ContextBuilder<Object> {
     
 	public Context<Object> build(Context<Object> context) {
 		context.setId(Constants.CONTEXT_ID);
-		//context.addProjection(grid);
 		//context.addValueLayer(worldStyle);
 		
 		 /* *** Get parameters *** */		
@@ -57,11 +56,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final double meanConsumerRisk = ((Double) parameters.getValue(PARAMETER_CONSUMER_RISK)).doubleValue();
 		final double meanConsumerDesire = ((Double) parameters.getValue(PARAMETER_CONSUMER_DESIRE)).doubleValue();
 		final double meanBankerRisk = ((Double) parameters.getValue(PARAMETER_BANKER_RISK)).doubleValue();
-		// TODO remove these parameters
-		final double rewiringProbability = ((Double) parameters.getValue(PARAMETER_REWIRING_PROBABILITY)).doubleValue(); 
-		final int meanDegree = ((Integer) parameters.getValue(PARAMETER_MEAN_DEGREE)).intValue(); 
-		
-		
+				
 		int consumersPerNeighborhood = consumerCount / neighborhoodCount;
 		int consumersPerNeighborhoodR = consumersPerNeighborhood * neighborhoodCount - consumerCount;
 		
