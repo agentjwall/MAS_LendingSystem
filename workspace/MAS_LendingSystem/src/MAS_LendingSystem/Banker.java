@@ -94,13 +94,21 @@ public class Banker {
 	}
 	
 	public boolean getDefaulted() {
-		if (assets < defaultedAssets) {
+		if (this.assets < this.defaultedAssets) {
 			this.defaulted = true;
 			return true;
 		} else {
 			this.defaulted = false;
 			return false;
 		}
+	}
+	
+	public double getAssets() {
+		return this.assets;
+	}
+	
+	public double getDefaultedAssets() {
+		return this.defaultedAssets;
 	}
 	
 

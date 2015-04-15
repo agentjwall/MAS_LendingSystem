@@ -4,15 +4,13 @@ import cern.jet.random.Normal;
 import cern.jet.random.engine.RandomEngine;
 import repast.simphony.context.Context;
 import repast.simphony.dataLoader.ContextBuilder;
-import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.engine.environment.*;
 import repast.simphony.parameter.Parameters;
-import repast.simphony.random.DistributionsAdapter;
-import repast.simphony.random.RandomHelper;
+import repast.simphony.random.*;
 import repast.simphony.space.graph.Network;
 import repast.simphony.space.graph.UndirectedJungNetwork;
-import repast.simphony.context.space.graph.NetworkFactory;
-import repast.simphony.context.space.graph.NetworkFactoryFinder;
-import repast.simphony.context.space.graph.WattsBetaSmallWorldGenerator;
+import repast.simphony.util.collections.IndexedIterable;
+import repast.simphony.context.space.graph.*;
 
 public class WorldBuilder implements ContextBuilder<Object> {
 	public static final String jnetwork_id = "jung_network";
@@ -42,15 +40,11 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		 for ( int i = 0; i < bankerCount; i++) {
 			 double riskThreshold = RandomHelper.nextDoubleFromTo(0, 1);
 			 double assets = n.nextDouble();
-			 
-			 
-			 
 			 context.add(new Banker(assets, riskThreshold));
 		 }
 		 
 		 for (int i = 0; i < consumerCount; i++) {
 			 double income = distributionGenerator.nextBurr2(.5,5,12);
-			 
 			 context.add(new Consumer());
 		 }
 
@@ -59,12 +53,11 @@ public class WorldBuilder implements ContextBuilder<Object> {
 				rewiringProbability, meanDegree, false);
 
 		RunEnvironment.getInstance().endAt(numYears * 12);
-
+		
 		NetworkFactoryFinder
 			.createNetworkFactory(null)
 			.createNetwork(jnetwork_id, context, generator, false);
 	
 		return context;
 	}
-
 }
