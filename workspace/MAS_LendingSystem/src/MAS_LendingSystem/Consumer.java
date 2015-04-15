@@ -155,8 +155,7 @@ public class Consumer {
 		return Consumer.maximumSplurge * this.desire + 1;
 	}
 	
-	private boolean doesSplurge() {
-		System.out.println(this.splurgeDesire() +","+ this.splurgeThreshold()); 
+	private boolean doesSplurge() { 
 		if (RandomHelper.nextDoubleFromTo(0, 1) < (this.splurgeDesire() /  this.splurgeThreshold())) {
 			 System.out.println("Splurge!");
 			 return true; 
@@ -251,11 +250,15 @@ public class Consumer {
 	
 	// Consumer requests a loan from banker
 	private boolean requestLoan(Banker bank) {
+		if (bank == null) {
+			return false;
+		}
+		
 		LoanRequest req = new LoanRequest(this.desiredLoanAmount(), this.desiredPaymentAmount(), this.risk, this, bank);
 		bank.receiveLoanRequests(req);
 		this.loanPending = bank;
 		
-		return false;
+		return true;
 	}
 	
 	private double adjustedDesire(double value) {
