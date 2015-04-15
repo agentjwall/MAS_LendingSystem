@@ -32,14 +32,11 @@ public class Consumer {
 	List<Loan> loans = new ArrayList<Loan>(); //Loans currently held by agent
 	List<Banker> rejectedBanks = new ArrayList<Banker>();
 
-	public Consumer(double income, double startingCash, double spending, double startingValueOfDefaults, double risk, double desire, double startingAssets) {
+	public Consumer(double income, double spending, double risk, double desire) {
 		this.income = income;
-		this.cash = startingCash;
 		this.spending = spending;
-		this.valueOfDefaults = startingValueOfDefaults;
 		this.risk = risk;
 		this.desire = desire;
-		this.assets = startingAssets;
 	}
 	
 	//TODO: implement

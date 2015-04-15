@@ -1,5 +1,6 @@
 package MAS_LendingSystem;
 
+import cern.jet.random.Normal;
 import cern.jet.random.engine.RandomEngine;
 import repast.simphony.context.Context;
 import repast.simphony.dataLoader.ContextBuilder;
@@ -31,14 +32,19 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final double rewiringProbability = ((Double) parameters.getValue(PARAMETER_REWIRING_PROBABILITY)).doubleValue(); 
 		final int meanDegree = ((Integer) parameters.getValue(PARAMETER_MEAN_DEGREE)).intValue(); 
 		final int numYears = ((Integer) parameters.getValue(PARAMETER_NUM_YEARS)).intValue();
-		 DistributionsAdapter incomeGenerator = new DistributionsAdapter(DistributionsAdapter.makeDefaultGenerator());		
+
+		
+		DistributionsAdapter distributionGenerator = new DistributionsAdapter(DistributionsAdapter.makeDefaultGenerator());
+		Normal n = RandomHelper.createNormal(0.5, 1);
+
 		 for ( int i = 0; i < bankerCount; i++) {
 			 double riskThreshold = RandomHelper.nextDoubleFromTo(0, 1);
-			 double assets =  1000; //incomeGenerator.nextBurr2(1,2,2);
+			 double assets = n.nextDouble();
 			 context.add(new Banker(assets, riskThreshold));
 		 }
 		 
 		 for (int i = 0; i < consumerCount; i++) {
+			 double income = distributionGenerator.nextBurr2(.5,5,12);
 			 context.add(new Consumer());
 		 }
 
