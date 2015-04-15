@@ -24,12 +24,6 @@
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
 		/>
-				<parameter name="meanDegree" displayName="Mean Degree" type="int" 
-						defaultValue="12" 
-						isReadOnly="false" 
-						converter="MAS_LendingSystem.RoundDownConverter"
-									
-		/>
 		</parameters>
 
 

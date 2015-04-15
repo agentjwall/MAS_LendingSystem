@@ -15,10 +15,9 @@ public class Banker {
 	ArrayList<Loan> loans = new ArrayList<Loan>(); //Loans currently loaned out 
 	boolean defaulted = false;
 	
-	public Banker(double assets, double riskThreshold, double startingDefaultedAssets) {
+	public Banker(double assets, double riskThreshold) {
 		this.assets = assets;
 		this.riskThreshold = riskThreshold;
-		this.defaultedAssets = startingDefaultedAssets;
 	}
 	
 	@ScheduledMethod ( start = 1 , interval = 1)
@@ -35,7 +34,13 @@ public class Banker {
 		this.loanReqs.add(req);
 	}
 	
-	private void acceptLoanRequests(ArrayList<LoanRequest> reqs) {
+	private void acceptLoanRequests(ArrayList<LoanRequest> reqs_arg) {
+		ArrayList<LoanRequest> reqs;
+		if (reqs_arg == null) {
+			reqs = new ArrayList<LoanRequest>();
+		} else {
+			reqs = reqs_arg;
+		}
 		Hashtable<Double, LoanRequest> loanValues = new Hashtable<Double, LoanRequest>();
 		boolean accept = true;
 		do {
@@ -48,7 +53,7 @@ public class Banker {
 				}
 			}
 			
-			if (this.assets > l.amount) {
+			if (l != null && this.assets > l.amount) {
 				this.loans.add(new Loan(l));
 				this.assets -= l.amount;
 				l.requester.loanAccepted = true;

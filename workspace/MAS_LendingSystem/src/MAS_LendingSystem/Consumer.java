@@ -7,7 +7,9 @@ import repast.simphony.random.RandomHelper;
 import repast.simphony.space.graph.Network;
 import repast.simphony.util.ContextUtils;
 import repast.simphony.engine.schedule.ScheduledMethod;
+import repast.simphony.parameter.Parameter;
 import repast.simphony.context.Context;
+
 
 public class Consumer {
 	static double percentDurable = .7; //0-1 Percent of goods bought that get added to net worth
@@ -251,9 +253,14 @@ public class Consumer {
 		}
 	} 
 	
+	@Parameter(displayName = "Net Worth", usageName = "netWorth")
 	public double getNetWorth() {
 		return this.netWorth();
 	};
+
+	public void setNetWorth() {
+		// needs to exist but not do anything (for the parameter)
+	}
 	
 	public double economicIndicator() {
 		return this.deltaNetWorth + this.spending + this.splurgeValue; 
