@@ -43,7 +43,7 @@ public class Cell {
 	}
 	
 	public boolean isEmpty(){
-		if (this.agent != null) {
+		if (this.agent == null) {
 			return true;
 		} else {
 			return false;

@@ -63,7 +63,6 @@ public class Neighborhood extends GridValueLayer implements Iterable<Cell> {
 	
 	public Cell getEmptyCell() {
 		int r = RandomHelper.nextIntFromTo(0, this.cells.size());
-		
 		Cell empty = null;
 		
 		for (Cell c: this.cells) {

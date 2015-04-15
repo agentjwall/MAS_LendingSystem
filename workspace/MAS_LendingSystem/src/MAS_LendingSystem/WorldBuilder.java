@@ -78,10 +78,10 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		for (int i=0; i < neighborhoodCount; i++) {
 			Neighborhood n = new Neighborhood("neighborhood_"+i, false, gridDim); //TODO: does this have to be the size of the grid or neighborhood?
 			
-			for (int j=0; j < gridDim[0]; j++) {
-				for (int k=0; k < gridDim[1]; k++) {
-					int x = (i * gridDim[0]) + j % neighborhoodDim[0];
-					int y = (i * gridDim[0]) / neighborhoodDim[0] + k;
+			for (int j=0; j < neighborhoodDim[0]; j++) {
+				for (int k=0; k < neighborhoodDim[1]; k++) {
+					int x = (i * neighborhoodDim[0]) % gridDim[0] + j;
+					int y = (i * neighborhoodDim[0]) / gridDim[0] + k;
 					n.addCell(new Cell(x, y, n));
 				}
 			}
