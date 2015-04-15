@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <parameters>
-					<parameter name="rewiringProbability" displayName="Rewiring Probability (Watts Beta)" type="double" 
-						defaultValue="0.04" 
+					<parameter name="randomSeed" displayName="Default Random Seed" type="int" 
+						defaultValue="__NULL__"
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="meanConsumerRisk" displayName="Mean Consumer Risk (0 to 1)" type="double" 
+						defaultValue="0.5" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
 		/>
-				<parameter name="bankerCount" displayName="Banker Count" type="int" 
-						defaultValue="40" 
+				<parameter name="costOfLiving" displayName="Cost of Living" type="double" 
+						defaultValue="1000.0" 
 						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
 		/>
-				<parameter name="consumerCount" displayName="Consumer Count" type="int" 
-						defaultValue="400" 
+				<parameter name="meanBankerRisk" displayName="Mean Bank Risk (0 to 1)" type="double" 
+						defaultValue="0.5" 
 						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
-									
-		/>
-				<parameter name="randomSeed" displayName="Default Random Seed" type="int" 
-						defaultValue="__NULL__"
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
 		/>
 				<parameter name="meanDegree" displayName="Mean Degree" type="int" 
@@ -30,10 +30,58 @@
 						converter="MAS_LendingSystem.RoundDownConverter"
 									
 		/>
+				<parameter name="bankerCount" displayName="Banker Count" type="int" 
+						defaultValue="40" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="rewiringProbability" displayName="Rewiring Probability (Watts Beta)" type="double" 
+						defaultValue="0.04" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="meanForIncomeDist" displayName="Mean for Consumer Income Dist" type="double" 
+						defaultValue="0.5" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="consumerCount" displayName="Consumer Count" type="int" 
+						defaultValue="400" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="meanSpending" displayName="Mean for Spending Distribution" type="double" 
+						defaultValue="0.5" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="meanConsumerDesire" displayName="Mean Consumer Desire to Splurge" type="double" 
+						defaultValue="0.5" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="maxIncome" displayName="Max Income" type="double" 
+						defaultValue="20000" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		></parameter>
 				<parameter name="numYears" displayName="Years" type="int" 
 						defaultValue="20" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="meanAssets" displayName="Mean Starting Bank Assets" type="double" 
+						defaultValue="100000.0" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
 		/>
 		</parameters>
