@@ -3,7 +3,6 @@ package MAS_LendingSystem;
 import cern.jet.random.Normal;
 import repast.simphony.context.Context;
 import repast.simphony.dataLoader.ContextBuilder;
-import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.engine.environment.*;
 import repast.simphony.parameter.Parameters;
 import repast.simphony.random.*;

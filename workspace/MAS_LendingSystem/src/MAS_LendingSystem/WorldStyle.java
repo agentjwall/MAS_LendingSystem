@@ -1,9 +1,6 @@
 package MAS_LendingSystem;
 
 import java.awt.Color;
-import java.awt.color.*;
-
-import repast.simphony.visualization.editedStyle.EditedEdgeStyle2D;
 import repast.simphony.visualization.editedStyle.EditedValueLayerStyleData;
 
 

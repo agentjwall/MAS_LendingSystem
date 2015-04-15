@@ -1,8 +1,6 @@
 package MAS_LendingSystem;
 
-import java.util.HashSet;
 import java.util.Set;
-
 import repast.simphony.context.Context;
 import repast.simphony.engine.environment.RunState;
 import repast.simphony.space.grid.*;
@@ -30,7 +28,7 @@ public class AgentClass {
 	}
 	
 	public GridPoint getGridPoint() {
-		Grid grid = getGrid();
+		Grid<Object> grid = getGrid();
 		return grid.getLocation(this);
 	}
 	

@@ -5,11 +5,8 @@ import java.util.List;
 import java.util.Set;
 
 import repast.simphony.parameter.Parameter;
-import repast.simphony.query.space.grid.*;
 import repast.simphony.random.RandomHelper;
-import repast.simphony.space.graph.Network;
 import repast.simphony.space.grid.*;
-import repast.simphony.util.ContextUtils;
 import repast.simphony.util.SimUtilities;
 import repast.simphony.util.collections.IndexedIterable;
 import repast.simphony.context.Context;

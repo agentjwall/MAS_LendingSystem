@@ -30,7 +30,7 @@ public class Loan {
 	
 	public Loan(double loanAmount, int ticksToPayoff) {
 		this.initialLoanAmount = this.principle = loanAmount;
-		this.payment = (Loan.interestRate * loanAmount) / ( 1- Math.pow(1 + this.interestRate, -ticksToPayoff));
+		this.payment = (Loan.interestRate * loanAmount) / ( 1- Math.pow(1 + Loan.interestRate, -ticksToPayoff));
 	}
 	
 	public double getPayment() {

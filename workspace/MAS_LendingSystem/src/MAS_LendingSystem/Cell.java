@@ -3,8 +3,6 @@ package MAS_LendingSystem;
 import java.util.HashSet;
 import java.util.Set;
 
-import repast.simphony.valueLayer.GridValueLayer;
-
 public class Cell {
 
 	private AgentClass agent = null;

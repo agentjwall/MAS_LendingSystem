@@ -46,7 +46,7 @@ public class ScheduleDispatcher {
 	
 	// TODO Maddy
 	public void updateBackground(IndexedIterable<Object> bankers, IndexedIterable<Object> consumers) {
-		Context<Object> context = this.getContext();
+		Context<Object> context = ScheduleDispatcher.getContext();
 		if (context == null) {
 			return;
 		}
