@@ -48,12 +48,12 @@
   <layoutInterval>1</layoutInterval>
   <layerOrder>
     <entry>
-      <string>MAS_LendingSystem.Banker</string>
-      <int>1</int>
-    </entry>
-    <entry>
       <string>MAS_LendingSystem.Consumer</string>
       <int>0</int>
+    </entry>
+    <entry>
+      <string>MAS_LendingSystem.Banker</string>
+      <int>1</int>
     </entry>
   </layerOrder>
   <projections>

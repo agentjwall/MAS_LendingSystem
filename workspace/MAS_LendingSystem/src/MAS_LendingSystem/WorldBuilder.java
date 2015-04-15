@@ -3,10 +3,18 @@ package MAS_LendingSystem;
 import cern.jet.random.Normal;
 import repast.simphony.context.Context;
 import repast.simphony.dataLoader.ContextBuilder;
-import repast.simphony.engine.environment.*;
 import repast.simphony.engine.schedule.ScheduledMethod;
+import repast.simphony.space.graph.Network;
+import repast.simphony.space.graph.UndirectedJungNetwork;
+import repast.simphony.valueLayer.GridValueLayer;
+import repast.simphony.valueLayer.ValueLayer;
+import repast.simphony.context.space.graph.NetworkFactory;
+import repast.simphony.context.space.graph.NetworkFactoryFinder;
+import repast.simphony.context.space.graph.WattsBetaSmallWorldGenerator;
+import repast.simphony.engine.environment.*;
 import repast.simphony.parameter.Parameters;
 import repast.simphony.random.*;
+import repast.simphony.space.grid.Grid;
 import repast.simphony.util.collections.IndexedIterable;
 import repast.simphony.context.space.graph.*;
 
@@ -14,6 +22,11 @@ public class WorldBuilder implements ContextBuilder<Object> {
 	public static final String jnetwork_id = "jung_network";
 	public static final String context_id = "MAS_LendingSystem";
 	public static final String PARAMETER_NUM_YEARS = "numYears";
+	
+	//final GridValueLayer foodValueLayer = new GridValueLayer();
+	//public static ValueLayer worldStyle =  (ValueLayer) new WorldStyle();
+	
+	public int monthsDeclining = 0;
 	
 	// network parameters
     public static final String PARAMETER_BANKER_COUNT = "bankerCount";
@@ -29,7 +42,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
     public static final String PARAMETER_MEAN_SPENDING = "meanSpending";
     public static final String PARAMETER_CONSUMER_RISK = "meanConsumerRisk";
     public static final String PARAMETER_CONSUMER_DESIRE = "meanConsumerDesire";
-    
+
     // banker parameters
     public static final String PARAMETER_BANKER_RISK = "meanBankerRisk";
 
@@ -37,7 +50,9 @@ public class WorldBuilder implements ContextBuilder<Object> {
 	
 	public Context<Object> build(Context<Object> context) {
 		context.setId(context_id);
-		 
+		//context.addProjection(grid);
+		//context.addValueLayer(worldStyle);
+		
 		final Parameters parameters = RunEnvironment.getInstance().getParameters();
 
 		final int bankerCount = ((Integer) parameters.getValue(PARAMETER_BANKER_COUNT)).intValue();
@@ -83,6 +98,12 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		context.add(new ScheduleDispatcher());
 		return context;
 	}
+	
+	@ScheduledMethod ( start = 1 , interval = 1)
+	public void updateBackground() {
+		 
+	}
+
 
 	public double getNormalDist(double min, double max, double mean) {
 		Normal n = RandomHelper.createNormal(mean, 1);
