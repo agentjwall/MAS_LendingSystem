@@ -139,7 +139,9 @@ public class WorldBuilder implements ContextBuilder<Object> {
 	
 	
 	private int[] getNeighborhoodDim() {
-		int elements = ((Integer) parameters.getValue(PARAMETER_BANKER_COUNT)).intValue();
+		int bankers = ((Integer) parameters.getValue(PARAMETER_BANKER_COUNT)).intValue();
+		int consumers = ((Integer) parameters.getValue(PARAMETER_CONSUMER_COUNT)).intValue();
+		int elements = (bankers + consumers) / neighborhoodCount; 
 		return getDim(elements);
 	}
 	
