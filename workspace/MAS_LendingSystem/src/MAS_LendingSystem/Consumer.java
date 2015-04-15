@@ -6,6 +6,7 @@ import java.util.List;
 import repast.simphony.random.RandomHelper;
 import repast.simphony.space.graph.Network;
 import repast.simphony.util.ContextUtils;
+import repast.simphony.util.collections.IndexedIterable;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.parameter.Parameter;
 import repast.simphony.context.Context;
@@ -17,6 +18,7 @@ public class Consumer {
 	static int maximumSplurge = 100;
 	static double loanPaymentPercentage = .2; //percent of disposable income that will be payed towards loans
 	
+	int id;
 	double income = 0; //Income gained per tick
 	double cash = 0; //Net cash of the 
 	double spending = 0; //Money spent per tick
@@ -31,12 +33,9 @@ public class Consumer {
 	List<Double> observedSplurges = new ArrayList<Double>();
 	List<Loan> loans = new ArrayList<Loan>(); //Loans currently held by agent
 	List<Banker> rejectedBanks = new ArrayList<Banker>();
-
-	public Consumer() {
-		
-	}
 	
-	public Consumer(double income, double spending, double risk, double desire) {
+	public Consumer(int id, double income, double spending, double risk, double desire) {
+		this.id = id;
 		this.income = income;
 		this.spending = spending;
 		this.risk = risk;
@@ -55,7 +54,6 @@ public class Consumer {
 		this.makeLoanPayments();
 		this.receiveNeighborsSplurging();
 		this.deltaNetWorth = this.netWorth() - netWorth;
-		
 		if (this.doesSplurge()) {
 			this.currentSplurge = this.splurgeAmount();
 			
@@ -153,12 +151,14 @@ public class Consumer {
 		return this.observedSplurges.size() + 1;
 	}
 	
-	private int splurgeThreshold() {
-		return (int) (Consumer.maximumSplurge * this.desire);
+	private double splurgeThreshold() {
+		return Consumer.maximumSplurge * this.desire + 1;
 	}
 	
 	private boolean doesSplurge() {
-		 if (RandomHelper.nextDoubleFromTo(0, 1) < (this.splurgeDesire() /  this.splurgeThreshold())) {
+		System.out.println(this.splurgeDesire() +","+ this.splurgeThreshold()); 
+		if (RandomHelper.nextDoubleFromTo(0, 1) < (this.splurgeDesire() /  this.splurgeThreshold())) {
+			 System.out.println("Splurge!");
 			 return true; 
 		 } else {
 			 return false;

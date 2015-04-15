@@ -7,6 +7,8 @@ import java.util.Hashtable;
 import repast.simphony.engine.schedule.ScheduledMethod;
 
 public class Banker {
+	
+	int id;
 	double assets = 0; //Total assets currently held by the bank
 	double defaultedAssets = 0; //Total amount of defaulted assets
 	double notesReceivable = 0; //Assets currently loaned out 
@@ -15,14 +17,15 @@ public class Banker {
 	ArrayList<Loan> loans = new ArrayList<Loan>(); //Loans currently loaned out 
 	boolean defaulted = false;
 	
-	public Banker(double assets, double riskThreshold) {
+	public Banker(int id, double assets, double riskThreshold) {
+		this.id = id;
 		this.assets = assets;
 		this.riskThreshold = riskThreshold;
 	}
 	
 	public void processLoans() {
 		if (!this.defaulted) {
-			this.acceptLoanRequests(loanReqs);
+			this.acceptLoanRequests(this.loanReqs);
 			this.monitorLoans();
 		}
 	}
@@ -37,7 +40,7 @@ public class Banker {
 		if (reqs_arg == null) {
 			reqs = new ArrayList<LoanRequest>();
 		} else {
-			reqs = reqs_arg;
+			reqs = new ArrayList<LoanRequest>(reqs_arg);
 		}
 		Hashtable<Double, LoanRequest> loanValues = new Hashtable<Double, LoanRequest>();
 		boolean accept = true;
@@ -52,6 +55,7 @@ public class Banker {
 			}
 			
 			if (l != null && this.assets > l.amount) {
+				System.out.println("Loan accepted!");
 				this.loans.add(new Loan(l));
 				this.assets -= l.amount;
 				l.requester.loanAccepted = true;
@@ -64,8 +68,10 @@ public class Banker {
 		
 		for (LoanRequest req: reqs) {
 			req.requester.loanAccepted = false;
-			reqs.remove(req);
 		}
+		
+		this.loanReqs = new ArrayList<LoanRequest>();
+
 	}
 	
 	private void monitorLoans() {
