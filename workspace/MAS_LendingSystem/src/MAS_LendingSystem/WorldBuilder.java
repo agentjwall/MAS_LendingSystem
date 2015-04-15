@@ -101,6 +101,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 				Consumer c = new Consumer(income, spending, risk, desire);
 				Cell  cell = n.getEmptyCell();
 				cell.setAgent(c);
+				c.setUnderlyingCell(cell);
 				context.add(c);
 				int[] coords = cell.getCoordinates();
 				grid.moveTo(c, coords[0], coords[1]);
@@ -120,6 +121,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 				Banker b = new Banker(assets, riskThreshold);
 				Cell  cell = n.getEmptyCell();
 				cell.setAgent(b);
+				b.setUnderlyingCell(cell);
 				context.add(b);
 				int[] coords = cell.getCoordinates();
 				grid.moveTo(b, coords[0], coords[1]);

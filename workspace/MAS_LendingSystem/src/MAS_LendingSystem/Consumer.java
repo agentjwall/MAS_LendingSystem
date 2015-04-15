@@ -200,78 +200,40 @@ public class Consumer extends AgentClass {
 	
 
 	private Banker getNearestAvalibleBank() {
-		//List<repast.simphony.query.space.grid.GridCell<Banker>> cells = new GridCellNgh<Banker>(
-        //         getGrid(), here, Banker.class, 0, 0).getNeighborhood(false);
-	/*	Set<Neighborhood> neighborhoods = this.getNeighborhoods();
+		Set<Neighborhood> neighborhoods = this.getNeighborhoods();
 		List<Banker> banks = new ArrayList<Banker>();
+		Banker nearestBank = null;
 		for (Neighborhood n: neighborhoods) {
 			banks.addAll(n.getBankers());
 		}
-		if (banks.size() > 0) {
+		// if there are any banks in my neighborhood, get a random one of those
+		while (banks.size() > 0 && nearestBank == null) {
 			SimUtilities.shuffle(banks, RandomHelper.getUniform());
-			return banks.get(0);
-		} else {
+			if (!this.rejectedBanks.contains(banks.get(0))) {
+				nearestBank = banks.get(0);
+			} else {
+				banks.remove(0);
+			}
+		}
+		
+		// none in my neighborhood that work; traverse all banks to find the nearest one
+		if (nearestBank == null) {
+			
 			Context<Object> context = getContext();
 			IndexedIterable<Object> bankers = context.getObjects(Banker.class);
-			
-		} */
-		 
-//		int ct = ScheduleDispatcher.idCount();
-//		System.out.println(ct);
-//		boolean[] visited = new boolean[ct];
-//		return this.getNearestAvalibleBank(this, visited); 
-
-		/* 
-		 * TODO replace with grid implementation
-		Context<Object> context = ScheduleDispatcher.getContext();
-		if (context == null) {
-			return null;
-		}
-        Network network = (Network) context.getProjection(WorldBuilder.jnetwork_id);
-        for (int dist=10; dist < 30; dist+= 10) {
-        	NetPathWithin npw = new NetPathWithin(network, this, dist);
-        	
-        	for (Object o: npw.query()) {
-        		if (o instanceof Banker) {
-        			return (Banker) o;
-        		}
-        	}
-        }
-        */
-        return null;
-	}
-
-	/*
-	 * TODO replace with grid implementation
-	private Banker getNearestAvalibleBank(Object o, boolean[] visited) {
-		Banker nearestBank = null;
-		
-		visited[this.id] = true;
-		Context<Object> context = (Context<Object>) ContextUtils.getContext(this);
-		Network network = (Network) context.getProjection(WorldBuilder.jnetwork_id);
-		Iterable<Object> banks = network.getAdjacent(o);
-		System.out.println();
-		
-		for(Object b : banks) {
-			if (b instanceof Banker && !this.rejectedBanks.contains((Banker) b)) {
-				nearestBank = (Banker) b;
-				break;
-			}
-		}
-		
-		if (nearestBank == null) {
-			for(Object b : banks) {
-				if (b instanceof Consumer && visited[((Consumer) b).id] != true) {
-					nearestBank = this.getNearestAvalibleBank(b, visited);
-					if (nearestBank != null) {
-						break;
-					}
+			double shortestDist = Double.POSITIVE_INFINITY;
+			Grid<Object> grid = getGrid();
+			for (Object b: bankers) {
+				Banker cast_b = (Banker) b;
+				double dist = grid.getDistance(this.getGridPoint(), cast_b.getGridPoint());
+				if (dist < shortestDist && !this.rejectedBanks.contains(cast_b)) {
+					shortestDist = dist;
+					nearestBank = cast_b;
 				}
 			}
-		}
-		
-		return nearestBank;
-	} */
+		} 
+     return nearestBank;
+	}
 	
 	// Consumer requests a loan from banker
 	private boolean requestLoan(Banker bank) {
