@@ -34,14 +34,13 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final double rewiringProbability = ((Double) parameters.getValue(PARAMETER_REWIRING_PROBABILITY)).doubleValue(); 
 		final int meanDegree = ((Integer) parameters.getValue(PARAMETER_MEAN_DEGREE)).intValue(); 
 		final int numYears = ((Integer) parameters.getValue(PARAMETER_NUM_YEARS)).intValue();
-
+		
 		
 		DistributionsAdapter distributionGenerator = new DistributionsAdapter(DistributionsAdapter.makeDefaultGenerator());
-		Normal n = RandomHelper.createNormal(0.5, 1);
 
 		 for ( int i = 0; i < bankerCount; i++) {
 			 double riskThreshold = RandomHelper.nextDoubleFromTo(0, 1);
-			 double assets = n.nextDouble();
+			 double assets = getNormalDist(100000, 200000);
 			 
 			 
 			 
@@ -65,6 +64,19 @@ public class WorldBuilder implements ContextBuilder<Object> {
 			.createNetwork(jnetwork_id, context, generator, false);
 	
 		return context;
+	}
+	
+	public double getNormalDist(double min, double max) {
+		Normal n = RandomHelper.createNormal(0.5, 1);
+		double val = n.nextDouble();
+		
+		if (val < 0) {
+			val = 0;
+		} else if (val > 1){
+			val = 1;
+		}
+		
+		return val * (max - min) + min;
 	}
 
 }
