@@ -82,6 +82,7 @@ public class Consumer {
 				this.loanAccepted = null;
 				this.assets += this.splurgeAmount();
 				this.observedSplurges = new ArrayList<Double>();
+				this.rejectedBanks.clear();
 			} else {
 				this.rejectedBanks.add(this.loanPending);
 				this.loanPending = null;
