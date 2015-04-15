@@ -87,6 +87,8 @@ public class WorldBuilder implements ContextBuilder<Object> {
 			
 			if (i == neighborhoodCount - 1) {
 				consumersPerNeighborhood = consumersPerNeighborhoodR;
+				bankersPerNeighborhood = bankersPerNeighborhoodR;
+
 			}
 			
 			for (int j=0; j < consumersPerNeighborhood; j++) {
@@ -100,11 +102,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 				int[] coords = cell.getCoordinates();
 				grid.moveTo(c, coords[0], coords[1]);
 			}
-			
-			if (i == neighborhoodCount - 1) {
-				bankersPerNeighborhood = bankersPerNeighborhoodR;
-			}
-			
+						
 			for (int j=0; j < bankersPerNeighborhood; j++) {
 				double riskThreshold = getNormalDist(0, 1, meanBankerRisk);
 				double assets = getNormalDist(100000, 200000, meanAssets);
@@ -122,11 +120,6 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		RunEnvironment.getInstance().endAt(numYears * 12);
 		context.add(new ScheduleDispatcher(uniqueId));
 		return context;
-	}
-	
-	@ScheduledMethod ( start = 1 , interval = 1)
-	public void updateBackground() {
-		 
 	}
 
 
@@ -166,8 +159,8 @@ public class WorldBuilder implements ContextBuilder<Object> {
 	private int[] getDim(int elements) {
 		int xDim = (int) Math.ceil(Math.sqrt(elements));
 		int yDim = xDim; 
-			while (xDim * (yDim - 1) > elements) {
-				yDim--;
+		while (xDim * (yDim - 1) > elements) {
+			yDim--;
 		}
 			
 		return new int[]{xDim, yDim};
