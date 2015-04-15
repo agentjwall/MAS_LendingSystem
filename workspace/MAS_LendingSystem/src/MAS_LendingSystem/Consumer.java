@@ -43,6 +43,11 @@ public class Consumer {
 		this.desire = desire;
 	}
 	
+/*	@ScheduledMethod ( start = 1 , interval = 1)
+	public void step() {
+		this.income += 5000;
+	} */
+	
 	public void beforeBanker() {
 		double netWorth = this.netWorth();
 		this.receiveIncome();
