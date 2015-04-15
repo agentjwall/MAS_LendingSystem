@@ -21,7 +21,7 @@ public class Consumer {
 	double cash = 0; //Net cash of the 
 	double spending = 0; //Money spent per tick
 	double deltaNetWorth = 0;
-	double splurgeValue = 0;
+	double currentSplurge = 0;
 	double valueOfDefaults = 0;
 	double risk = 0; //0-1 percent risk of defaulting
 	double desire = 0; //0-1 percent desire for more netWorth 
@@ -39,12 +39,7 @@ public class Consumer {
 		this.desire = desire;
 	}
 	
-	//TODO: implement
-	public Consumer() {
-		//this.desiredSpending = Dist(min(costOfLiving, income), income); 
-		//this.income = Dist(Consumer.costOfLiving, 20000);
-	}
-	
+	//TODO: depricate
 	@ScheduledMethod ( start = 1 , interval = 1)
 	private void step() {
 		double netWorth = this.netWorth();
@@ -70,7 +65,7 @@ public class Consumer {
 		}
 		
 		if (this.loanPending == null && this.doesSplurge()) {
-			this.splurgeValue = this.splurgeAmount();
+			this.currentSplurge = this.splurgeAmount();
 			
 			if (this.splurgeAmount() < this.cash) { //Pay for splurge purchase if possible
 				
@@ -83,7 +78,49 @@ public class Consumer {
 				
 			}
 		} else {
-			this.splurgeValue = 0;
+			this.currentSplurge = 0;
+		}
+	}
+	
+	public void beforeBanker() {
+		double netWorth = this.netWorth();
+		this.receiveIncome();
+		this.spendMoney();
+		this.makeLoanPayments();
+		this.receiveNeighborsSplurging();
+		this.deltaNetWorth = this.netWorth() - netWorth;
+		
+		if (this.doesSplurge()) {
+			this.currentSplurge = this.splurgeAmount();
+			
+			if (this.splurgeAmount() < this.cash) { //Pay for splurge purchase if possible
+				
+				this.cash -= this.splurgeAmount();
+			
+			} else {
+				
+				Banker b = this.getNearestAvalibleBank();
+				boolean success = this.requestLoan(b);
+				
+			}
+		} else {
+			this.currentSplurge = 0;
+		}
+	}
+	
+	public void afterBanker() {
+		if (this.loanAccepted != null) {
+			
+			if (this.loanAccepted) {
+				this.loanPending = null;
+				this.loanAccepted = null;
+				this.assets += this.splurgeAmount();
+				this.observedSplurges = new ArrayList<Double>();
+			} else {
+				this.rejectedBanks.add(this.loanPending);
+				this.loanPending = null;
+				this.loanAccepted = null;
+			}		
 		}
 	}
 
@@ -192,7 +229,7 @@ public class Consumer {
 		
 		for (Object c : consumers) {
 			if (c.getClass() == Consumer.class) {
-				list.add(((Consumer) c).splurgeValue);
+				list.add(((Consumer) c).currentSplurge);
 			}
 		}
 		
@@ -230,15 +267,12 @@ public class Consumer {
 		return nearestBank;
 	}
 	
-	//TODO: implement
+
 	private boolean requestLoan(Banker bank) {
 		LoanRequest req = new LoanRequest(this.desiredLoanAmount(), this.desiredPaymentAmount(), this.risk, this, bank);
 		bank.receiveLoanRequests(req);
 		this.loanPending = bank;
 		
-		//send message to nearest non-rejected bank
-		//(refinance if consumer has one or more loans)
-		//wait for request
 		return false;
 	}
 	
@@ -260,6 +294,6 @@ public class Consumer {
 	}
 	
 	public double economicIndicator() {
-		return this.deltaNetWorth + this.spending + this.splurgeValue; 
+		return this.deltaNetWorth + this.spending + this.currentSplurge; 
 	}
 }
