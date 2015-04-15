@@ -14,7 +14,7 @@ public class ScheduleDispatcher {
 	static private int idCount;
 	
 	public ScheduleDispatcher(int idCount) {
-		this.idCount = idCount;
+		ScheduleDispatcher.idCount = idCount;
 	}
 	
 

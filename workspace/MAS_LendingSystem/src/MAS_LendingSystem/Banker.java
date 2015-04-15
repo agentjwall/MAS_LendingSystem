@@ -1,7 +1,6 @@
 package MAS_LendingSystem;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 
 public class Banker {
 	
@@ -39,7 +38,6 @@ public class Banker {
 		} else {
 			reqs = new ArrayList<LoanRequest>(reqs_arg);
 		}
-		Hashtable<Double, LoanRequest> loanValues = new Hashtable<Double, LoanRequest>();
 
 		boolean accept = true;
 		do {
@@ -82,7 +80,7 @@ public class Banker {
 	private void acceptPayment(Loan l) {
 		this.assets += l.acceptPayment();
 		
-		if (l.principle <= 0) { //Loan is payed off
+		if (l.principle <= 0) { //Loan is paid off
 			this.loans.remove(l);
 		}
 	}
