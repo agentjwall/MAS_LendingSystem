@@ -181,7 +181,8 @@ public class Consumer extends AgentClass {
 	
 	private List<Double> receiveNeighborsSplurging() {
 		List<Double> list = new ArrayList<Double>();
-		
+		/*
+		 * TODO replace with grid
 		Context<Object> context = (Context<Object>) ContextUtils.getContext(this);
 		Network network = (Network) context.getProjection(WorldBuilder.jnetwork_id);
 		Iterable<Object> consumers = network.getAdjacent(this);
@@ -191,7 +192,7 @@ public class Consumer extends AgentClass {
 				list.add(((Consumer) c).currentSplurge);
 			}
 		}
-		
+		*/
 		return list;
 	}
 	
@@ -203,7 +204,8 @@ public class Consumer extends AgentClass {
 //		boolean[] visited = new boolean[ct];
 //		return this.getNearestAvalibleBank(this, visited); 
 
-
+		/* 
+		 * TODO replace with grid implementation
 		Context<Object> context = ScheduleDispatcher.getContext();
 		if (context == null) {
 			return null;
@@ -219,7 +221,7 @@ public class Consumer extends AgentClass {
         		}
         	}
         }
-        
+        */
         return null;
 	}
 	
@@ -227,6 +229,8 @@ public class Consumer extends AgentClass {
 		visited[this.id] = true;
 		Banker nearestBank = null;
 		
+		/* 
+		 * TODO replace with grid implementation
 		Context<Object> context = (Context<Object>) ContextUtils.getContext(this);
 		Network network = (Network) context.getProjection(WorldBuilder.jnetwork_id);
 		Iterable<Object> banks = network.getAdjacent(o);
@@ -249,7 +253,7 @@ public class Consumer extends AgentClass {
 				}
 			}
 		}
-		
+		*/
 		return nearestBank;
 	}
 	
