@@ -71,9 +71,10 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final double meanConsumerDesire = ((Double) parameters.getValue(PARAMETER_CONSUMER_DESIRE)).doubleValue();
 		final double meanBankerRisk = ((Double) parameters.getValue(PARAMETER_BANKER_RISK)).doubleValue();
 		
+		int[] gridDim = getGridDim();
 		
 		for (int i=0; i < neighborhoodCount; i++) {
-			context.add(new GridValueLayer("neighborhood_"+i, false, getGridXDim(), getGridYDim()));
+			context.add(new GridValueLayer("neighborhood_"+i, false, gridDim[0], gridDim[1]));
 		}
 
 		for (int i = 0; i < bankerCount; i++) {
@@ -124,38 +125,32 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		return val * (max - min) + min;
 	}
 	
-	private int getGridXDim() {
+	
+	private int[] getGridDim() {
 		int elements = neighborhoodCount;
-		return getXDim(elements) * getNeighborhoodXDim();
+		int[] neighborhood = getNeighborhoodDim();
+		int[] grid = getDim(elements);
+
+		int x = neighborhood[0] * grid[0];
+		int y = neighborhood[1] * grid[1];
+		
+		return new int[]{x, y};
 	}
 	
-	private int getGridYDim() {
-		int elements = neighborhoodCount;
-		return getYDim(elements) * getNeighborhoodYDim();
-	}
 	
-	private int getNeighborhoodXDim() {
+	private int[] getNeighborhoodDim() {
 		int elements = ((Integer) parameters.getValue(PARAMETER_BANKER_COUNT)).intValue();
-		return getXDim(elements);
+		return getDim(elements);
 	}
 	
-	private int getNeighborhoodYDim() {
-		int elements = ((Integer) parameters.getValue(PARAMETER_BANKER_COUNT)).intValue();
-		return getXDim(elements);
-	}
-	
-	private int getXDim(int elements) {
-		return (int) Math.ceil(Math.sqrt(elements));
-	}
-	
-	private int getYDim(int elements) {
-		int xDim = getXDim(elements);
+	private int[] getDim(int elements) {
+		int xDim = (int) Math.ceil(Math.sqrt(elements));
 		int yDim = xDim; 
 			while (xDim * (yDim - 1) > elements) {
 				yDim--;
 		}
 			
-		return yDim;
+		return new int[]{xDim, yDim};
 	}
 	
 
