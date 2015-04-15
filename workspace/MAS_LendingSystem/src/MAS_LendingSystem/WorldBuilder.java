@@ -22,6 +22,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
     public static final String PARAMETER_MEAN_DEGREE = "meanDegree";
     public static final String PARAMETER_NUM_YEARS = "numYears";
     
+    private static int uniqueId = 0;
 	
 	public Context<Object> build(Context<Object> context) {
 		context.setId(context_id);
@@ -37,13 +38,14 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final int costOfLiving = 1000;
 		final int maxIncome = 20000;
 		
+		
 		DistributionsAdapter distributionGenerator = new DistributionsAdapter(DistributionsAdapter.makeDefaultGenerator());
 
 		 for ( int i = 0; i < bankerCount; i++) {
 			 double riskThreshold = RandomHelper.nextDoubleFromTo(0, 1);
 			 double assets = getNormalDist(100000, 200000);
 
-			 context.add(new Banker(assets, riskThreshold));
+			 context.add(new Banker(stampId(), assets, riskThreshold));
 		 }
 		 
 		 for (int i = 0; i < consumerCount; i++) {
@@ -52,7 +54,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 			 double risk = RandomHelper.nextDoubleFromTo(0, 1);
 			 double desire = RandomHelper.nextDoubleFromTo(0, 1);
 			 
-			 context.add(new Consumer(income, spending, risk, desire));
+			 context.add(new Consumer(stampId(), income, spending, risk, desire));
 		 }
 
 		// rewiringProbability = probability that a node in a clustered will be rewired to some other random node
@@ -116,7 +118,6 @@ public class WorldBuilder implements ContextBuilder<Object> {
          IndexedIterable<Object> bankers = context.getObjects(Banker.class);
          IndexedIterable<Object> consumers = context.getObjects(Consumer.class);
          
-         System.out.println("Please?");
          for (int i = 0; i < consumers.size(); i++) {
         	 Consumer c = (Consumer) consumers.get(i);
         	 c.beforeBanker();
@@ -147,6 +148,15 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		 */
 		
 		// get rid of the bankers parameter if you don't need it
+	}
+	
+	private static int stampId() {
+		uniqueId ++;
+		return uniqueId - 1;	
+	}
+	
+	public int idCt() {
+		return uniqueId;
 	}
 	
 }

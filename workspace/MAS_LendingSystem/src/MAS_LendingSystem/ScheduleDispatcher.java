@@ -58,7 +58,7 @@ public class ScheduleDispatcher {
 	
 		// returns the context if simulation is started & correctly initialized
 		// otherwise returns null
-		public Context<Object> getContext() {
+		static public Context<Object> getContext() {
 			final RunState runState = RunState.getInstance();
 
 	        // If simulation is not yet started or initialized correctly
