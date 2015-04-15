@@ -205,10 +205,21 @@ public class Consumer {
 	
 	
 	private Banker getNearestAvalibleBank() {
-		return this.getNearestAvalibleBank(this); 
+		Context<Object> context = ScheduleDispatcher.getContext();
+		if (context == null) {
+			return null;
+		}
+		
+		IndexedIterable<Object> wbs = context.getObjects(WorldBuilder.class);
+		if (wbs.size() == 0) {
+			return null;
+		} else {
+			int ct = ((WorldBuilder) wbs.get(0)).idCt();
+			return this.getNearestAvalibleBank(this, new boolean[ct]); 
+		}
 	}
 	
-	private Banker getNearestAvalibleBank(Object o) {
+	private Banker getNearestAvalibleBank(Object o, boolean[] visited) {
 		Banker nearestBank = null;
 		
 		Context<Object> context = (Context<Object>) ContextUtils.getContext(this);
@@ -219,14 +230,18 @@ public class Consumer {
 			if (b.getClass() == Banker.class && !this.rejectedBanks.contains((Banker) b)) {
 				nearestBank = (Banker) b;
 				break;
+			} else {
+				visited[((Consumer) b).id] = true;
 			}
 		}
 		
 		if (nearestBank == null) {
 			for(Object b : banks) {
-				nearestBank = this.getNearestAvalibleBank(b);
-				if (nearestBank != null) {
-					break;
+				if (visited[((Consumer) b).id] != true) {
+					nearestBank = this.getNearestAvalibleBank(b, visited);
+					if (nearestBank != null) {
+						break;
+					}
 				}
 			}
 		}
