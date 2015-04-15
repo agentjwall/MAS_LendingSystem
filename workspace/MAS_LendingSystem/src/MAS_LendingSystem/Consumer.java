@@ -113,7 +113,7 @@ public class Consumer {
 			this.cash -= payment;
 			l.makePayment(payment);
 			
-			if (l.principle == 0) { //Loan is payed off
+			if (l.principle == 0) { //Loan is paid off
 				this.updateRisk(l);
 				this.loans.remove(l);
 			}
