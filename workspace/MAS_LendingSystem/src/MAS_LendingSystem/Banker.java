@@ -11,27 +11,34 @@ public class Banker {
 	double defaultedAssets = 0; //Total amount of defaulted assets
 	double notesReceivable = 0; //Assets currently loaned out 
 	double riskThreshold = 0; //0-1 Soft threshold for taking on loans of equal or lower risk
+	ArrayList<LoanRequest> loanReqs = new ArrayList<LoanRequest>();
 	ArrayList<Loan> loans = new ArrayList<Loan>(); //Loans currently loaned out 
 	boolean defaulted = false;
 	
-	@ScheduledMethod ( start = 1 , interval = 1)
-	public void step() {
-		
+	public Banker(double assets, double riskThreshold) {
+		this.assets = assets;
+		this.riskThreshold = riskThreshold;
+	}
+	
+	public void processLoans() {
 		if (!this.defaulted) {
-			ArrayList<LoanRequest> reqs = this.receiveLoanRequests();
-			this.acceptLoanRequests(reqs);
+			this.acceptLoanRequests(loanReqs);
 			this.monitorLoans();
 		}
-
 	}
 	
-	//TODO: implement
-	private ArrayList<LoanRequest> receiveLoanRequests() {
-		//get all lon requests for this bank
-		return null;
+	// Banker accepts communication of a loan request from a consumer agent 
+	public void receiveLoanRequests(LoanRequest req) {
+		this.loanReqs.add(req);
 	}
 	
-	private void acceptLoanRequests(ArrayList<LoanRequest> reqs) {
+	private void acceptLoanRequests(ArrayList<LoanRequest> reqs_arg) {
+		ArrayList<LoanRequest> reqs;
+		if (reqs_arg == null) {
+			reqs = new ArrayList<LoanRequest>();
+		} else {
+			reqs = reqs_arg;
+		}
 		Hashtable<Double, LoanRequest> loanValues = new Hashtable<Double, LoanRequest>();
 		boolean accept = true;
 		do {
@@ -44,15 +51,21 @@ public class Banker {
 				}
 			}
 			
-			if (this.assets > l.amount) {
+			if (l != null && this.assets > l.amount) {
 				this.loans.add(new Loan(l));
 				this.assets -= l.amount;
-				reqs.remove(l);
+				l.requester.loanAccepted = true;
+				this.loanReqs.remove(l);
 			} else {
 				accept = false;
 			}
 			
 		} while (accept);
+		
+		for (LoanRequest req: reqs) {
+			req.requester.loanAccepted = false;
+			reqs.remove(req);
+		}
 	}
 	
 	private void monitorLoans() {
@@ -79,13 +92,24 @@ public class Banker {
 	}
 	
 	public boolean getDefaulted() {
-		if (assets < defaultedAssets) {
+		if (this.assets < this.defaultedAssets) {
 			this.defaulted = true;
 			return true;
 		} else {
 			this.defaulted = false;
 			return false;
 		}
+	}
+	
+	public double getAssets() {
+		return this.assets;
+	}
+	public void setAssets (double newAssets) {
+		this.assets = newAssets;
+	}
+	
+	public double getDefaultedAssets() {
+		return this.defaultedAssets;
 	}
 	
 

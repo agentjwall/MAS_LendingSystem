@@ -30,12 +30,6 @@
 						converter="MAS_LendingSystem.RoundDownConverter"
 									
 		/>
-				<parameter name="numYears" displayName="Years" type="int" 
-						defaultValue="20" 
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
-									
-		/>
-		</parameters>
+</parameters>
 
 
