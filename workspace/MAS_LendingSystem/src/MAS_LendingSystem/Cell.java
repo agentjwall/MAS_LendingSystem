@@ -38,22 +38,15 @@ public class Cell {
 		return this.agent;
 	}
 	
+	public int[] getCoordinates() {
+		return new int[] {this.x, this.y};
+	}
+	
 	public boolean isEmpty(){
 		if (this.agent != null) {
 			return true;
 		} else {
 			return false;
-		}
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public Class getType() {
-		if (this.agent instanceof Banker) {
-			return Banker.class;
-		} else if (this.agent instanceof Consumer) {
-			return Consumer.class;
-		} else {
-			return null;
 		}
 	}
 	
