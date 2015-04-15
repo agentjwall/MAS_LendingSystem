@@ -1,15 +1,17 @@
 package MAS_LendingSystem;
 
-import java.util.HashSet;
+
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 import repast.simphony.random.RandomHelper;
+import repast.simphony.util.SimUtilities;
 import repast.simphony.valueLayer.GridValueLayer;
 
 public class Neighborhood extends GridValueLayer implements Iterable<Cell> {
 	
-	private Set<Cell> cells  = new HashSet<Cell>();
+	private List<Cell> cells  = new ArrayList<Cell>();
 
 	public Neighborhood(String name, boolean dense, int[] dimensions) {
 		super(name, dense, dimensions);
@@ -19,8 +21,8 @@ public class Neighborhood extends GridValueLayer implements Iterable<Cell> {
 		return this.cells.iterator();
 	}
 	
-	public Set<AgentClass> getAgents() {
-		Set<AgentClass> set = new HashSet<AgentClass>();
+	public List<AgentClass> getAgents() {
+		List<AgentClass> set = new ArrayList<AgentClass>();
 		for (Cell c: this) {
 			if (!c.isEmpty()) {
 				set.add(c.getAgent());
@@ -29,8 +31,8 @@ public class Neighborhood extends GridValueLayer implements Iterable<Cell> {
 		return set;
 	}
 	
-	public Set<Consumer> getConsumers() {
-		Set<Consumer> set = new HashSet<Consumer>();
+	public List<Consumer> getConsumers() {
+		List<Consumer> set = new ArrayList<Consumer>();
 		for (Cell c: this) {
 			if (c.isConsumer()) {
 				set.add((Consumer) c.getAgent());
@@ -39,8 +41,8 @@ public class Neighborhood extends GridValueLayer implements Iterable<Cell> {
 		return set;
 	}
 	
-	public Set<Banker> getBankers() {
-		Set<Banker> set = new HashSet<Banker>();
+	public List<Banker> getBankers() {
+		List<Banker> set = new ArrayList<Banker>();
 		for (Cell c: this) {
 			if (c.isBanker()) {
 				set.add((Banker) c.getAgent());
@@ -50,29 +52,19 @@ public class Neighborhood extends GridValueLayer implements Iterable<Cell> {
 	}
 	
 	public Cell getCell() {
-		int r = RandomHelper.nextIntFromTo(0, this.cells.size());
-		
+		SimUtilities.shuffle(this.cells, RandomHelper.getUniform());
 		for (Cell c: this.cells) {
-			if (r >= 0) {
-				return c;
-			}
-			r--;
+			return c;
 		}
 		return null;
 	}
 	
 	public Cell getEmptyCell() {
-		int r = RandomHelper.nextIntFromTo(0, this.cells.size());
-		Cell empty = null;
-		
+		SimUtilities.shuffle(this.cells, RandomHelper.getUniform());
 		for (Cell c: this.cells) {
 			if (c.isEmpty()) {
-				empty = c;
-			}
-			if (r >= 0 && empty != null) {
 				return c;
 			}
-			r--;
 		}
 		return null;
 	}
