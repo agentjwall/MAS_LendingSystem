@@ -9,9 +9,19 @@ import repast.simphony.util.collections.IndexedIterable;
 import repast.simphony.valueLayer.ValueLayer;
 
 public class ScheduleDispatcher {
+
+
+	static private int idCount;
+	
+	public ScheduleDispatcher(int idCount) {
+		this.idCount = idCount;
+	}
+	
+
 	public int prevPositiveBankAssets;
 	public int prevConsumerSpending;
 	public int monthsInDecline;
+
 	/* A single step function is used for the entire world in order
 	 * to facilitate synchronization of actions.
 	 * Called synchronously on every tick of the simulation. 
@@ -50,7 +60,6 @@ public class ScheduleDispatcher {
 		}
 
 		Collection<ValueLayer> layers = context.getValueLayers(); 
-		WorldStyle layer = (WorldStyle) layers.iterator().next();
 		
 		// figure out if consumer spending has increased or decreased
 		int totalConsumerSpending = 0;
@@ -60,24 +69,7 @@ public class ScheduleDispatcher {
          	}
 		int percentChangeCS = (totalConsumerSpending - prevConsumerSpending)/prevConsumerSpending;
 		
-		// figure out if bank assets-bank defaulted assets has increased or decreased
-		int totalPositiveBankAssets = 0;
-		for (int i = 0; i < bankers.size(); i++) {
-        	 	Banker b = (Banker) bankers.get(i);
-        	 	totalPositiveBankAssets += (b.assets + b.defaultedAssets);
-         	}
-		int percentChangeBA = (totalPositiveBankAssets - prevPositiveBankAssets)/prevPositiveBankAssets;
 		
-			int totalPercentChange = percentChangeCS + percentChangeBA;
-			if(totalPercentChange < 0){ 
-				layer.changeColor(monthsInDecline);
-				monthsInDecline++;
-			}
-			else{
-				monthsInDecline = 0;
-				layer.changeColor(monthsInDecline);
-				
-			}
 	}
 	
 		// returns the context if simulation is started & correctly initialized
@@ -99,6 +91,10 @@ public class ScheduleDispatcher {
 	        	return null;
 	        }
 	        return masterContext;
+		}
+		
+		static int idCount() {
+			return idCount;
 		}
 
 }

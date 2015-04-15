@@ -3,6 +3,9 @@ package MAS_LendingSystem;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.opengis.filter.spatial.Within;
+
+import repast.simphony.query.space.graph.NetPathWithin;
 import repast.simphony.random.RandomHelper;
 import repast.simphony.space.graph.Network;
 import repast.simphony.util.ContextUtils;
@@ -60,10 +63,10 @@ public class Consumer {
 			if (this.splurgeAmount() < this.cash) { //Pay for splurge purchase if possible
 				
 				this.cash -= this.splurgeAmount();
-			
+				System.out.println("splurge bought!");
 			} else {
 				
-				Banker b = this.getNearestAvailableBank();
+				Banker b = this.getNearestAvalibleBank();
 				boolean success = this.requestLoan(b);
 				
 			}
@@ -202,40 +205,52 @@ public class Consumer {
 	}
 	
 	
-	private Banker getNearestAvailableBank() {
+
+	private Banker getNearestAvalibleBank() {
+//		int ct = ScheduleDispatcher.idCount();
+//		System.out.println(ct);
+//		boolean[] visited = new boolean[ct];
+//		return this.getNearestAvalibleBank(this, visited); 
+
+
 		Context<Object> context = ScheduleDispatcher.getContext();
 		if (context == null) {
 			return null;
 		}
-		
-		IndexedIterable<Object> wbs = context.getObjects(WorldBuilder.class);
-		if (wbs.size() == 0) {
-			return null;
-		} else {
-			int ct = ((WorldBuilder) wbs.get(0)).idCt();
-			return this.getNearestAvalibleBank(this, new boolean[ct]); 
-		}
+        IndexedIterable<Object> bankers = context.getObjects(Banker.class);
+        Network network = (Network) context.getProjection(WorldBuilder.jnetwork_id);
+        for (int dist=10; dist < 30; dist+= 10) {
+        	NetPathWithin npw = new NetPathWithin(network, this, dist);
+        	
+        	for (Object o: npw.query()) {
+        		if (o instanceof Banker) {
+        			return (Banker) o;
+        		}
+        	}
+        }
+        
+        return null;
 	}
 	
 	private Banker getNearestAvalibleBank(Object o, boolean[] visited) {
+		visited[this.id] = true;
 		Banker nearestBank = null;
 		
 		Context<Object> context = (Context<Object>) ContextUtils.getContext(this);
 		Network network = (Network) context.getProjection(WorldBuilder.jnetwork_id);
 		Iterable<Object> banks = network.getAdjacent(o);
+		System.out.println();
 		
 		for(Object b : banks) {
-			if (b.getClass() == Banker.class && !this.rejectedBanks.contains((Banker) b)) {
+			if (b instanceof Banker && !this.rejectedBanks.contains((Banker) b)) {
 				nearestBank = (Banker) b;
 				break;
-			} else {
-				visited[((Consumer) b).id] = true;
 			}
 		}
 		
 		if (nearestBank == null) {
 			for(Object b : banks) {
-				if (visited[((Consumer) b).id] != true) {
+				if (b instanceof Consumer && visited[((Consumer) b).id] != true) {
 					nearestBank = this.getNearestAvalibleBank(b, visited);
 					if (nearestBank != null) {
 						break;
