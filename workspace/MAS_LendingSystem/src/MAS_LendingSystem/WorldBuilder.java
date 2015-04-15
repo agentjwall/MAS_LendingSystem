@@ -98,7 +98,8 @@ public class WorldBuilder implements ContextBuilder<Object> {
 				Consumer c = new Consumer(stampId(), income, spending, risk, desire);
 				Cell  cell = n.getEmptyCell();
 				context.add(c);
-				grid.moveTo(c, cell.getCoordinates());
+				int[] coords = cell.getCoordinates();
+				grid.moveTo(c, coords[0], coords[1]);
 			}
 			
 			if (i == neighborhoodCount - 1) {
@@ -111,7 +112,8 @@ public class WorldBuilder implements ContextBuilder<Object> {
 				Banker b = new Banker(stampId(), assets, riskThreshold);
 				Cell  cell = n.getEmptyCell();
 				context.add(b);
-				grid.moveTo(b, cell.getCoordinates());
+				int[] coords = cell.getCoordinates();
+				grid.moveTo(b, coords[0], coords[1]);
 				
 			}
 			
