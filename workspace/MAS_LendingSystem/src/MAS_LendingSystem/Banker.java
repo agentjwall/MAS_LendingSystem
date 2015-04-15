@@ -20,14 +20,20 @@ public class Banker {
 		this.riskThreshold = riskThreshold;
 	}
 	
+	//TODO: depricate
 	@ScheduledMethod ( start = 1 , interval = 1)
 	public void step() {
-		
 		if (!this.defaulted) {
 			this.acceptLoanRequests(loanReqs);
 			this.monitorLoans();
 		}
-
+	}
+	
+	public void processLoans() {
+		if (!this.defaulted) {
+			this.acceptLoanRequests(loanReqs);
+			this.monitorLoans();
+		}
 	}
 	
 	public void receiveLoanRequests(LoanRequest req) {
