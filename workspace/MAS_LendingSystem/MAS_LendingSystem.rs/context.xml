@@ -1,4 +1,3 @@
-<context id="MAS_LendingSystem" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://repast.org/scenario/context">
-  	
-	<projection id="jung_network" type="network"></projection>
-	</context>
+<context id="MAS_LendingSystem" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://repast.org/scenario/context">  	
+	<projection type="grid" id="grid"/>
+</context>
