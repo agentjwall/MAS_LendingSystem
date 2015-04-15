@@ -24,8 +24,8 @@ public class Consumer {
 	double splurgeValue = 0;
 	double valueOfDefaults = 0;
 	double risk = 0; //0-1 percent risk of defaulting
-	double desire = 0; //0-1 percent deesire for more netWorth 
-	double assets = 0; //cahs value of non-cash assets
+	double desire = 0; //0-1 percent desire for more netWorth 
+	double assets = 0; //cash value of non-cash assets
 	Banker loanPending = null;
 	Boolean loanAccepted = null;
 	List<Double> observedSplurges = new ArrayList<Double>();
