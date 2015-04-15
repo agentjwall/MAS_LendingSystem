@@ -73,6 +73,15 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		int[] gridDim = getGridDim();
 		int[] neighborhoodDim = getNeighborhoodDim();
 		
+		/* *** Create grid *** */
+		Grid<Object> grid = GridFactoryFinder.createGridFactory(null)
+								.createGrid(Constants.GRID_ID, context, 
+										new GridBuilderParameters<Object>(
+												new StrictBorders(),				// no wrap-around on corners of grid
+												new SimpleGridAdder<Object>(),		// simply adds an object to the grid w/o other action
+												true, 								// each cell is multi-occupancy
+												gridDim)); 							// int[] grid dimensions
+		
 		for (int i=0; i < neighborhoodCount; i++) {
 			Neighborhood n = new Neighborhood("neighborhood_"+i, false, gridDim); //TODO: does this have to be the size of the grid or neighborhood?
 			
@@ -94,9 +103,9 @@ public class WorldBuilder implements ContextBuilder<Object> {
 				double risk = getNormalDist(0, 1, meanConsumerRisk);
 				double desire = getNormalDist(0, 1, meanConsumerDesire);
 				Consumer c = new Consumer(stampId(), income, spending, risk, desire);
-				n.getEmptyCell().setAgent(c);
+				Cell  cell = n.getEmptyCell();
 				context.add(c);
-				
+				grid.moveTo(c, cell.getCoordinates());
 			}
 			
 			if (i == neighborhoodCount - 1) {
@@ -107,51 +116,14 @@ public class WorldBuilder implements ContextBuilder<Object> {
 				double riskThreshold = getNormalDist(0, 1, meanBankerRisk);
 				double assets = getNormalDist(100000, 200000, meanAssets);
 				Banker b = new Banker(stampId(), assets, riskThreshold);
-				n.getEmptyCell().setAgent(b);
+				Cell  cell = n.getEmptyCell();
 				context.add(b);
+				grid.moveTo(b, cell.getCoordinates());
 				
 			}
 			
 			context.add(n);
-		}
-
-		 /* *** Create grid *** */
-		// hard-coded now, TODO use Nick's actual methods
-		int[] dimensions = {1, 2};
-		// creates a grid and adds it to the context
-		Grid<Object> grid = GridFactoryFinder.createGridFactory(null)
-								.createGrid(Constants.GRID_ID, context, 
-										new GridBuilderParameters<Object>(
-												new StrictBorders(),				// no wrap-around on corners of grid
-												new SimpleGridAdder<Object>(),		// simply adds an object to the grid w/o other action
-												true, 								// each cell is multi-occupancy
-												dimensions)); 						// int[] grid dimensions
-		
-		
-		/* *** Generate agents *** */
-		//TODO replace with real x/y calculations
-		//TODO question: not sure if instances of AgentClass need to be passed the grid when instantiated.
-				// in stupidmodel they are but idk why that's necessary
-		int x = 0;
-		int y = 0;
-		 for (int i = 0; i < bankerCount; i++) {
-			 double riskThreshold = getNormalDist(0, 1, meanBankerRisk);
-			 double assets = getNormalDist(100000, 200000, meanAssets);
-			 AgentClass newAgent = new Banker(stampId(), assets, riskThreshold);
-			 context.add(newAgent);
-			 grid.moveTo(newAgent, x, y);
-		 }
-		 
-		 for (int i = 0; i < consumerCount; i++) {
-			 // Normal distribution with variable min, max, and mean used to approximate a Burr distribution
-			 double income = getNormalDist(costOfLiving, maxIncome, meanIncome);
-			 double spending = getNormalDist(costOfLiving, income, meanSpending);
-			 double risk = getNormalDist(0, 1, meanConsumerRisk);
-			 double desire = getNormalDist(0, 1, meanConsumerDesire);
-			 AgentClass newAgent = new Consumer(stampId(), income, spending, risk, desire);
-			 context.add(newAgent);
-			 grid.moveTo(newAgent, x, y);
-		 }												
+		}								
 		
 		RunEnvironment.getInstance().endAt(numYears * 12);
 		context.add(new ScheduleDispatcher(uniqueId));
