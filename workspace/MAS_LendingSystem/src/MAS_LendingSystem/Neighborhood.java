@@ -69,13 +69,39 @@ public class Neighborhood extends GridValueLayer implements Iterable<Cell> {
 		return null;
 	}
 	
-	public void addCell(Cell cell) {
-		this.cells.add(cell);
+	public int countEmptyCells() {
+		int ct = 0;
+		
+		for (Cell c: this.cells) {
+			if (c.isEmpty()) {
+				ct++;
+			}
+		}
+		return ct;
+	}
+	
+	public boolean addCell(Cell cell) {
+		if (!this.contains(cell)) {
+			this.cells.add(cell);
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean updateCell(Cell cell) {
+		for (Cell c: this) {
+			if (c.getCoordinates() == cell.getCoordinates()) {
+				this.cells.remove(c);
+				this.cells.add(cell);
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public boolean contains(Cell cell) {
 		for (Cell c: this) {
-			if (c.equals(cell)) {
+			if (c.getCoordinates() == cell.getCoordinates()) {
 				return true;
 			}
 		}

@@ -27,7 +27,7 @@ public class Cell {
 	}
 	
 	public boolean setAgent(AgentClass agent) {
-		if (this.agent != null) {
+		if (this.agent == null) {
 			this.agent = agent;
 			return true;
 		}

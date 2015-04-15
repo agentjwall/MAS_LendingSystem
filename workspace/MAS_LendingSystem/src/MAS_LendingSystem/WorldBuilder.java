@@ -77,7 +77,6 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		for (int i=0; i < neighborhoodCount; i++) {
 			Neighborhood n = new Neighborhood("neighborhood_"+i, false, gridDim); //TODO: does this have to be the size of the grid or neighborhood?
 			
-			System.out.println(i+"*"+neighborhoodDim[0]+"/"+ gridDim[0]+"="+((i * neighborhoodDim[0]) / gridDim[0]));
 			
 			for (int j=0; j < neighborhoodDim[0]; j++) {
 				for (int k=0; k < neighborhoodDim[1]; k++) {
@@ -102,6 +101,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 				double desire = getNormalDist(0, 1, meanConsumerDesire);
 				Consumer c = new Consumer(stampId(), income, spending, risk, desire);
 				Cell  cell = n.getEmptyCell();
+				cell.setAgent(c);
 				context.add(c);
 				int[] coords = cell.getCoordinates();
 				grid.moveTo(c, coords[0], coords[1]);
@@ -119,11 +119,11 @@ public class WorldBuilder implements ContextBuilder<Object> {
 				double riskThreshold = getNormalDist(0, 1, meanBankerRisk);
 				double assets = getNormalDist(100000, 200000, meanAssets);
 				Banker b = new Banker(stampId(), assets, riskThreshold);
-				Cell  cell = n.getEmptyCell();
+				Cell cell = n.getEmptyCell();
+				cell.setAgent(b);
 				context.add(b);
 				int[] coords = cell.getCoordinates();
 				grid.moveTo(b, coords[0], coords[1]);
-				
 			}
 			
 			context.add(n);
