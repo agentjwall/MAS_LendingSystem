@@ -1,12 +1,17 @@
 package MAS_LendingSystem;
 
+import java.util.Collection;
+
 import repast.simphony.context.Context;
 import repast.simphony.engine.environment.RunState;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.util.collections.IndexedIterable;
+import repast.simphony.valueLayer.ValueLayer;
 
 public class ScheduleDispatcher {
-
+	public int prevPositiveBankAssets;
+	public int prevConsumerSpending;
+	public int monthsInDecline;
 	/* A single step function is used for the entire world in order
 	 * to facilitate synchronization of actions.
 	 * Called synchronously on every tick of the simulation. 
@@ -43,17 +48,40 @@ public class ScheduleDispatcher {
 	
 	// TODO Maddy
 	public void updateBackground(IndexedIterable<Object> bankers, IndexedIterable<Object> consumers) {
+		Context<Object> context = this.getContext();
+		if (context == null) {
+			return;
+		}
+
+		Collection<ValueLayer> layers = context.getValueLayers(); 
+		WorldStyle layer = (WorldStyle) layers.iterator().next();
+		
 		// figure out if consumer spending has increased or decreased
-		// see pseudocode on the whiteboard
-		
-		/*
-		 *   for (int i = 0; i < consumers.size(); i++) {
+		int totalConsumerSpending = 0;
+		for (int i = 0; i < consumers.size(); i++) {
         	 	Consumer c = (Consumer) consumers.get(i);
-        	 	// call whatever you need on consumer to figure out if economy is in decline
+        	 	totalConsumerSpending += (c.spending + c.currentSplurge);
          	}
-		 */
+		int percentChangeCS = (totalConsumerSpending - prevConsumerSpending)/prevConsumerSpending;
 		
-		// get rid of the bankers parameter if you don't need it
+		// figure out if bank assets-bank defaulted assets has increased or decreased
+		int totalPositiveBankAssets = 0;
+		for (int i = 0; i < bankers.size(); i++) {
+        	 	Banker b = (Banker) bankers.get(i);
+        	 	totalPositiveBankAssets += (b.assets + b.defaultedAssets);
+         	}
+		int percentChangeBA = (totalPositiveBankAssets - prevPositiveBankAssets)/prevPositiveBankAssets;
+		
+			int totalPercentChange = percentChangeCS + percentChangeBA;
+			if(totalPercentChange < 0){ 
+				layer.changeColor(monthsInDecline);
+				monthsInDecline++;
+			}
+			else{
+				monthsInDecline = 0;
+				layer.changeColor(monthsInDecline);
+				
+			}
 	}
 	
 		// returns the context if simulation is started & correctly initialized

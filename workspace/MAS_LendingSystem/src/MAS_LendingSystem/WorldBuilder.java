@@ -7,6 +7,7 @@ import repast.simphony.dataLoader.ContextBuilder;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.space.graph.Network;
 import repast.simphony.space.graph.UndirectedJungNetwork;
+import repast.simphony.valueLayer.GridValueLayer;
 import repast.simphony.valueLayer.ValueLayer;
 import repast.simphony.context.space.graph.NetworkFactory;
 import repast.simphony.context.space.graph.NetworkFactoryFinder;
@@ -16,13 +17,16 @@ import repast.simphony.parameter.Parameters;
 import repast.simphony.random.*;
 import repast.simphony.space.graph.Network;
 import repast.simphony.space.graph.UndirectedJungNetwork;
+import repast.simphony.space.grid.Grid;
 import repast.simphony.util.collections.IndexedIterable;
 import repast.simphony.context.space.graph.*;
 
 public class WorldBuilder implements ContextBuilder<Object> {
 	public static final String jnetwork_id = "jung_network";
 	public static final String context_id = "MAS_LendingSystem";
-	public static final ValueLayer worldStyle =  (ValueLayer) new WorldStyle();
+	//final GridValueLayer foodValueLayer = new GridValueLayer();
+	//public static ValueLayer worldStyle =  (ValueLayer) new WorldStyle();
+	
 	public int monthsDeclining = 0;
 	
     public static final String PARAMETER_BANKER_COUNT = "bankerCount";
@@ -33,9 +37,9 @@ public class WorldBuilder implements ContextBuilder<Object> {
     
 	public Context<Object> build(Context<Object> context) {
 		context.setId(context_id);
-		context.addValueLayer(worldStyle);
+		//context.addProjection(grid);
+		//context.addValueLayer(worldStyle);
 		
-		 
 		final Parameters parameters = RunEnvironment.getInstance().getParameters();
 
 		final int bankerCount = ((Integer) parameters.getValue(PARAMETER_BANKER_COUNT)).intValue();
