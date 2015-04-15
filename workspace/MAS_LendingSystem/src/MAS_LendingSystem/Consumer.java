@@ -10,14 +10,12 @@ import repast.simphony.random.RandomHelper;
 import repast.simphony.space.graph.Network;
 import repast.simphony.util.ContextUtils;
 import repast.simphony.util.collections.IndexedIterable;
-import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.parameter.Parameter;
 import repast.simphony.context.Context;
 
 
 public class Consumer {
 	static double percentDurable = .7; //0-1 Percent of goods bought that get added to net worth
-	static int costOfLiving = 1000;  // 1000/ month = 12k annually
 	static int maximumSplurge = 100;
 	static double loanPaymentPercentage = .2; //percent of disposable income that will be payed towards loans
 	
@@ -44,11 +42,6 @@ public class Consumer {
 		this.risk = risk;
 		this.desire = desire;
 	}
-	
-/*	@ScheduledMethod ( start = 1 , interval = 1)
-	public void step() {
-		this.income += 5000;
-	} */
 	
 	public void beforeBanker() {
 		double netWorth = this.netWorth();
