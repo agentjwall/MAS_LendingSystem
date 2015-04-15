@@ -3,6 +3,9 @@ package MAS_LendingSystem;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.opengis.filter.spatial.Within;
+
+import repast.simphony.query.space.graph.NetPathWithin;
 import repast.simphony.random.RandomHelper;
 import repast.simphony.space.graph.Network;
 import repast.simphony.util.ContextUtils;
@@ -203,11 +206,28 @@ public class Consumer {
 	
 	
 	private Banker getNearestAvalibleBank() {
-		int ct = ScheduleDispatcher.idCount();
-		System.out.println(ct);
-		boolean[] visited = new boolean[ct];
-		return this.getNearestAvalibleBank(this, visited); 
+//		int ct = ScheduleDispatcher.idCount();
+//		System.out.println(ct);
+//		boolean[] visited = new boolean[ct];
+//		return this.getNearestAvalibleBank(this, visited); 
 
+		Context<Object> context = ScheduleDispatcher.getContext();
+		if (context == null) {
+			return null;
+		}
+        IndexedIterable<Object> bankers = context.getObjects(Banker.class);
+        Network network = (Network) context.getProjection(WorldBuilder.jnetwork_id);
+        for (int dist=10; dist < 30; dist+= 10) {
+        	NetPathWithin npw = new NetPathWithin(network, this, dist);
+        	
+        	for (Object o: npw.query()) {
+        		if (o instanceof Banker) {
+        			return (Banker) o;
+        		}
+        	}
+        }
+        
+        return null;
 	}
 	
 	private Banker getNearestAvalibleBank(Object o, boolean[] visited) {
@@ -217,7 +237,6 @@ public class Consumer {
 		Context<Object> context = (Context<Object>) ContextUtils.getContext(this);
 		Network network = (Network) context.getProjection(WorldBuilder.jnetwork_id);
 		Iterable<Object> banks = network.getAdjacent(o);
-		
 		System.out.println();
 		
 		for(Object b : banks) {
