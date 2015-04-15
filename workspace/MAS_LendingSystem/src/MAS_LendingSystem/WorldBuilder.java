@@ -5,6 +5,7 @@ import cern.jet.random.engine.RandomEngine;
 import repast.simphony.context.Context;
 import repast.simphony.dataLoader.ContextBuilder;
 import repast.simphony.engine.environment.*;
+import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.parameter.Parameters;
 import repast.simphony.random.*;
 import repast.simphony.space.graph.Network;
@@ -60,4 +61,48 @@ public class WorldBuilder implements ContextBuilder<Object> {
 	
 		return context;
 	}
+
+	public double getNormalDist(double min, double max) {
+		Normal n = RandomHelper.createNormal(0.5, 1);
+		double val = n.nextDouble();
+		
+		if (val < 0) {
+			val = 0;
+		} else if (val > 1){
+			val = 1;
+		}
+		
+		return val * (max - min) + min;
+	}
+	
+	// returns the context if simulation is started & correctly initialized
+	// otherwise returns null
+	public Context<Object> getContext() {
+		final RunState runState = RunState.getInstance();
+
+        // If simulation is not yet started or initialized correctly
+        if (null == runState) {
+        	return null;
+        }
+
+        @SuppressWarnings("unchecked")
+        final Context<Object> masterContext = runState.getMasterContext();
+
+        // If simulation is not initialized correctly and there is no root
+        // context
+        if (null == masterContext) {
+        	return null;
+        }
+        return masterContext;
+	}
+	
+	@ScheduledMethod ( start = 1 , interval = 1)
+	public void step() {
+		Context<Object> context = this.getContext();
+		if (context == null) {
+			return;
+		}
+		
+	}
+	
 }
