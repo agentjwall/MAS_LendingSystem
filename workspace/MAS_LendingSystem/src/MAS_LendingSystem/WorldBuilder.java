@@ -77,11 +77,12 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		for (int i=0; i < neighborhoodCount; i++) {
 			Neighborhood n = new Neighborhood("neighborhood_"+i, false, gridDim); //TODO: does this have to be the size of the grid or neighborhood?
 			
+			System.out.println(i+"*"+neighborhoodDim[0]+"/"+ gridDim[0]+"="+((i * neighborhoodDim[0]) / gridDim[0]));
+			
 			for (int j=0; j < neighborhoodDim[0]; j++) {
 				for (int k=0; k < neighborhoodDim[1]; k++) {
 					int x = (i * neighborhoodDim[0]) % gridDim[0] + j;
 					int y = ((i * neighborhoodDim[0]) / gridDim[0]) * neighborhoodDim[1] + k;
-					System.out.println(x+","+y +":"+i);
 					n.addCell(new Cell(x, y, n));
 				}
 			}
@@ -177,7 +178,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 	private int[] getDim(int elements) {
 		int xDim = (int) Math.ceil(Math.sqrt(elements));
 		int yDim = xDim; 
-		while (xDim * (yDim - 1) > elements) {
+		while (xDim * (yDim - 1) >= elements) {
 			yDim--;
 		}
 			
