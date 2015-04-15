@@ -1,10 +1,6 @@
 package MAS_LendingSystem;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Hashtable;
-
-import repast.simphony.engine.schedule.ScheduledMethod;
 
 public class Banker {
 	
@@ -42,7 +38,6 @@ public class Banker {
 		} else {
 			reqs = new ArrayList<LoanRequest>(reqs_arg);
 		}
-		Hashtable<Double, LoanRequest> loanValues = new Hashtable<Double, LoanRequest>();
 		boolean accept = true;
 		do {
 			LoanRequest l = null;
