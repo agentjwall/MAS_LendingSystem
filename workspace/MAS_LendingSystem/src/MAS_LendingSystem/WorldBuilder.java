@@ -62,8 +62,8 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		int bankersPerNeighborhood = bankerCount / neighborhoodCount;
 		int bankersPerNeighborhoodR = bankerCount - bankersPerNeighborhood * neighborhoodCount;
 		
-		int[] gridDim = getGridDim(parameters);
-		int[] neighborhoodDim = getNeighborhoodDim(parameters);
+		int[] gridDim = getGridDim(bankerCount, consumerCount);
+		int[] neighborhoodDim = getNeighborhoodDim(bankerCount, consumerCount);
 		
 		/* *** Create grid *** */
 		Grid<Object> grid = GridFactoryFinder.createGridFactory(null)
@@ -75,12 +75,13 @@ public class WorldBuilder implements ContextBuilder<Object> {
 												gridDim)); 							// int[] grid dimensions
 		
 		for (int i=0; i < neighborhoodCount; i++) {
-			Neighborhood n = new Neighborhood("neighborhood_"+i, false, gridDim); //TODO: does this have to be the size of the grid or neighborhood?
+			//TODO: does this have to be the size of the grid or neighborhood?
+			Neighborhood n = new Neighborhood("neighborhood_"+i, false, gridDim); 
 			
 			for (int j=0; j < neighborhoodDim[0]; j++) {
 				for (int k=0; k < neighborhoodDim[1]; k++) {
-					int x = (i * neighborhoodDim[0]) % gridDim[0] + j;
-					int y = (i * neighborhoodDim[0]) / gridDim[0] + k;
+					int x = ((i * neighborhoodDim[0]) % gridDim[0]) + j;
+					int y = ((i * neighborhoodDim[0]) / gridDim[0]) + k;
 					n.addCell(new Cell(x, y, n));
 				}
 			}
@@ -147,9 +148,9 @@ public class WorldBuilder implements ContextBuilder<Object> {
 	}
 	
 	
-	private int[] getGridDim(Parameters parameters) {
+	private int[] getGridDim(int bankerCount, int consumerCount) {
 		int elements = neighborhoodCount;
-		int[] neighborhood = getNeighborhoodDim(parameters);
+		int[] neighborhood = getNeighborhoodDim(bankerCount, consumerCount);
 		int[] grid = getDim(elements);
 
 		int x = neighborhood[0] * grid[0];
@@ -159,27 +160,25 @@ public class WorldBuilder implements ContextBuilder<Object> {
 	}
 	
 	
-	private int[] getNeighborhoodDim(Parameters parameters) {
-		int bankers = ((Integer) parameters.getValue(PARAMETER_BANKER_COUNT)).intValue();
-		int consumers = ((Integer) parameters.getValue(PARAMETER_CONSUMER_COUNT)).intValue();
-		int elements = (bankers + consumers) / neighborhoodCount; 
-		if ((bankers % neighborhoodCount) != 0) {
+	private int[] getNeighborhoodDim(int bankerCount, int consumerCount) {
+		int elements = (bankerCount + consumerCount) / neighborhoodCount; 
+		if ((bankerCount % neighborhoodCount) != 0) {
 			elements++;
 		}
-		if ((consumers % neighborhoodCount) != 0) {
+		if ((consumerCount % neighborhoodCount) != 0) {
 			elements++;
 		}
 		
 		return getDim(elements);
 	}
 	
+	// gets box dimension required for the provided number of elements 
 	private int[] getDim(int elements) {
 		int xDim = (int) Math.ceil(Math.sqrt(elements));
 		int yDim = xDim; 
 		while (xDim * (yDim - 1) > elements) {
 			yDim--;
 		}
-			
 		return new int[]{xDim, yDim};
 	}
 	
