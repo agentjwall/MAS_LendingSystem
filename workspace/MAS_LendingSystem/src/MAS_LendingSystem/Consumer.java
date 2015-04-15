@@ -6,6 +6,7 @@ import java.util.List;
 import repast.simphony.random.RandomHelper;
 import repast.simphony.space.graph.Network;
 import repast.simphony.util.ContextUtils;
+import repast.simphony.util.collections.IndexedIterable;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.parameter.Parameter;
 import repast.simphony.context.Context;
@@ -17,6 +18,7 @@ public class Consumer {
 	static int maximumSplurge = 100;
 	static double loanPaymentPercentage = .2; //percent of disposable income that will be payed towards loans
 	
+	int id;
 	double income = 0; //Income gained per tick
 	double cash = 0; //Net cash of the 
 	double spending = 0; //Money spent per tick
@@ -31,12 +33,9 @@ public class Consumer {
 	List<Double> observedSplurges = new ArrayList<Double>();
 	List<Loan> loans = new ArrayList<Loan>(); //Loans currently held by agent
 	List<Banker> rejectedBanks = new ArrayList<Banker>();
-
-	public Consumer() {
-		
-	}
 	
-	public Consumer(double income, double spending, double risk, double desire) {
+	public Consumer(int id, double income, double spending, double risk, double desire) {
+		this.id = id;
 		this.income = income;
 		this.spending = spending;
 		this.risk = risk;
@@ -55,7 +54,6 @@ public class Consumer {
 		this.makeLoanPayments();
 		this.receiveNeighborsSplurging();
 		this.deltaNetWorth = this.netWorth() - netWorth;
-		
 		if (this.doesSplurge()) {
 			this.currentSplurge = this.splurgeAmount();
 			
@@ -65,7 +63,7 @@ public class Consumer {
 			
 			} else {
 				
-				Banker b = this.getNearestAvalibleBank();
+				Banker b = this.getNearestAvailableBank();
 				boolean success = this.requestLoan(b);
 				
 			}
@@ -82,6 +80,7 @@ public class Consumer {
 				this.loanAccepted = null;
 				this.assets += this.splurgeAmount();
 				this.observedSplurges = new ArrayList<Double>();
+				this.rejectedBanks.clear();
 			} else {
 				this.rejectedBanks.add(this.loanPending);
 				this.loanPending = null;
@@ -114,7 +113,7 @@ public class Consumer {
 			this.cash -= payment;
 			l.makePayment(payment);
 			
-			if (l.principle == 0) { //Loan is payed off
+			if (l.principle == 0) { //Loan is paid off
 				this.updateRisk(l);
 				this.loans.remove(l);
 			}
@@ -152,12 +151,12 @@ public class Consumer {
 		return this.observedSplurges.size() + 1;
 	}
 	
-	private int splurgeThreshold() {
-		return (int) (Consumer.maximumSplurge * this.desire);
+	private double splurgeThreshold() {
+		return Consumer.maximumSplurge * this.desire + 1;
 	}
 	
-	private boolean doesSplurge() {
-		 if (RandomHelper.nextDoubleFromTo(0, 1) < (this.splurgeDesire() /  this.splurgeThreshold())) {
+	private boolean doesSplurge() { 
+		if (RandomHelper.nextDoubleFromTo(0, 1) < (this.splurgeDesire() /  this.splurgeThreshold())) {
 			 return true; 
 		 } else {
 			 return false;
@@ -203,11 +202,22 @@ public class Consumer {
 	}
 	
 	
-	private Banker getNearestAvalibleBank() {
-		return this.getNearestAvalibleBank(this); 
+	private Banker getNearestAvailableBank() {
+		Context<Object> context = ScheduleDispatcher.getContext();
+		if (context == null) {
+			return null;
+		}
+		
+		IndexedIterable<Object> wbs = context.getObjects(WorldBuilder.class);
+		if (wbs.size() == 0) {
+			return null;
+		} else {
+			int ct = ((WorldBuilder) wbs.get(0)).idCt();
+			return this.getNearestAvalibleBank(this, new boolean[ct]); 
+		}
 	}
 	
-	private Banker getNearestAvalibleBank(Object o) {
+	private Banker getNearestAvalibleBank(Object o, boolean[] visited) {
 		Banker nearestBank = null;
 		
 		Context<Object> context = (Context<Object>) ContextUtils.getContext(this);
@@ -218,14 +228,18 @@ public class Consumer {
 			if (b.getClass() == Banker.class && !this.rejectedBanks.contains((Banker) b)) {
 				nearestBank = (Banker) b;
 				break;
+			} else {
+				visited[((Consumer) b).id] = true;
 			}
 		}
 		
 		if (nearestBank == null) {
 			for(Object b : banks) {
-				nearestBank = this.getNearestAvalibleBank(b);
-				if (nearestBank != null) {
-					break;
+				if (visited[((Consumer) b).id] != true) {
+					nearestBank = this.getNearestAvalibleBank(b, visited);
+					if (nearestBank != null) {
+						break;
+					}
 				}
 			}
 		}
@@ -235,11 +249,15 @@ public class Consumer {
 	
 	// Consumer requests a loan from banker
 	private boolean requestLoan(Banker bank) {
+		if (bank == null) {
+			return false;
+		}
+		
 		LoanRequest req = new LoanRequest(this.desiredLoanAmount(), this.desiredPaymentAmount(), this.risk, this, bank);
 		bank.receiveLoanRequests(req);
 		this.loanPending = bank;
 		
-		return false;
+		return true;
 	}
 	
 	private double adjustedDesire(double value) {

@@ -18,7 +18,7 @@ public class ScheduleDispatcher {
 	 */
 	@ScheduledMethod ( start = 1 , interval = 1)
 	public void step() {
-		Context<Object> context = this.getContext();
+		Context<Object> context = ScheduleDispatcher.getContext();
 		if (context == null) {
 			return;
 		}
@@ -31,15 +31,11 @@ public class ScheduleDispatcher {
          }
          for (int i = 0; i < bankers.size(); i++) {
         	 Banker b = (Banker) bankers.get(i);
-        	 b.processLoans();
-        	 if (i ==0) {
-        		 b.setAssets(-15);
-        	 }
-
+        	b.processLoans();
          }
          for (int i = 0; i < consumers.size(); i++) {
         	 Consumer c = (Consumer) consumers.get(i);
-        	 c.afterBanker();
+        	c.afterBanker();
          }
          
          this.updateBackground(bankers, consumers);
@@ -86,7 +82,7 @@ public class ScheduleDispatcher {
 	
 		// returns the context if simulation is started & correctly initialized
 		// otherwise returns null
-		public Context<Object> getContext() {
+		static public Context<Object> getContext() {
 			final RunState runState = RunState.getInstance();
 
 	        // If simulation is not yet started or initialized correctly
