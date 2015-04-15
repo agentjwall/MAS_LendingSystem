@@ -22,15 +22,15 @@ public class ScheduleDispatcher {
          
          for (int i = 0; i < consumers.size(); i++) {
         	 Consumer c = (Consumer) consumers.get(i);
-        	 //c.beforeBanker();
+        	 c.beforeBanker();
          }
          for (int i = 0; i < bankers.size(); i++) {
         	 Banker b = (Banker) bankers.get(i);
-        	// b.processLoans();
+        	b.processLoans();
          }
          for (int i = 0; i < consumers.size(); i++) {
         	 Consumer c = (Consumer) consumers.get(i);
-        	// c.afterBanker();
+        	c.afterBanker();
          }
          
          this.updateBackground(bankers, consumers);
