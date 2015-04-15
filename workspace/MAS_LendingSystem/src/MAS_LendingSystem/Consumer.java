@@ -63,7 +63,7 @@ public class Consumer {
 			
 			} else {
 				
-				Banker b = this.getNearestAvalibleBank();
+				Banker b = this.getNearestAvailableBank();
 				boolean success = this.requestLoan(b);
 				
 			}
@@ -203,7 +203,7 @@ public class Consumer {
 	}
 	
 	
-	private Banker getNearestAvalibleBank() {
+	private Banker getNearestAvailableBank() {
 		Context<Object> context = ScheduleDispatcher.getContext();
 		if (context == null) {
 			return null;

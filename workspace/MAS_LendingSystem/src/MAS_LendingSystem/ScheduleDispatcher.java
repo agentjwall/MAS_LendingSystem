@@ -13,7 +13,7 @@ public class ScheduleDispatcher {
 	 */
 	@ScheduledMethod ( start = 1 , interval = 1)
 	public void step() {
-		Context<Object> context = this.getContext();
+		Context<Object> context = ScheduleDispatcher.getContext();
 		if (context == null) {
 			return;
 		}
