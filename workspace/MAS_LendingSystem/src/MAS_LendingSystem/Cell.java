@@ -9,13 +9,21 @@ public class Cell {
 
 	private AgentClass agent = null;
 	
-	private Set<GridValueLayer> neighborhood = new HashSet<GridValueLayer>();
+	private Set<Neighborhood> neighborhood = new HashSet<Neighborhood>();
 	private final int x;
 	private final int y;
 	
-	public Cell(int x, int y) {
+	public Cell(int x, int y, Neighborhood n) {
 		this.x = x;
 		this.y = y;
+		this.neighborhood.add(n);
+	}
+	
+	public Cell(int x, int y, Neighborhood n, AgentClass agent) {
+		this.x = x;
+		this.y = y;
+		this.neighborhood.add(n);
+		this.agent = agent;
 	}
 	
 	public boolean setAgent(AgentClass agent) {
@@ -26,7 +34,7 @@ public class Cell {
 		return false;
 	}
 	
-	public Object getAgent() {
+	public AgentClass getAgent() {
 		return this.agent;
 	}
 	
@@ -46,6 +54,22 @@ public class Cell {
 			return Consumer.class;
 		} else {
 			return null;
+		}
+	}
+	
+	public boolean isConsumer() {
+		if (this.agent instanceof Consumer) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean isBanker() {
+		if (this.agent instanceof Banker) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 	

@@ -46,10 +46,11 @@ public class WorldBuilder implements ContextBuilder<Object> {
     public static final String PARAMETER_BANKER_RISK = "meanBankerRisk";
 
     public static final Parameters parameters = RunEnvironment.getInstance().getParameters();
-    
-    private static int uniqueId = 0;
-    private static final int neighborhoodCount = 12;
 	
+    private static int uniqueId = 0;
+    
+    public static final int neighborhoodCount = 12;
+    
 	public Context<Object> build(Context<Object> context) {
 		context.setId(Constants.CONTEXT_ID);
 		//context.addProjection(grid);
@@ -71,10 +72,56 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final double meanConsumerDesire = ((Double) parameters.getValue(PARAMETER_CONSUMER_DESIRE)).doubleValue();
 		final double meanBankerRisk = ((Double) parameters.getValue(PARAMETER_BANKER_RISK)).doubleValue();
 		
+		
+		int consumersPerNeighborhood = consumerCount / neighborhoodCount;
+		int consumersPerNeighborhoodR = consumersPerNeighborhood * neighborhoodCount - consumerCount;
+		
+		int bankersPerNeighborhood = bankerCount / neighborhoodCount;
+		int bankersPerNeighborhoodR = bankersPerNeighborhood * neighborhoodCount - bankerCount;
+		
 		int[] gridDim = getGridDim();
+		int[] neighborhoodDim = getNeighborhoodDim();
 		
 		for (int i=0; i < neighborhoodCount; i++) {
-			context.add(new GridValueLayer("neighborhood_"+i, false, gridDim[0], gridDim[1]));
+			Neighborhood n = new Neighborhood("neighborhood_"+i, false, gridDim); //TODO: does this have to be the size of the grid or neighborhood?
+			
+			for (int j=0; j < gridDim[0]; j++) {
+				for (int k=0; k < gridDim[1]; k++) {
+					int x = (i * gridDim[0]) + j % neighborhoodDim[0];
+					int y = neighborhoodDim[0] / (i * gridDim[0]) + k;
+					n.addCell(new Cell(x, y, n));
+				}
+			}
+			
+			if (i == neighborhoodCount - 1) {
+				consumersPerNeighborhood = consumersPerNeighborhoodR;
+			}
+			
+			for (int j=0; j < consumersPerNeighborhood; j++) {
+				double income = getNormalDist(costOfLiving, maxIncome, meanIncome);
+				double spending = getNormalDist(costOfLiving, income, meanSpending);
+				double risk = getNormalDist(0, 1, meanConsumerRisk);
+				double desire = getNormalDist(0, 1, meanConsumerDesire);
+				Consumer c = new Consumer(stampId(), income, spending, risk, desire);
+				n.getEmptyCell().setAgent(c);
+				context.add(c);
+				
+			}
+			
+			if (i == neighborhoodCount - 1) {
+				bankersPerNeighborhood = bankersPerNeighborhoodR;
+			}
+			
+			for (int j=0; j < bankersPerNeighborhood; j++) {
+				double riskThreshold = getNormalDist(0, 1, meanBankerRisk);
+				double assets = getNormalDist(100000, 200000, meanAssets);
+				Banker b = new Banker(stampId(), assets, riskThreshold);
+				n.getEmptyCell().setAgent(b);
+				context.add(b);
+				
+			}
+			
+			context.add(n);
 		}
 
 		for (int i = 0; i < bankerCount; i++) {
