@@ -2,7 +2,7 @@ package MAS_LendingSystem;
 
 import java.util.ArrayList;
 
-public class Banker {
+public class Banker extends AgentClass {
 	
 	int id;
 	double assets = 0; //Total assets currently held by the bank
