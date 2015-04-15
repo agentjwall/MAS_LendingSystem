@@ -157,7 +157,6 @@ public class Consumer {
 	
 	private boolean doesSplurge() { 
 		if (RandomHelper.nextDoubleFromTo(0, 1) < (this.splurgeDesire() /  this.splurgeThreshold())) {
-			 System.out.println("Splurge!");
 			 return true; 
 		 } else {
 			 return false;
