@@ -34,9 +34,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 
     // banker parameters
     public static final String PARAMETER_BANKER_RISK = "meanBankerRisk";
-	
-    private static int uniqueId = 0;
-    
+	    
     public static final int neighborhoodCount = 12;
     
 	public Context<Object> build(Context<Object> context) {
@@ -100,7 +98,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 				double spending = getNormalDist(costOfLiving, income, meanSpending);
 				double risk = getNormalDist(0, 1, meanConsumerRisk);
 				double desire = getNormalDist(0, 1, meanConsumerDesire);
-				Consumer c = new Consumer(stampId(), income, spending, risk, desire);
+				Consumer c = new Consumer(income, spending, risk, desire);
 				Cell  cell = n.getEmptyCell();
 				context.add(c);
 				int[] coords = cell.getCoordinates();
@@ -118,7 +116,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 			for (int j=0; j < bankers; j++) {
 				double riskThreshold = getNormalDist(0, 1, meanBankerRisk);
 				double assets = getNormalDist(100000, 200000, meanAssets);
-				Banker b = new Banker(stampId(), assets, riskThreshold);
+				Banker b = new Banker(assets, riskThreshold);
 				Cell  cell = n.getEmptyCell();
 				context.add(b);
 				int[] coords = cell.getCoordinates();
@@ -130,7 +128,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		}								
 		
 		RunEnvironment.getInstance().endAt(numYears * 12);
-		context.add(new ScheduleDispatcher(uniqueId));
+		context.add(new ScheduleDispatcher());
 		return context;
 	}
 
@@ -202,13 +200,5 @@ public class WorldBuilder implements ContextBuilder<Object> {
         	return null;
         }
         return masterContext;
-	}
-	
-	
-	
-	private static int stampId() {
-		uniqueId ++;
-		return uniqueId - 1;
-	}
-	
+	}	
 }
