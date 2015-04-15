@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import repast.simphony.random.RandomHelper;
+import repast.simphony.space.graph.Network;
+import repast.simphony.util.ContextUtils;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.parameter.Parameter;
+import repast.simphony.context.Context;
+
 
 public class Consumer {
 	static double percentDurable = .7; //0-1 Percent of goods bought that get added to net worth
@@ -22,10 +26,22 @@ public class Consumer {
 	double risk = 0; //0-1 percent risk of defaulting
 	double desire = 0; //0-1 percent deesire for more netWorth 
 	double assets = 0; //cahs value of non-cash assets
+	Banker loanPending = null;
+	Boolean loanAccepted = null;
 	List<Double> observedSplurges = new ArrayList<Double>();
 	List<Loan> loans = new ArrayList<Loan>(); //Loans currently held by agent
 	List<Banker> rejectedBanks = new ArrayList<Banker>();
 
+	public Consumer(double income, double startingCash, double spending, double startingValueOfDefaults, double risk, double desire, double startingAssets) {
+		this.income = income;
+		this.cash = startingCash;
+		this.spending = spending;
+		this.valueOfDefaults = startingValueOfDefaults;
+		this.risk = risk;
+		this.desire = desire;
+		this.assets = startingAssets;
+	}
+	
 	//TODO: implement
 	public Consumer() {
 		//this.desiredSpending = Dist(min(costOfLiving, income), income); 
@@ -41,7 +57,22 @@ public class Consumer {
 		this.receiveNeighborsSplurging();
 		this.deltaNetWorth = this.netWorth() - netWorth;
 		
-		if (this.doesSplurge()) {
+		if (this.loanPending != null && this.loanAccepted != null) {
+			
+			if (this.loanAccepted) {
+				this.loanPending = null;
+				this.loanAccepted = null;
+				this.assets += this.splurgeAmount();
+				this.observedSplurges = new ArrayList<Double>();
+			} else {
+				this.rejectedBanks.add(this.loanPending);
+				this.loanPending = null;
+				this.loanAccepted = null;
+			}
+			
+		}
+		
+		if (this.loanPending == null && this.doesSplurge()) {
 			this.splurgeValue = this.splurgeAmount();
 			
 			if (this.splurgeAmount() < this.cash) { //Pay for splurge purchase if possible
@@ -50,12 +81,9 @@ public class Consumer {
 			
 			} else {
 				
-				boolean success = this.requestLoan();
+				Banker b = this.getNearestAvalibleBank();
+				boolean success = this.requestLoan(b);
 				
-				if (success) {
-					this.assets += this.splurgeAmount();
-					this.observedSplurges = new ArrayList<Double>();
-				}
 			}
 		} else {
 			this.splurgeValue = 0;
@@ -158,29 +186,58 @@ public class Consumer {
 		return this.disposableIncome() * Consumer.loanPaymentPercentage;
 	}
 	
-	//TODO: implement
 	private List<Double> receiveNeighborsSplurging() {
-		// ask all neighbors what they are spending
-		// return the average of that
-		return new ArrayList<Double>();
+		List<Double> list = new ArrayList<Double>();
+		
+		Context<Object> context = (Context<Object>) ContextUtils.getContext(this);
+		Network network = (Network) context.getProjection(WorldBuilder.jnetwork_id);
+		Iterable<Object> consumers = network.getAdjacent(this);
+		
+		for (Object c : consumers) {
+			if (c.getClass() == Consumer.class) {
+				list.add(((Consumer) c).splurgeValue);
+			}
+		}
+		
+		return list;
 	}
 	
-	//TODO: implement
+	
 	private Banker getNearestAvalibleBank() {
+		return this.getNearestAvalibleBank(this); 
+	}
+	
+	private Banker getNearestAvalibleBank(Object o) {
 		Banker nearestBank = null;
 		
-		// for (Banker b : globalBanksList) {
-			// if ( !this.rejectedBanks.contains(b) && (nearestBank == null || b is closer than nearestBank) {
-				//nearestBanker = b;
-			//}
-		//}
+		Context<Object> context = (Context<Object>) ContextUtils.getContext(this);
+		Network network = (Network) context.getProjection(WorldBuilder.jnetwork_id);
+		Iterable<Object> banks = network.getAdjacent(o);
+		
+		for(Object b : banks) {
+			if (b.getClass() == Banker.class && !this.rejectedBanks.contains((Banker) b)) {
+				nearestBank = (Banker) b;
+				break;
+			}
+		}
+		
+		if (nearestBank == null) {
+			for(Object b : banks) {
+				nearestBank = this.getNearestAvalibleBank(b);
+				if (nearestBank != null) {
+					break;
+				}
+			}
+		}
 		
 		return nearestBank;
 	}
 	
 	//TODO: implement
-	private boolean requestLoan() {
-		LoanRequest req = new LoanRequest(this.desiredLoanAmount(), this.desiredPaymentAmount(), this.risk, this, this.getNearestAvalibleBank());
+	private boolean requestLoan(Banker bank) {
+		LoanRequest req = new LoanRequest(this.desiredLoanAmount(), this.desiredPaymentAmount(), this.risk, this, bank);
+		bank.receiveLoanRequests(req);
+		this.loanPending = bank;
 		
 		//send message to nearest non-rejected bank
 		//(refinance if consumer has one or more loans)
