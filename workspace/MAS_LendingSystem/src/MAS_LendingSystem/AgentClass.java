@@ -23,6 +23,6 @@ public class AgentClass {
 	public Grid<Object> getGrid() {
         return (Grid<Object>) ContextUtils.getContext(this)
                         .getProjection(Constants.GRID_ID);
-}
+	}
 	
 }
