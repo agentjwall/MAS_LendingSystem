@@ -86,7 +86,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 			for (int j=0; j < gridDim[0]; j++) {
 				for (int k=0; k < gridDim[1]; k++) {
 					int x = (i * gridDim[0]) + j % neighborhoodDim[0];
-					int y = neighborhoodDim[0] / (i * gridDim[0]) + k;
+					int y = (i * gridDim[0]) / neighborhoodDim[0] + k;
 					n.addCell(new Cell(x, y, n));
 				}
 			}
