@@ -104,6 +104,9 @@ public class Banker {
 	public double getAssets() {
 		return this.assets;
 	}
+	public void setAssets (double newAssets) {
+		this.assets = newAssets;
+	}
 	
 	public double getDefaultedAssets() {
 		return this.defaultedAssets;
