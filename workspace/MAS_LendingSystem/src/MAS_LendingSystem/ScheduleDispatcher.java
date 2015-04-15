@@ -24,7 +24,7 @@ public class ScheduleDispatcher {
 		}
          IndexedIterable<Object> bankers = context.getObjects(Banker.class);
          IndexedIterable<Object> consumers = context.getObjects(Consumer.class);
-         /* commented out until Nick fixes runtime errors
+
          for (int i = 0; i < consumers.size(); i++) {
         	 Consumer c = (Consumer) consumers.get(i);
         	 c.beforeBanker();
@@ -41,7 +41,7 @@ public class ScheduleDispatcher {
         	 Consumer c = (Consumer) consumers.get(i);
         	 c.afterBanker();
          }
-         */
+         
          this.updateBackground(bankers, consumers);
          		
 	}
