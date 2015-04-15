@@ -85,11 +85,13 @@ public class WorldBuilder implements ContextBuilder<Object> {
 				}
 			}
 			
-			if (i == neighborhoodCount - 1) {
-				consumersPerNeighborhood = consumersPerNeighborhoodR;
+			int consumers = consumersPerNeighborhood;
+			if (consumersPerNeighborhoodR > 0) {
+				consumers++;
+				consumersPerNeighborhoodR--;
 			}
 			
-			for (int j=0; j < consumersPerNeighborhood; j++) {
+			for (int j=0; j < consumers; j++) {
 				double income = getNormalDist(costOfLiving, maxIncome, meanIncome);
 				double spending = getNormalDist(costOfLiving, income, meanSpending);
 				double risk = getNormalDist(0, 1, meanConsumerRisk);
@@ -101,11 +103,13 @@ public class WorldBuilder implements ContextBuilder<Object> {
 				grid.moveTo(c, coords[0], coords[1]);
 			}
 			
-			if (i == neighborhoodCount - 1) {
-				bankersPerNeighborhood = bankersPerNeighborhoodR;
+			int bankers = bankersPerNeighborhood;
+			if (bankersPerNeighborhoodR > 0) {
+				bankers++;
+				bankersPerNeighborhoodR--;
 			}
 			
-			for (int j=0; j < bankersPerNeighborhood; j++) {
+			for (int j=0; j < bankers; j++) {
 				double riskThreshold = getNormalDist(0, 1, meanBankerRisk);
 				double assets = getNormalDist(100000, 200000, meanAssets);
 				Banker b = new Banker(stampId(), assets, riskThreshold);
@@ -160,6 +164,13 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		int bankers = ((Integer) parameters.getValue(PARAMETER_BANKER_COUNT)).intValue();
 		int consumers = ((Integer) parameters.getValue(PARAMETER_CONSUMER_COUNT)).intValue();
 		int elements = (bankers + consumers) / neighborhoodCount; 
+		if ((bankers % neighborhoodCount) != 0) {
+			elements++;
+		}
+		if ((consumers % neighborhoodCount) != 0) {
+			elements++;
+		}
+		
 		return getDim(elements);
 	}
 	
