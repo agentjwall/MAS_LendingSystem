@@ -34,6 +34,8 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final int meanDegree = ((Integer) parameters.getValue(PARAMETER_MEAN_DEGREE)).intValue(); 
 		final int numYears = ((Integer) parameters.getValue(PARAMETER_NUM_YEARS)).intValue();
 		
+		final int costOfLiving = 1000;
+		final int maxIncome = 20000;
 		
 		DistributionsAdapter distributionGenerator = new DistributionsAdapter(DistributionsAdapter.makeDefaultGenerator());
 
@@ -46,7 +48,11 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		 
 		 for (int i = 0; i < consumerCount; i++) {
 			 double income = distributionGenerator.nextBurr2(.5,5,12);
-			 context.add(new Consumer());
+			 double spending = getNormalDist(costOfLiving, income);
+			 double risk = RandomHelper.nextDoubleFromTo(0, 1);
+			 double desire = RandomHelper.nextDoubleFromTo(0, 1);
+			 
+			 context.add(new Consumer(income, spending, risk, desire));
 		 }
 
 		// rewiringProbability = probability that a node in a clustered will be rewired to some other random node
