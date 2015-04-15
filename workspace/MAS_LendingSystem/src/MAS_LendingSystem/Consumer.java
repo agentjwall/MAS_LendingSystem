@@ -181,20 +181,21 @@ public class Consumer extends AgentClass {
 	}
 	
 	private List<Double> receiveNeighborsSplurging() {
-		List<Double> list = new ArrayList<Double>();
-		/*
-		 * TODO replace with grid
-		Context<Object> context = (Context<Object>) ContextUtils.getContext(this);
-		Network network = (Network) context.getProjection(WorldBuilder.jnetwork_id);
-		Iterable<Object> consumers = network.getAdjacent(this);
+		List<Double> splurges = new ArrayList<Double>();
 		
-		for (Object c : consumers) {
-			if (c.getClass() == Consumer.class) {
-				list.add(((Consumer) c).currentSplurge);
+		Set<Neighborhood> neighborhoods = this.getNeighborhoods();
+		List<Consumer> consumers = new ArrayList<Consumer>();
+		
+		for (Neighborhood n: neighborhoods) {
+			consumers.addAll(n.getConsumers());
+		}
+
+		for (Consumer c: consumers) {
+			if (c != this) {
+				splurges.add(c.currentSplurge);
 			}
 		}
-		*/
-		return list;
+		return splurges;
 	}
 	
 	
