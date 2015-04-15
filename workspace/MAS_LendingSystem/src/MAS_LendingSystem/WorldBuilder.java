@@ -45,14 +45,17 @@ public class WorldBuilder implements ContextBuilder<Object> {
     // banker parameters
     public static final String PARAMETER_BANKER_RISK = "meanBankerRisk";
 
+    public static final Parameters parameters = RunEnvironment.getInstance().getParameters();
+    
     private static int uniqueId = 0;
+    private static final int neighborhoodCount = 12;
 	
 	public Context<Object> build(Context<Object> context) {
 		context.setId(Constants.CONTEXT_ID);
 		//context.addProjection(grid);
 		//context.addValueLayer(worldStyle);
 		
-		final Parameters parameters = RunEnvironment.getInstance().getParameters();
+		
 
 		final int bankerCount = ((Integer) parameters.getValue(PARAMETER_BANKER_COUNT)).intValue();
 		final int consumerCount = ((Integer) parameters.getValue(PARAMETER_CONSUMER_COUNT)).intValue();
@@ -68,8 +71,12 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final double meanConsumerDesire = ((Double) parameters.getValue(PARAMETER_CONSUMER_DESIRE)).doubleValue();
 		final double meanBankerRisk = ((Double) parameters.getValue(PARAMETER_BANKER_RISK)).doubleValue();
 		
+		
+		for (int i=0; i < neighborhoodCount; i++) {
+			context.add(new GridValueLayer("neighborhood_"+i, false, getGridXDim(), getGridYDim()));
+		}
 
-		 for (int i = 0; i < bankerCount; i++) {
+		for (int i = 0; i < bankerCount; i++) {
 			 double riskThreshold = getNormalDist(0, 1, meanBankerRisk);
 			 double assets = getNormalDist(100000, 200000, meanAssets);
 			 context.add(new Banker(stampId(), assets, riskThreshold));
@@ -115,6 +122,40 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		}
 		
 		return val * (max - min) + min;
+	}
+	
+	private int getGridXDim() {
+		int elements = neighborhoodCount;
+		return getXDim(elements) * getNeighborhoodXDim();
+	}
+	
+	private int getGridYDim() {
+		int elements = neighborhoodCount;
+		return getYDim(elements) * getNeighborhoodYDim();
+	}
+	
+	private int getNeighborhoodXDim() {
+		int elements = ((Integer) parameters.getValue(PARAMETER_BANKER_COUNT)).intValue();
+		return getXDim(elements);
+	}
+	
+	private int getNeighborhoodYDim() {
+		int elements = ((Integer) parameters.getValue(PARAMETER_BANKER_COUNT)).intValue();
+		return getXDim(elements);
+	}
+	
+	private int getXDim(int elements) {
+		return (int) Math.ceil(Math.sqrt(elements));
+	}
+	
+	private int getYDim(int elements) {
+		int xDim = getXDim(elements);
+		int yDim = xDim; 
+			while (xDim * (yDim - 1) > elements) {
+				yDim--;
+		}
+			
+		return yDim;
 	}
 	
 
