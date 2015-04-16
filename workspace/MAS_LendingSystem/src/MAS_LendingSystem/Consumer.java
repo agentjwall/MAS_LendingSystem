@@ -179,7 +179,7 @@ public class Consumer extends AgentClass {
 			splurgeAmount += splurge;
 		}
 		
-		double modifier = RandomHelper.nextDoubleFromTo(-1, 1);
+		double modifier = RandomHelper.nextDoubleFromTo(0, 1);
 		if (this.observedSplurges.size() != 0) {
 			splurgeAmount /= this.observedSplurges.size();
 		}

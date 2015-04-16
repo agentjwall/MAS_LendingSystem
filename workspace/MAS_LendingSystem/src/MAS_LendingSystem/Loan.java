@@ -42,11 +42,11 @@ public class Loan {
 	}
 	
 	public double disbursePayment() {
-		payment = this.paymentsMade;
+		double thisPayment = this.paymentsMade;
 		this.paymentsMade = 0;
-		return payment;
+		return thisPayment;
 	}
-		
+
 	public void accrueInterest () {
 		this.principle = this.principle * (1 + Loan.interestRate) - this.payment;
 	}
