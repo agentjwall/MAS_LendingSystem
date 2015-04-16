@@ -202,7 +202,6 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		} else if (val > max){
 			val = max;
 		}
-		System.out.println(val);
 		return val;
 	}
 	
