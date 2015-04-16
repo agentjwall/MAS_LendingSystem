@@ -6,6 +6,7 @@ public class LoanRequest {
 	double requesterRisk;
 	Consumer requester;
 	Banker bank;
+	Loan loan;
 	
 	public LoanRequest(double amount, double payment, double requesterRisk, Consumer requester, Banker bank) {
 		this.requester = requester;

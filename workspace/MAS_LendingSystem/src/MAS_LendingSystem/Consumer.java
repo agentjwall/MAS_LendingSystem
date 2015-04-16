@@ -26,7 +26,9 @@ public class Consumer extends AgentClass {
 	double risk = 0; //0-1 percent risk of defaulting
 	double desire = 0; //0-1 percent desire for more netWorth 
 	double assets = 0; //cash value of non-cash assets
-	Banker loanPending = null;
+	Banker bankPending = null;
+	Loan loanPending = null;
+	
 	Boolean loanAccepted = null;
 	List<Double> observedSplurges = new ArrayList<Double>();
 	List<Loan> loans = new ArrayList<Loan>(); //Loans currently held by agent
@@ -68,14 +70,20 @@ public class Consumer extends AgentClass {
 		if (this.loanAccepted != null) {
 			
 			if (this.loanAccepted) {
-				this.loanPending = null;
+				this.loans.add(loanPending);
+				
+				// reset comm variables
+				this.bankPending = null;
 				this.loanAccepted = null;
-				this.assets += this.splurgeAmount();
+				this.loanPending = null;
 				this.observedSplurges = new ArrayList<Double>();
+				
+				// make the purchase!
+				this.assets += this.splurgeAmount();
 				this.rejectedBanks.clear();
 			} else {
-				this.rejectedBanks.add(this.loanPending);
-				this.loanPending = null;
+				this.rejectedBanks.add(this.bankPending);
+				this.bankPending = null;
 				this.loanAccepted = null;
 			}		
 		}
@@ -92,6 +100,7 @@ public class Consumer extends AgentClass {
 	
 	private void makeLoanPayments() {
 		for (Loan l: this.loans) {
+			System.out.println("makeLoanPayments");
 			this.makeLoanPayment(l);  //TODO should this return whether any payments defaulted?
 		}
 	}
@@ -100,7 +109,7 @@ public class Consumer extends AgentClass {
 		l.accrueInterest();
 		
 		double payment = l.getPayment();
-		
+		System.out.println(payment);
 		if (this.cash > payment && this.risk < RandomHelper.nextDoubleFromTo(0, 1)) {			
 			this.cash -= payment;
 			l.makePayment(payment);
@@ -171,7 +180,7 @@ public class Consumer extends AgentClass {
 		}
 		//splurgeAmount *= this.adjustedDesire(modifier);
 		// TODO magic number for testing
-		splurgeAmount += 150000;
+		splurgeAmount += 15000;
 		//System.out.println(splurgeAmount);
 		return splurgeAmount;
 	}
@@ -248,7 +257,7 @@ public class Consumer extends AgentClass {
 		
 		LoanRequest req = new LoanRequest(this.desiredLoanAmount(), this.desiredPaymentAmount(), this.risk, this, bank);
 		bank.receiveLoanRequests(req);
-		this.loanPending = bank;
+		this.bankPending = bank;
 		
 		return true;
 	}
