@@ -119,7 +119,7 @@ public class Consumer extends AgentClass {
 			this.cash -= payment;
 			l.makePayment(payment);
 			System.out.println("payment: "+payment);
-			if (l.principle == 0) { //Loan is paid off
+			if (l.principle >= 0) { //Loan is paid off
 				this.updateRisk(l);
 				this.loans.remove(l);
 			}
