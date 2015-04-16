@@ -117,25 +117,27 @@ public class Consumer extends AgentClass {
 		
 		double payment = l.getPayment();
 		System.out.println(payment);
-		if (this.cash > payment && this.risk < RandomHelper.nextDoubleFromTo(0, 1)) {			
+		boolean fail = this.risk < RandomHelper.nextDoubleFromTo(0, 1);
+		if (payment > 0 && this.cash > payment && fail) {			
 			this.cash -= payment;
 			l.makePayment(payment);
 			System.out.println("payment: "+payment);
-			if (l.principle >= 0) { //Loan is paid off
+			fail = false;
+		}
+		
+		if (l.principle <= 0) { //Loan is paid off
 				this.updateRisk(l);
 				this.loans.remove(l);
-			}
-			
-			return true;
-			
-		} else { //default 
-			
+				return true;
+		}	
+		
+		if (fail) { //default 	
 			l.defaulted = true;
 			this.valueOfDefaults += l.principle;
-			this.updateRisk(l);
-			
+			this.updateRisk(l);	
 			return false;
 		}
+		return true;
 	} 
 	
 	private double netWorth() {
