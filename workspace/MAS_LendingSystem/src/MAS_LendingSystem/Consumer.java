@@ -54,8 +54,9 @@ public class Consumer extends AgentClass {
 			if (this.currentSplurge < this.cash) { //Pay for splurge purchase if possible
 				
 				this.cash -= this.currentSplurge;
-				this.assets += this.currentSplurge; 
-				System.out.println("splurge bought in cash!");
+
+				this.assets += this.currentSplurge;
+				System.out.println("Cash Splurge: "+this.currentSplurge+", ("+this.cash+" remaining)");
 			} else {
 				System.out.println("need loan");
 				Banker b = this.getNearestAvalibleBank();
@@ -167,7 +168,6 @@ public class Consumer extends AgentClass {
 	}
 	
 	private boolean doesSplurge() { 
-		//System.out.println(this.splurgeDesire()+" / "+this.splurgeThreshold());
 		if (this.splurgeThreshold() > 0 && RandomHelper.nextDoubleFromTo(0, 1) < (this.splurgeDesire() /  this.splurgeThreshold())) {
 			 return true; 
 		 } else {
