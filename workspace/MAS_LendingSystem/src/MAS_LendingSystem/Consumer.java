@@ -21,7 +21,7 @@ public class Consumer extends AgentClass {
 	double cash = 0; //Net cash of the 
 	double spending = 0; //Money spent per tick
 	double deltaNetWorth = 0;
-	double currentSplurge = 0;
+	double currentSplurge = 19000;
 	double valueOfDefaults = 0;
 	double risk = 0; //0-1 percent risk of defaulting
 	double desire = 0; //0-1 percent desire for more netWorth 
@@ -48,23 +48,23 @@ public class Consumer extends AgentClass {
 		this.spendMoney();
 		this.makeLoanPayments();
 		this.observedSplurges = this.receiveNeighborsSplurging();
+		this.currentSplurge = this.nextSplurgeAmount(this.currentSplurge);
 		this.deltaNetWorth = this.netWorth() - netWorth;
 		if (this.doesSplurge()) {
-			this.currentSplurge = this.splurgeAmount();
-			
-			if (this.splurgeAmount() < this.cash) { //Pay for splurge purchase if possible
+			if (this.currentSplurge < this.cash) { //Pay for splurge purchase if possible
 				
-				this.cash -= this.splurgeAmount();
-				//System.out.println("splurge bought!");
+				this.cash -= this.currentSplurge;
+
+				this.assets += this.currentSplurge;
+				System.out.println("Cash Splurge: "+this.currentSplurge+", ("+this.cash+" remaining)");
 			} else {
-				
 				Banker b = this.getNearestAvalibleBank();
 				boolean success = this.requestLoan(b);
 				
 			}
-		} else {
+		} /*else {
 			this.currentSplurge = 0;
-		}
+		} */
 	}
 	
 	public void afterBanker() {
@@ -81,7 +81,7 @@ public class Consumer extends AgentClass {
 				this.observedSplurges = new ArrayList<Double>();
 				
 				// make the purchase!
-				this.assets += this.splurgeAmount();
+				this.assets += this.currentSplurge;
 				this.rejectedBanks.clear();
 			} else {
 				this.rejectedBanks.add(this.bankPending);
@@ -102,12 +102,15 @@ public class Consumer extends AgentClass {
 	
 	private void makeLoanPayments() {
 		if (this.loans.size() != 0) {
-			System.out.println("i have a loan");
+			
 		}
-		for (Loan l: this.loans) {
+		
+		List<Loan> ls = new ArrayList<Loan>(this.loans);
+		for (Loan l: ls) {
 			System.out.println("makeLoanPayments");
 			this.makeLoanPayment(l);  //TODO should this return whether any payments defaulted?
 		}
+		this.loans = ls;
 	}
 	
 	private boolean makeLoanPayment(Loan l) {
@@ -115,25 +118,24 @@ public class Consumer extends AgentClass {
 		
 		double payment = l.getPayment();
 		System.out.println(payment);
-		if (this.cash > payment && this.risk < RandomHelper.nextDoubleFromTo(0, 1)) {			
+		boolean fail = this.risk < RandomHelper.nextDoubleFromTo(0, 1);
 			this.cash -= payment;
 			l.makePayment(payment);
-			System.out.println("payment: "+payment);
-			if (l.principle == 0) { //Loan is paid off
+		}
+		
+		if (l.principle <= 0) { //Loan is paid off
 				this.updateRisk(l);
 				this.loans.remove(l);
-			}
-			
-			return true;
-			
-		} else { //default 
-			
+				return true;
+		}	
+		
+		if (fail) { //default 	
 			l.defaulted = true;
 			this.valueOfDefaults += l.principle;
-			this.updateRisk(l);
-			
+			this.updateRisk(l);	
 			return false;
 		}
+		return true;
 	} 
 	
 	private double netWorth() {
@@ -161,37 +163,34 @@ public class Consumer extends AgentClass {
 		return Consumer.maximumSplurge * this.desire + 1;
 	}
 	
-	private boolean doesSplurge() { 
-		//System.out.println(this.splurgeDesire()+" / "+this.splurgeThreshold());
-		if (this.splurgeThreshold() > 0 && RandomHelper.nextDoubleFromTo(0, 1) < (this.splurgeDesire() /  this.splurgeThreshold())) {
-			//System.out.println("splurge");
 			 return true; 
 		 } else {
 			 return false;
 		 }
 	}
 	
-	private double splurgeAmount() {
+	private double nextSplurgeAmount(double prevSplurge) {
 		// TODO magic number
-		double splurgeAmount = 19000;
-		
+	//	double splurgeAmount = 19000;
+		double neighborsSplurge = 0;
 		for (Double splurge: this.observedSplurges) {
-			splurgeAmount += splurge;
+			neighborsSplurge += splurge;
 		}
 		
-		double modifier = RandomHelper.nextDoubleFromTo(0, 1);
+		double modifier = RandomHelper.nextDoubleFromTo(-1, 1);
+		double averageSplurge = 0;
 		if (this.observedSplurges.size() != 0) {
-			splurgeAmount /= this.observedSplurges.size();
+			 averageSplurge = neighborsSplurge / this.observedSplurges.size();
 		}
-		splurgeAmount *= this.adjustedDesire(modifier);
+		
+		// increase or decrease the next splurge amount by the average of neighbor's observed splurges
+		return prevSplurge + averageSplurge * this.adjustedDesire(modifier); 
 		// TODO magic number for testing
 		//splurgeAmount += 15000;
-		//System.out.println(splurgeAmount);
-		return splurgeAmount;
 	}
 		
 	private double desiredLoanAmount() {
-		return this.splurgeAmount() - this.cash;
+		return this.currentSplurge - this.cash;
 	}  
 	
 	private double desiredPaymentAmount() {

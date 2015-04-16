@@ -13,7 +13,7 @@
 									
 		/>
 				<parameter name="costOfLiving" displayName="Cost of Living" type="double" 
-						defaultValue="1000.0" 
+						defaultValue="20000.0" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
@@ -37,7 +37,7 @@
 									
 		/>
 				<parameter name="consumerCount" displayName="Consumer Count" type="int" 
-						defaultValue="3" 
+						defaultValue="200" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
@@ -49,7 +49,7 @@
 									
 		/>
 				<parameter name="maxIncome" displayName="Max Income" type="double" 
-						defaultValue="20000" 
+						defaultValue="30000" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
