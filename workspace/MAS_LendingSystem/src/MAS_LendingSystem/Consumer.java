@@ -26,10 +26,11 @@ public class Consumer extends AgentClass {
 	double risk = 0; //0-1 percent risk of defaulting
 	double desire = 0; //0-1 percent desire for more netWorth 
 	double assets = 0; //cash value of non-cash assets
-	Banker bankPending = null;
-	Loan loanPending = null;
 	
-	Boolean loanAccepted = false;
+	private Banker bankPending = null;
+	private Loan loanPending = null;
+	private Boolean loanAccepted = false;
+	
 	List<Double> observedSplurges = new ArrayList<Double>();
 	List<Loan> loans = new ArrayList<Loan>(); //Loans currently held by agent
 	List<Banker> rejectedBanks = new ArrayList<Banker>();
@@ -67,9 +68,11 @@ public class Consumer extends AgentClass {
 	}
 	
 	public void afterBanker() {
-		if (this.loanAccepted != null && this.bankPending != null) {
+		System.out.println(this.bankPending+"\t,"+this.loanPending);
+		
+		if (this.bankPending != null) {
 
-			if (this.loanAccepted) {
+			if (this.loanPending != null) {
 				System.out.println("I have a loan");
 				this.loans.add(loanPending);
 				
@@ -117,7 +120,7 @@ public class Consumer extends AgentClass {
 		if (this.cash > payment && this.risk < RandomHelper.nextDoubleFromTo(0, 1)) {			
 			this.cash -= payment;
 			l.makePayment(payment);
-			
+			System.out.println("payment: "+payment);
 			if (l.principle == 0) { //Loan is paid off
 				this.updateRisk(l);
 				this.loans.remove(l);
@@ -265,6 +268,19 @@ public class Consumer extends AgentClass {
 		
 		return true;
 	}
+	
+	public void setBankPending(Banker bankPending) {
+		this.bankPending = bankPending;
+	}
+
+	public void setLoanPending(Loan loanPending) {
+		this.loanPending = loanPending;
+	}
+
+	public void setLoanAccepted(Boolean loanAccepted) {
+		this.loanAccepted = loanAccepted;
+	}
+
 	
 	private double adjustedDesire(double value) {
 		if (value < 0) {
