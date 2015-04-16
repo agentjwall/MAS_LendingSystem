@@ -1,36 +1,22 @@
 package MAS_LendingSystem;
 
 public class Loan {
-	public static double interestRate = .04;
+	final public static double interestRate = .04;
+	final double initialLoanAmount; //Initial value of the loan
+	final private double payment; //Amount paid every tick
+	final Banker banker;
+	final Consumer consumer;
 	
-	double initialLoanAmount; //Initial value of the loan
 	double principle; //Current value of the loan
-	private double payment; //Amount paid every tick
 	private double paymentsMade = 0; //Money being transfered from consumer to banker
 	boolean defaulted = false;
-	Banker banker;
-	Consumer consumer;
+	
 	
 	public Loan(LoanRequest req) {
 		this.initialLoanAmount = this.principle = req.amount;
 		this.payment = req.payment;
 		this.banker = req.bank;
 		this.consumer = req.requester;
-	}
-	
-	public Loan(double loanAmount) {
-		this.initialLoanAmount = this.principle = loanAmount;
-		this.payment = 0;
-	}
-	
-	public Loan(double loanAmount, double paymentPerTick) {
-		this.initialLoanAmount = this.principle = loanAmount;
-		this.payment = paymentPerTick;
-	}
-	
-	public Loan(double loanAmount, int ticksToPayoff) {
-		this.initialLoanAmount = this.principle = loanAmount;
-		this.payment = (Loan.interestRate * loanAmount) / ( 1- Math.pow(1 + Loan.interestRate, -ticksToPayoff));
 	}
 	
 	public double getPayment() {
