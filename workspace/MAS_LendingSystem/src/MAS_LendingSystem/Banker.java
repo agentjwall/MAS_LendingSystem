@@ -52,7 +52,7 @@ public class Banker extends AgentClass {
 			
 			
 			if (l != null && this.assets > l.amount) {
-			//	System.out.println("Loan accepted!");
+				System.out.println("Loan accepted!");
 				Loan newLoan = new Loan(l);
 				this.loans.add(newLoan);
 				this.assets -= l.amount;

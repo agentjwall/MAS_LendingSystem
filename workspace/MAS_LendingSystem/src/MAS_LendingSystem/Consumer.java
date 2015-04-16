@@ -68,7 +68,7 @@ public class Consumer extends AgentClass {
 	
 	public void afterBanker() {
 		if (this.loanAccepted != null && this.bankPending != null) {
-			
+
 			if (this.loanAccepted) {
 				System.out.println("I have a loan");
 				this.loans.add(loanPending);
