@@ -52,7 +52,7 @@ public class Consumer extends AgentClass {
 			if (this.splurgeAmount() < this.cash) { //Pay for splurge purchase if possible
 				
 				this.cash -= this.splurgeAmount();
-				System.out.println("splurge bought!");
+				//System.out.println("splurge bought!");
 			} else {
 				
 				Banker b = this.getNearestAvalibleBank();
@@ -148,7 +148,9 @@ public class Consumer extends AgentClass {
 	}
 	
 	private boolean doesSplurge() { 
+		//System.out.println(this.splurgeDesire()+" / "+this.splurgeThreshold());
 		if (RandomHelper.nextDoubleFromTo(0, 1) < (this.splurgeDesire() /  this.splurgeThreshold())) {
+			//System.out.println("splurge");
 			 return true; 
 		 } else {
 			 return false;
@@ -170,7 +172,7 @@ public class Consumer extends AgentClass {
 		//splurgeAmount *= this.adjustedDesire(modifier);
 		// TODO magic number for testing
 		splurgeAmount += 150000;
-		System.out.println(splurgeAmount);
+		//System.out.println(splurgeAmount);
 		return splurgeAmount;
 	}
 		
