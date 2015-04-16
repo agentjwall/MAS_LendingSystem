@@ -15,7 +15,7 @@ import repast.simphony.context.Context;
 public class Consumer extends AgentClass {
 	static double percentDurable = .7; //0-1 Percent of goods bought that get added to net worth
 	static int maximumSplurge = 20;
-	static double loanPaymentPercentage = .2; //percent of disposable income that will be payed towards loans
+	static double loanPaymentPercentage = .2; //percent of disposable income that will be paid towards loans
 	
 	double income = 0; //Income gained per tick
 	double cash = 0; //Net cash of the 
