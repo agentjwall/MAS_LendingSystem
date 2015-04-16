@@ -103,10 +103,13 @@ public class Consumer extends AgentClass {
 		if (this.loans.size() != 0) {
 			System.out.println("i have a loan");
 		}
-		for (Loan l: this.loans) {
+		
+		List<Loan> ls = new ArrayList<Loan>(this.loans);
+		for (Loan l: ls) {
 			System.out.println("makeLoanPayments");
 			this.makeLoanPayment(l);  //TODO should this return whether any payments defaulted?
 		}
+		this.loans = ls;
 	}
 	
 	private boolean makeLoanPayment(Loan l) {
@@ -118,7 +121,7 @@ public class Consumer extends AgentClass {
 			this.cash -= payment;
 			l.makePayment(payment);
 			System.out.println("payment: "+payment);
-			if (l.principle == 0) { //Loan is paid off
+			if (l.principle >= 0) { //Loan is paid off
 				this.updateRisk(l);
 				this.loans.remove(l);
 			}
