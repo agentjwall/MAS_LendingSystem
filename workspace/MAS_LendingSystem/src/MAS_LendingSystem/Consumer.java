@@ -58,7 +58,6 @@ public class Consumer extends AgentClass {
 				this.assets += this.currentSplurge;
 				System.out.println("Cash Splurge: "+this.currentSplurge+", ("+this.cash+" remaining)");
 			} else {
-				System.out.println("need loan");
 				Banker b = this.getNearestAvalibleBank();
 				boolean success = this.requestLoan(b);
 				
