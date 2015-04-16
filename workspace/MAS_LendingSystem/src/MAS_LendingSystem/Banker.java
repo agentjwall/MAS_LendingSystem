@@ -43,7 +43,7 @@ public class Banker extends AgentClass {
 			Double lVal = null;
 			
 			for (LoanRequest req: reqs) {
-				System.out.println("Loan requested, val = " + this.valueLoan(req));
+				//System.out.println("Loan requested, val = " + this.valueLoan(req));
 				if (this.valueLoan(req) != 0 && (lVal == null || this.valueLoan(req) > lVal)) {		
 					l = req;
 					lVal = this.valueLoan(req);
@@ -52,7 +52,7 @@ public class Banker extends AgentClass {
 			
 			
 			if (l != null && this.assets > l.amount) {
-				System.out.println("Loan accepted!");
+				//System.out.println("Loan accepted!");
 				Loan newLoan = new Loan(l);
 				this.loans.add(newLoan);
 				this.assets -= l.amount;
