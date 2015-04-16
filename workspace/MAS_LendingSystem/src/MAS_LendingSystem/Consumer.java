@@ -165,7 +165,7 @@ public class Consumer extends AgentClass {
 	
 	private boolean doesSplurge() { 
 		//System.out.println(this.splurgeDesire()+" / "+this.splurgeThreshold());
-		if (this.splurgeThreshold() > 0 && RandomHelper.nextDoubleFromTo(0, 1) < (this.splurgeDesire() /  this.splurgeThreshold())) {
+		if (RandomHelper.nextDoubleFromTo(0, 1) < (this.splurgeDesire() /  this.splurgeThreshold())) {
 			//System.out.println("splurge");
 			 return true; 
 		 } else {
