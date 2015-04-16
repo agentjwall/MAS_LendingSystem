@@ -41,7 +41,7 @@ public class Loan {
 		this.paymentsMade += payment;
 	}
 	
-	public double acceptPayment() {
+	public double disbursePayment() {
 		payment = this.paymentsMade;
 		this.paymentsMade = 0;
 		return payment;
