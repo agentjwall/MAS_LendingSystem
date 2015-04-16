@@ -35,7 +35,8 @@ public class WorldBuilder implements ContextBuilder<Object> {
     public static final String PARAMETER_MEAN_SPENDING = "meanSpending";
     public static final String PARAMETER_CONSUMER_RISK = "meanConsumerRisk";
     public static final String PARAMETER_CONSUMER_DESIRE = "meanConsumerDesire";
-
+    
+    
     // banker parameters
     public static final String PARAMETER_BANKER_RISK = "meanBankerRisk";
 	    

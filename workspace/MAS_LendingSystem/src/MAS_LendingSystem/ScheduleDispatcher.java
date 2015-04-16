@@ -13,6 +13,7 @@ public class ScheduleDispatcher {
 	public int prevPositiveBankAssets;
 	public int prevConsumerSpending;
 	public int monthsInDecline;
+	public double totalPercentChange;
 
 	/* A single step function is used for the entire world in order
 	 * to facilitate synchronization of actions.
@@ -46,26 +47,7 @@ public class ScheduleDispatcher {
          //this.updateBackground(bankers, consumers);
          		
 	}
-	
-	// TODO Maddy
-	public void updateBackground(IndexedIterable<Object> bankers, IndexedIterable<Object> consumers) {
-		Context<Object> context = ScheduleDispatcher.getContext();
-		if (context == null) {
-			return;
-		}
-
-		Collection<ValueLayer> layers = context.getValueLayers(); 
-		
-		// figure out if consumer spending has increased or decreased
-		int totalConsumerSpending = 0;
-		for (int i = 0; i < consumers.size(); i++) {
-        	 	Consumer c = (Consumer) consumers.get(i);
-        	 	totalConsumerSpending += (c.spending + c.currentSplurge);
-         	}
-		int percentChangeCS = (totalConsumerSpending - prevConsumerSpending)/prevConsumerSpending;
-		
-		
-	}
+	 
 	
 		// returns the context if simulation is started & correctly initialized
 		// otherwise returns null
@@ -86,5 +68,34 @@ public class ScheduleDispatcher {
 	        	return null;
 	        }
 	        return masterContext;
+		}
+		
+		public void calculateTotalPercentChangeOfEconomy(IndexedIterable<Object> bankers, IndexedIterable<Object> consumers){
+			Context<Object> context = ScheduleDispatcher.getContext();
+			if (context == null) {
+					return;
+			}
+			// figure out if consumer spending has increased or decreased
+			int totalConsumerSpending = 0;
+			for (int i = 0; i < consumers.size(); i++) {
+        	 	Consumer c = (Consumer) consumers.get(i);
+        	 	totalConsumerSpending += (c.spending + c.currentSplurge);
+         	}
+			double percentChangeCS = (totalConsumerSpending - prevConsumerSpending)/prevConsumerSpending;
+		
+			// figure out if bank assets-bank defaulted assets has increased or decreased
+			int totalPositiveBankAssets = 0;
+			for (int i = 0; i < bankers.size(); i++) {
+        	 	Banker b = (Banker) bankers.get(i);
+        	 	totalPositiveBankAssets += (b.assets - b.defaultedAssets);
+         	}
+			double percentChangeBA = (totalPositiveBankAssets - prevPositiveBankAssets)/prevPositiveBankAssets;
+		
+			totalPercentChange = percentChangeCS + percentChangeBA;
+			
+		}
+		
+		public double getTotalPercentChange(){
+			return totalPercentChange;
 		}
 }

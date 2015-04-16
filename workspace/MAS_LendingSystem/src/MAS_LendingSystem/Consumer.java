@@ -58,7 +58,6 @@ public class Consumer extends AgentClass {
 				this.assets += this.currentSplurge;
 				System.out.println("Cash Splurge: "+this.currentSplurge+", ("+this.cash+" remaining)");
 			} else {
-				System.out.println("need loan");
 				Banker b = this.getNearestAvalibleBank();
 				boolean success = this.requestLoan(b);
 				
@@ -103,7 +102,7 @@ public class Consumer extends AgentClass {
 	
 	private void makeLoanPayments() {
 		if (this.loans.size() != 0) {
-			System.out.println("i have a loan");
+			
 		}
 		
 		List<Loan> ls = new ArrayList<Loan>(this.loans);
@@ -120,11 +119,8 @@ public class Consumer extends AgentClass {
 		double payment = l.getPayment();
 		System.out.println(payment);
 		boolean fail = this.risk < RandomHelper.nextDoubleFromTo(0, 1);
-		if (payment > 0 && this.cash > payment && fail) {			
 			this.cash -= payment;
 			l.makePayment(payment);
-			System.out.println("payment: "+payment);
-			fail = false;
 		}
 		
 		if (l.principle <= 0) { //Loan is paid off
@@ -167,8 +163,6 @@ public class Consumer extends AgentClass {
 		return Consumer.maximumSplurge * this.desire + 1;
 	}
 	
-	private boolean doesSplurge() { 
-		if (this.splurgeThreshold() > 0 && RandomHelper.nextDoubleFromTo(0, 1) < (this.splurgeDesire() /  this.splurgeThreshold())) {
 			 return true; 
 		 } else {
 			 return false;
