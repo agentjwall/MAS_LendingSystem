@@ -67,9 +67,7 @@ public class Consumer extends AgentClass {
 		}
 	}
 	
-	public void afterBanker() {
-		System.out.println(this.bankPending+"\t,"+this.loanPending);
-		
+	public void afterBanker() {		
 		if (this.bankPending != null) {
 
 			if (this.loanPending != null) {
