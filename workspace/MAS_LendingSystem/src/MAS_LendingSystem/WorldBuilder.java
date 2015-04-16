@@ -178,7 +178,6 @@ public class WorldBuilder implements ContextBuilder<Object> {
 					
 						if (!cell.isInNeighborhood(n)) {
 							cell.addNeighborhood(n);
-							System.out.println("Added neighborhood!");
 						}
 					}
 				}
