@@ -50,6 +50,7 @@ public class Banker extends AgentClass {
 				}
 			}
 			
+			
 			if (l != null && this.assets > l.amount) {
 				System.out.println("Loan accepted!");
 				this.loans.add(new Loan(l));
@@ -94,6 +95,7 @@ public class Banker extends AgentClass {
 	
 	private double valueLoan(LoanRequest req) {
 		double riskC = req.requesterRisk;
+
 		//System.out.println("Risk c: " + riskC);
 		//System.out.println("risk threshold: " + this.riskThreshold);
 		return riskC < this.riskThreshold? riskC * req.amount: 0;
