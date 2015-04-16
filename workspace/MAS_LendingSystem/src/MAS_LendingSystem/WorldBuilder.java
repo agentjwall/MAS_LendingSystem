@@ -193,7 +193,8 @@ public class WorldBuilder implements ContextBuilder<Object> {
 
 	public double getNormalDist(double min, double max, double mean) {
 		double trueMean = min + (mean * (max-min));
-		Normal n = RandomHelper.createNormal(trueMean, 1);
+		double sd = (max - min) / 6;
+		Normal n = RandomHelper.createNormal(trueMean, sd);
 		double val = n.nextDouble();
 		
 		if (val < min) {
@@ -201,6 +202,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		} else if (val > max){
 			val = max;
 		}
+		System.out.println(val);
 		return val;
 	}
 	
