@@ -148,13 +148,13 @@ public class WorldBuilder implements ContextBuilder<Object> {
 				int[] coords = cell.getCoordinates();
 				List<AgentClass> adjacent = new ArrayList<AgentClass>();
 				
-				if (coords[0] < gridDim[0] && (AgentClass)g.getObjectAt(coords[0]+1, coords[1]) != null) {
+				if (coords[0] < gridDim[0] - 1 && (AgentClass)g.getObjectAt(coords[0]+1, coords[1]) != null) {
 					adjacent.add((AgentClass)g.getObjectAt(coords[0]+1, coords[1]));
 				}
 				if (coords[0] > 0 && (AgentClass)g.getObjectAt(coords[0]-1, coords[1]) != null) {
 					adjacent.add((AgentClass)g.getObjectAt(coords[0]-1, coords[1]));
 				}
-				if (coords[1] < gridDim[1] && (AgentClass)g.getObjectAt(coords[0], coords[1]+1) != null) {
+				if (coords[1] < gridDim[1] - 1 && (AgentClass)g.getObjectAt(coords[0], coords[1]+1) != null) {
 					adjacent.add((AgentClass)g.getObjectAt(coords[0], coords[1]+1));
 				}
 				if (coords[1] > 0 && (AgentClass)g.getObjectAt(coords[0], coords[1]-1) != null) {
