@@ -31,13 +31,13 @@
 									
 		/>
 				<parameter name="bankerCount" displayName="Banker Count" type="int" 
-						defaultValue="40" 
+						defaultValue="5" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
 		/>
 				<parameter name="consumerCount" displayName="Consumer Count" type="int" 
-						defaultValue="400" 
+						defaultValue="3" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									

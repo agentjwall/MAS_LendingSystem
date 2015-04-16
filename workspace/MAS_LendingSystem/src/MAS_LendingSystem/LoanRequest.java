@@ -14,5 +14,6 @@ public class LoanRequest {
 		this.requesterRisk = requesterRisk;
 		this.bank = bank;
 		this.amount = amount;
+		this.payment = payment;
 	}
 }

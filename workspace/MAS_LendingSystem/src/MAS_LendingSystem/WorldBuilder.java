@@ -40,7 +40,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
     public static final String PARAMETER_BANKER_RISK = "meanBankerRisk";
 	    
     //TODO: add parameters
-    public static final int neighborhoodCount = 12;
+    public static final int neighborhoodCount = 1;
     public static final double sharedNeighborhoodProbability = 0.04;
     
 	public Context<Object> build(Context<Object> context) {
