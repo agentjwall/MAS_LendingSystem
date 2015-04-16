@@ -21,7 +21,7 @@ public class Consumer extends AgentClass {
 	double cash = 0; //Net cash of the 
 	double spending = 0; //Money spent per tick
 	double deltaNetWorth = 0;
-	double currentSplurge = 0;
+	double currentSplurge = 19000;
 	double valueOfDefaults = 0;
 	double risk = 0; //0-1 percent risk of defaulting
 	double desire = 0; //0-1 percent desire for more netWorth 
@@ -54,9 +54,10 @@ public class Consumer extends AgentClass {
 			if (this.currentSplurge < this.cash) { //Pay for splurge purchase if possible
 				
 				this.cash -= this.currentSplurge;
-				//System.out.println("splurge bought!");
+				this.assets += this.currentSplurge; 
+				System.out.println("splurge bought in cash!");
 			} else {
-				
+				System.out.println("need loan");
 				Banker b = this.getNearestAvalibleBank();
 				boolean success = this.requestLoan(b);
 				
@@ -167,8 +168,7 @@ public class Consumer extends AgentClass {
 	
 	private boolean doesSplurge() { 
 		//System.out.println(this.splurgeDesire()+" / "+this.splurgeThreshold());
-		if (RandomHelper.nextDoubleFromTo(0, 1) < (this.splurgeDesire() /  this.splurgeThreshold())) {
-			//System.out.println("splurge");
+		if (this.splurgeThreshold() > 0 && RandomHelper.nextDoubleFromTo(0, 1) < (this.splurgeDesire() /  this.splurgeThreshold())) {
 			 return true; 
 		 } else {
 			 return false;
