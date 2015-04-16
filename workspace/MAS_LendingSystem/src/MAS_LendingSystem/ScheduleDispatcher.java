@@ -31,10 +31,13 @@ public class ScheduleDispatcher {
         	 Consumer c = (Consumer) consumers.get(i);
         	 c.beforeBanker();
          }
+         double assets = 0;
          for (int i = 0; i < bankers.size(); i++) {
         	 Banker b = (Banker) bankers.get(i);
+        	 assets += b.getAssets();
         	b.processLoans();
          }
+         System.out.println(assets);
          for (int i = 0; i < consumers.size(); i++) {
         	 Consumer c = (Consumer) consumers.get(i);
         	c.afterBanker();

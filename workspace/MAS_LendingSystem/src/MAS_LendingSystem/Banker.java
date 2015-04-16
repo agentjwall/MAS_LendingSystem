@@ -43,6 +43,7 @@ public class Banker extends AgentClass {
 			Double lVal = null;
 			
 			for (LoanRequest req: reqs) {
+				System.out.println("Loan requested, val = " + this.valueLoan(req));
 				if (this.valueLoan(req) != 0 && (lVal == null || this.valueLoan(req) < lVal)) {		
 					l = req;
 					lVal = this.valueLoan(req);
@@ -93,6 +94,8 @@ public class Banker extends AgentClass {
 	
 	private double valueLoan(LoanRequest req) {
 		double riskC = req.requesterRisk;
+		//System.out.println("Risk c: " + riskC);
+		//System.out.println("risk threshold: " + this.riskThreshold);
 		return riskC < this.riskThreshold? riskC * req.amount: 0;
 	}
 	
