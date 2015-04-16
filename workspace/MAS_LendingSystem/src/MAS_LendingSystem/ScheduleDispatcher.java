@@ -33,6 +33,9 @@ public class ScheduleDispatcher {
          }
          for (int i = 0; i < bankers.size(); i++) {
         	 Banker b = (Banker) bankers.get(i);
+        	 if (b.loanReqs.size() > 0) {
+        		 System.out.println("break here!");
+        	 }
         	b.processLoans();
          }
          for (int i = 0; i < consumers.size(); i++) {

@@ -29,7 +29,7 @@ public class Consumer extends AgentClass {
 	Banker bankPending = null;
 	Loan loanPending = null;
 	
-	Boolean loanAccepted = null;
+	Boolean loanAccepted = false;
 	List<Double> observedSplurges = new ArrayList<Double>();
 	List<Loan> loans = new ArrayList<Loan>(); //Loans currently held by agent
 	List<Banker> rejectedBanks = new ArrayList<Banker>();
@@ -67,9 +67,10 @@ public class Consumer extends AgentClass {
 	}
 	
 	public void afterBanker() {
-		if (this.loanAccepted != null) {
+		if (this.loanAccepted != null && this.bankPending != null) {
 			
 			if (this.loanAccepted) {
+				System.out.println("I have a loan");
 				this.loans.add(loanPending);
 				
 				// reset comm variables
@@ -99,6 +100,9 @@ public class Consumer extends AgentClass {
 	}
 	
 	private void makeLoanPayments() {
+		if (this.loans.size() != 0) {
+			System.out.println("i have a loan");
+		}
 		for (Loan l: this.loans) {
 			System.out.println("makeLoanPayments");
 			this.makeLoanPayment(l);  //TODO should this return whether any payments defaulted?
