@@ -68,7 +68,6 @@ public class Consumer extends AgentClass {
 	}
 	
 	public void afterBanker() {
-		System.out.println(this.bankPending+"\t,"+this.loanPending);
 		
 		if (this.bankPending != null) {
 
@@ -197,7 +196,10 @@ public class Consumer extends AgentClass {
 	}  
 	
 	private double desiredPaymentAmount() {
+		System.out.println("payment requested: " + this.disposableIncome() * Consumer.loanPaymentPercentage);
+		
 		return this.disposableIncome() * Consumer.loanPaymentPercentage;
+		
 	}
 	
 	private List<Double> receiveNeighborsSplurging() {
@@ -262,7 +264,10 @@ public class Consumer extends AgentClass {
 			return false;
 		}
 		
-		LoanRequest req = new LoanRequest(this.desiredLoanAmount(), this.desiredPaymentAmount(), this.risk, this, bank);
+		double amount = this.desiredLoanAmount();
+		double payment = this.desiredPaymentAmount();
+		
+		LoanRequest req = new LoanRequest(amount, payment, this.risk, this, bank);
 		bank.receiveLoanRequests(req);
 		this.bankPending = bank;
 		
