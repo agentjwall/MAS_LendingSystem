@@ -43,20 +43,21 @@ public class Banker extends AgentClass {
 			Double lVal = null;
 			
 			for (LoanRequest req: reqs) {
-				//System.out.println("Loan requested, val = " + this.valueLoan(req));
+				System.out.println("Loan requested, val = " + this.valueLoan(req));
 				if (this.valueLoan(req) != 0 && (lVal == null || this.valueLoan(req) > lVal)) {		
 					l = req;
 					lVal = this.valueLoan(req);
 				}
 			}
 			
+			
 			if (l != null && this.assets > l.amount) {
-			//	System.out.println("Loan accepted!");
+				System.out.println("Loan accepted!");
 				Loan newLoan = new Loan(l);
 				this.loans.add(newLoan);
 				this.assets -= l.amount;
-				l.requester.loanAccepted = true;
-				l.requester.loanPending = newLoan;
+				l.requester.setLoanPending(newLoan);
+				l.requester.setBankPending(this);
 				this.loanReqs.remove(l);
 			} else {
 				accept = false;
@@ -65,7 +66,7 @@ public class Banker extends AgentClass {
 		} while (accept);
 		
 		for (LoanRequest req: reqs) {
-			req.requester.loanAccepted = false;
+			req.requester.setLoanAccepted(false);
 		}
 		
 		this.loanReqs = new ArrayList<LoanRequest>();
@@ -73,10 +74,12 @@ public class Banker extends AgentClass {
 	}
 	
 	private void monitorLoans() {
-		for (Loan l: this.loans) {
+		ArrayList<Loan> ls = new ArrayList<Loan>(this.loans);
+		for (Loan l: ls) {
 			this.acceptPayment(l);
 			this.handleDefault(l);
 		}
+		this.loans = ls;
 	}
 	
 	private void acceptPayment(Loan l) {
@@ -96,6 +99,7 @@ public class Banker extends AgentClass {
 	
 	private double valueLoan(LoanRequest req) {
 		double riskC = req.requesterRisk;
+
 		//System.out.println("Risk c: " + riskC);
 		//System.out.println("risk threshold: " + this.riskThreshold);
 		return riskC < this.riskThreshold? riskC * req.amount: 0;
