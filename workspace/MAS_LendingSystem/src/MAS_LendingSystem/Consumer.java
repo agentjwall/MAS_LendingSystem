@@ -44,7 +44,7 @@ public class Consumer extends AgentClass {
 		this.receiveIncome();
 		this.spendMoney();
 		this.makeLoanPayments();
-		this.receiveNeighborsSplurging();
+		this.observedSplurges = this.receiveNeighborsSplurging();
 		this.deltaNetWorth = this.netWorth() - netWorth;
 		if (this.doesSplurge()) {
 			this.currentSplurge = this.splurgeAmount();
@@ -156,16 +156,21 @@ public class Consumer extends AgentClass {
 	}
 	
 	private double splurgeAmount() {
-		double splurgeAmount = 0;
+		// TODO magic number
+		double splurgeAmount = 19000;
 		
 		for (Double splurge: this.observedSplurges) {
 			splurgeAmount += splurge;
 		}
 		
 		double modifier = RandomHelper.nextDoubleFromTo(-1, 1);
-		splurgeAmount /= this.observedSplurges.size();
-		splurgeAmount *= this.adjustedDesire(modifier) * modifier;
-		
+		if (this.observedSplurges.size() != 0) {
+			splurgeAmount /= this.observedSplurges.size();
+		}
+		//splurgeAmount *= this.adjustedDesire(modifier);
+		// TODO magic number for testing
+		splurgeAmount += 150000;
+		System.out.println(splurgeAmount);
 		return splurgeAmount;
 	}
 		
