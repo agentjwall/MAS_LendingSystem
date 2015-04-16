@@ -45,6 +45,7 @@ public class Banker extends AgentClass {
 			for (LoanRequest req: reqs) {
 				if (this.valueLoan(req) != 0 && (lVal == null || this.valueLoan(req) < lVal)) {		
 					l = req;
+					lVal = this.valueLoan(req);
 				}
 			}
 			
