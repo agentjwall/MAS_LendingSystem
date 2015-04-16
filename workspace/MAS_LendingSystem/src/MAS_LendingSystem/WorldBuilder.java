@@ -1,12 +1,19 @@
 package MAS_LendingSystem;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import cern.jet.random.Normal;
 import repast.simphony.context.Context;
 import repast.simphony.dataLoader.ContextBuilder;
 import repast.simphony.engine.environment.*;
 import repast.simphony.parameter.Parameters;
+import repast.simphony.query.space.grid.GridCell;
+import repast.simphony.query.space.grid.GridCellNgh;
 import repast.simphony.random.*;
 import repast.simphony.space.grid.*;
+import repast.simphony.util.collections.IndexedIterable;
 import repast.simphony.context.space.grid.GridFactoryFinder;
 
 public class WorldBuilder implements ContextBuilder<Object> {	
@@ -34,7 +41,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 	    
     //TODO: add parameters
     public static final int neighborhoodCount = 12;
-    public static final double sharedNeighborhoodProbability = 0;
+    public static final double sharedNeighborhoodProbability = 0.04;
     
 	public Context<Object> build(Context<Object> context) {
 		context.setId(Constants.CONTEXT_ID);
@@ -98,7 +105,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 				double risk = getNormalDist(0, 1, meanConsumerRisk);
 				double desire = getNormalDist(0, 1, meanConsumerDesire);
 				Consumer c = new Consumer(income, spending, risk, desire);
-				Cell  cell = n.getEmptyCell();
+				Cell cell = n.getEmptyCell();
 				cell.setAgent(c);
 				c.setUnderlyingCell(cell);
 				context.add(c);
@@ -127,7 +134,57 @@ public class WorldBuilder implements ContextBuilder<Object> {
 			}
 			
 			context.add(n);
-		}								
+		}
+		
+		//Add shared neighborhoods
+		Iterable<Object> consumers = context.getObjects(Consumer.class);
+		
+		for (Object o: consumers) {
+			Consumer c = (Consumer) o;
+			if (RandomHelper.nextDoubleFromTo(0,1) < sharedNeighborhoodProbability) {
+				
+				Cell cell = c.getUnderlyingCell();
+				Grid<Object> g = (Grid<Object>) context.getProjection(Constants.GRID_ID);
+				int[] coords = cell.getCoordinates();
+				List<AgentClass> adjacent = new ArrayList<AgentClass>();
+				
+				if (coords[0] < gridDim[0] && (AgentClass)g.getObjectAt(coords[0]+1, coords[1]) != null) {
+					adjacent.add((AgentClass)g.getObjectAt(coords[0]+1, coords[1]));
+				}
+				if (coords[0] > 0 && (AgentClass)g.getObjectAt(coords[0]-1, coords[1]) != null) {
+					adjacent.add((AgentClass)g.getObjectAt(coords[0]-1, coords[1]));
+				}
+				if (coords[1] < gridDim[1] && (AgentClass)g.getObjectAt(coords[0], coords[1]+1) != null) {
+					adjacent.add((AgentClass)g.getObjectAt(coords[0], coords[1]+1));
+				}
+				if (coords[1] > 0 && (AgentClass)g.getObjectAt(coords[0], coords[1]-1) != null) {
+					adjacent.add((AgentClass)g.getObjectAt(coords[0], coords[1]-1));
+				}
+//				Cell cell = c.getUnderlyingCell();
+//				Grid<Object> g = (Grid<Object>) context.getProjection(Constants.GRID_ID);
+//				List<GridCell<Cell>> adjacent = new GridCellNgh<Cell>(g, g.getLocation(cell), Cell.class,1,1).getNeighborhood(false);
+//				
+//				for (GridCell<Cell> adj: adjacent) {
+//					adj.
+//					
+//					for (Cell gc: adj.) {
+						
+				for (AgentClass adj: adjacent) {
+						
+					Cell adjCell = adj.getUnderlyingCell();
+					Set<Neighborhood> adjN = adjCell.getNeighborhoods();
+					
+					for (Neighborhood n: adjN) {
+					
+						if (!cell.isInNeighborhood(n)) {
+							cell.addNeighborhood(n);
+							System.out.println("Added neighborhood!");
+						}
+					}
+				}
+				
+			}
+		}
 		
 		RunEnvironment.getInstance().endAt(numYears * 12);
 		context.add(new ScheduleDispatcher());

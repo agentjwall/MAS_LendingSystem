@@ -32,6 +32,14 @@ public class Cell {
 		return false;
 	}
 	
+	public boolean addNeighborhood(Neighborhood n) {
+		if (!this.neighborhood.contains(n)) {
+			this.neighborhood.add(n);
+			return true;
+		}
+		return false;
+	}
+	
 	public AgentClass getAgent() {
 		return this.agent;
 	}
@@ -42,6 +50,15 @@ public class Cell {
 	
 	public int[] getCoordinates() {
 		return new int[] {this.x, this.y};
+	}
+	
+	public boolean isInNeighborhood(Neighborhood neighborhood) {
+		for (Neighborhood n: this.neighborhood) {
+			if (n.equals(neighborhood)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public boolean isEmpty(){
