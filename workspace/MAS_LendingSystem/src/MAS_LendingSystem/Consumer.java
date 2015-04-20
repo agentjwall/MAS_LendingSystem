@@ -121,7 +121,6 @@ public class Consumer extends AgentClass {
 		boolean fail = this.risk < RandomHelper.nextDoubleFromTo(0, 1);
 			this.cash -= payment;
 			l.makePayment(payment);
-		}
 		
 		if (l.principle <= 0) { //Loan is paid off
 				this.updateRisk(l);
@@ -163,10 +162,14 @@ public class Consumer extends AgentClass {
 		return Consumer.maximumSplurge * this.desire + 1;
 	}
 	
-			 return true; 
-		 } else {
-			 return false;
-		 }
+	private boolean doesSplurge() { 
+	//System.out.println(this.splurgeDesire()+" / "+this.splurgeThreshold());
+	if (this.splurgeThreshold() > 0 && RandomHelper.nextDoubleFromTo(0, 1) < (this.splurgeDesire() /  this.splurgeThreshold())) {
+		//System.out.println("splurge");
+		return true; 
+	 } else {
+		 return false;
+	 }
 	}
 	
 	private double nextSplurgeAmount(double prevSplurge) {
