@@ -43,6 +43,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
     //TODO: add parameters
     public static final int neighborhoodCount = 1;
     public static final double sharedNeighborhoodProbability = 0.04;
+    public static final int neighborhoodClustering = 1; //1 low, 2 med, 3 high
     
 	public Context<Object> build(Context<Object> context) {
 		context.setId(Constants.CONTEXT_ID);
@@ -70,6 +71,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		int[] gridDim = getGridDim(bankerCount, consumerCount);
 		int[] neighborhoodDim = getNeighborhoodDim(bankerCount, consumerCount);
 		
+		
 		/* *** Create grid *** */
 		Grid<Object> grid = GridFactoryFinder.createGridFactory(null)
 								.createGrid(Constants.GRID_ID, context, 
@@ -83,6 +85,23 @@ public class WorldBuilder implements ContextBuilder<Object> {
 			//TODO: does this have to be the size of the grid or neighborhood?
 			Neighborhood n = new Neighborhood("neighborhood_"+i, false, gridDim); 
 			
+			//get cluster section
+			int cluster = RandomHelper.nextIntFromTo(1, neighborhoodClustering);
+			double meanRisk = meanConsumerRisk;
+			if (neighborhoodClustering == 2) {
+				if (cluster == 1) {
+					meanRisk = meanConsumerRisk / 3 * 2;
+				} else {
+					meanRisk =  1 - ((1 - meanConsumerRisk) / 3 * 2);
+				}
+			} else if (neighborhoodClustering == 3) {
+				if (cluster == 1) {
+					meanRisk = meanConsumerRisk / 2;
+				} else if (cluster == 3) {
+					meanRisk =  1 - ((1 - meanConsumerRisk) / 2);
+				}
+			}
+			//System.out.println(meanRisk);
 			
 			for (int j=0; j < neighborhoodDim[0]; j++) {
 				for (int k=0; k < neighborhoodDim[1]; k++) {
@@ -103,7 +122,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 			for (int j=0; j < consumers; j++) {
 				double income = getNormalDist(costOfLiving, maxIncome, meanIncome);
 				double spending = getNormalDist(costOfLiving, income, meanSpending);
-				double risk = getNormalDist(0, 1, meanConsumerRisk);
+				double risk = getNormalDist(0, 1, meanRisk);
 				double desire = getNormalDist(0, 1, meanConsumerDesire);
 				Consumer c = new Consumer(income, spending, risk, desire);
 				Cell cell = n.getEmptyCell();
