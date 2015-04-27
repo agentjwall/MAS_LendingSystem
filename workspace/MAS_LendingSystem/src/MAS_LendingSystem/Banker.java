@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Banker extends AgentClass {
 	
 	double assets = 0; //Total assets currently held by the bank
+	double initAssets = 0; //Assets at the beginning of the experiment
 	double defaultedAssets = 0; //Total amount of defaulted assets
 	double notesReceivable = 0; //Assets currently loaned out 
 	double riskThreshold = 0; //0-1 Soft threshold for taking on loans of equal or lower risk
@@ -13,7 +14,7 @@ public class Banker extends AgentClass {
 	boolean defaulted = false;
 	
 	public Banker(double assets, double riskThreshold) {
-		this.assets = assets;
+		this.initAssets = this.assets = assets;
 		this.riskThreshold = riskThreshold;
 	}
 	
@@ -91,7 +92,8 @@ public class Banker extends AgentClass {
 	}
 	
 	private void handleDefault(Loan l) {
-		if (l.defaulted) {
+		if (l.defaulted && l.principle > 0) {
+			System.out.println("Default: " + l.principle);
 			this.defaultedAssets += l.principle;
 			this.loans.remove(l);
 		}
@@ -106,7 +108,7 @@ public class Banker extends AgentClass {
 	}
 	
 	public boolean getDefaulted() {
-		if (this.assets < this.defaultedAssets) {
+		if (this.initAssets < this.defaultedAssets) {
 			this.defaulted = true;
 			return true;
 		} else {

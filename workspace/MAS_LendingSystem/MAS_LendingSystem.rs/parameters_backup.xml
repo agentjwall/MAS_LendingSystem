@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <parameters>
-					<parameter name="meanConsumerRisk" displayName="Mean Consumer Risk (0 to 1)" type="double" 
+					<parameter name="meanForIncomeDist" displayName="Mean for Consumer Income Dist" type="double" 
+						defaultValue="0.5" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="bankerCount" displayName="Banker Count" type="int" 
+						defaultValue="5" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="meanConsumerRisk" displayName="Mean Consumer Risk (0 to 1)" type="double" 
 						defaultValue="0.5" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
@@ -12,40 +24,16 @@
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
 		/>
-				<parameter name="costOfLiving" displayName="Cost of Living" type="double" 
-						defaultValue="1000.0" 
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
-									
-		/>
-				<parameter name="meanBankerRisk" displayName="Mean Bank Risk (0 to 1)" type="double" 
-						defaultValue="0.5" 
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
-									
-		/>
-				<parameter name="meanForIncomeDist" displayName="Mean for Consumer Income Dist" type="double" 
-						defaultValue="0.5" 
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
-									
-		/>
-				<parameter name="bankerCount" displayName="Banker Count" type="int" 
-						defaultValue="40" 
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
-									
-		/>
-				<parameter name="new" displayName="getRidofThis" type="int" 
-						defaultValue="0" 
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
-									
-		/>
 				<parameter name="consumerCount" displayName="Consumer Count" type="int" 
-						defaultValue="400" 
+						defaultValue="200" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="sharedNeighborhoodProbability" displayName="Shared Neighborhhod Probability" type="double" 
+						defaultValue="0.04" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
 		/>
 				<parameter name="meanSpending" displayName="Mean for Spending Distribution" type="double" 
@@ -54,8 +42,26 @@
 						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
 		/>
+				<parameter name="neighborhoodCount" displayName="Neighborhood Count" type="int" 
+						defaultValue="12" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="neighborhoodClustering (1 low, 2 med, 3 high)" displayName="Neighborhood Clustering" type="int" 
+						defaultValue="1" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="costOfLiving" displayName="Cost of Living" type="double" 
+						defaultValue="20000.0" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
 				<parameter name="maxIncome" displayName="Max Income" type="double" 
-						defaultValue="20000" 
+						defaultValue="30000" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
@@ -64,6 +70,24 @@
 						defaultValue="0.5" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="minBankerAssets" displayName="Min Banker Assets" type="int" 
+						defaultValue="20000" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="meanBankerRisk" displayName="Mean Bank Risk (0 to 1)" type="double" 
+						defaultValue="0.5" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="maxBankerAssets" displayName="Max Banker Assets" type="int" 
+						defaultValue="30000" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
 		/>
 				<parameter name="meanAssets" displayName="Mean Starting Bank Assets" type="double" 

@@ -21,7 +21,7 @@ public class Consumer extends AgentClass {
 	double cash = 0; //Net cash of the 
 	double spending = 0; //Money spent per tick
 	double deltaNetWorth = 0;
-	double currentSplurge = 19000;
+	double currentSplurge = 0;
 	double valueOfDefaults = 0;
 	double risk = 0; //0-1 percent risk of defaulting
 	double desire = 0; //0-1 percent desire for more netWorth 
@@ -35,11 +35,12 @@ public class Consumer extends AgentClass {
 	List<Loan> loans = new ArrayList<Loan>(); //Loans currently held by agent
 	List<Banker> rejectedBanks = new ArrayList<Banker>();
 	
-	public Consumer(double income, double spending, double risk, double desire) {
+	public Consumer(double income, double spending, double risk, double desire, int splurge) {
 		this.income = income;
 		this.spending = spending;
 		this.risk = risk;
 		this.desire = desire;
+		this.currentSplurge = splurge;
 	}
 	
 	public void beforeBanker() {
@@ -117,12 +118,13 @@ public class Consumer extends AgentClass {
 		l.accrueInterest();
 		
 		double payment = l.getPayment();
-		System.out.println(payment);
-		boolean fail = this.risk > RandomHelper.nextDoubleFromTo(0, 1);
+		System.out.println(payment +" ("+l.principle+")");
+		boolean fail = false; // (this.risk / 10) > RandomHelper.nextDoubleFromTo(0, 1);
 			this.cash -= payment;
 			l.makePayment(payment);
 		
 		if (l.principle <= 0) { //Loan is paid off
+			System.out.println("Loan Payed off!");
 				this.updateRisk(l);
 				this.loans.remove(l);
 				return true;
