@@ -20,7 +20,14 @@ public class Loan {
 	}
 	
 	public double getPayment() {
-		return this.principle < this.payment ? this.principle: this.payment; 
+		if (this.principle <= 0) {
+			return 0;
+		} else if (this.principle < this.payment) {
+			return this.principle;
+		} else {
+			return this.payment;
+		}
+		//return this.principle < this.payment ? this.principle: this.payment; 
 	}
 	
 	public void makePayment(double payment) {

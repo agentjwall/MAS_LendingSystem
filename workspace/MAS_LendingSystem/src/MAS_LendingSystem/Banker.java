@@ -92,7 +92,8 @@ public class Banker extends AgentClass {
 	}
 	
 	private void handleDefault(Loan l) {
-		if (l.defaulted) {
+		if (l.defaulted && l.principle > 0) {
+			System.out.println("Default: " + l.principle);
 			this.defaultedAssets += l.principle;
 			this.loans.remove(l);
 		}
