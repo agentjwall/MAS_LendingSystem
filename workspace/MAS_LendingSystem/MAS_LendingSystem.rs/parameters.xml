@@ -54,7 +54,7 @@
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
 		/>
-				<parameter name="neighborhoodClustering (1 low, 2 med, 3 high)" displayName="Neighborhood Clustering" type="int" 
+				<parameter name="neighborhoodClustering" displayName="Neighborhood Clustering  (1 low, 2 med, 3 high)" type="int" 
 						defaultValue="1" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"

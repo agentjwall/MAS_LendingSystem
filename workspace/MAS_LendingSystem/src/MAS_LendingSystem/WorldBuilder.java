@@ -44,14 +44,6 @@ public class WorldBuilder implements ContextBuilder<Object> {
     public static final String PARAMETER_BANKER_RISK = "meanBankerRisk";
     public static final String PARAMETER_MAX_BANKER_ASSETS = "maxBankerAssets";
     public static final String PARAMETER_MIN_BANKER_ASSETS = "minBankerAssets"; 
-	    
-    //TODO: add parameters
-    public static final int neighborhoodCount = 1;
-    public static final double sharedNeighborhoodProbability = 0.04;
-    public static final int neighborhoodClustering = 1; //1 low, 2 med, 3 high
-    public static final int maxBankerAssets = 30000;
-    public static final int minBankerAssets = 20000;
-    public static final int avgSplurgeAmount = 19000;
     
 	public Context<Object> build(Context<Object> context) {
 		context.setId(Constants.CONTEXT_ID);
@@ -63,7 +55,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final int consumerCount = ((Integer) parameters.getValue(PARAMETER_CONSUMER_COUNT)).intValue();
 		final int numYears = ((Integer) parameters.getValue(PARAMETER_NUM_YEARS)).intValue();
 		final int neighborhoodCount = ((Integer) parameters.getValue(PARAMETER_NEIGHBORHOOD_COUNT)).intValue();
-		final double sharedNeighborhoodProbability = ((Integer) parameters.getValue(PARAMETER_SHARED_NEIGHBORHOOD_PROBABILITY)).intValue();
+		final double sharedNeighborhoodProbability = ((Double) parameters.getValue(PARAMETER_SHARED_NEIGHBORHOOD_PROBABILITY)).intValue();
 		final int neighborhoodClustering = ((Integer) parameters.getValue(PARAMETER_NEIGHBORHOOD_CLUSTERING)).intValue();
 		final double costOfLiving = ((Double) parameters.getValue(PARAMETER_COST_OF_LIVING)).doubleValue();
 		final double maxIncome = ((Double) parameters.getValue(PARAMETER_MAX_INCOME)).doubleValue();
@@ -82,8 +74,8 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		int bankersPerNeighborhood = bankerCount / neighborhoodCount;
 		int bankersPerNeighborhoodR = bankerCount - bankersPerNeighborhood * neighborhoodCount;
 		
-		int[] gridDim = getGridDim(bankerCount, consumerCount);
-		int[] neighborhoodDim = getNeighborhoodDim(bankerCount, consumerCount);
+		int[] gridDim = getGridDim(bankerCount, consumerCount, neighborhoodCount);
+		int[] neighborhoodDim = getNeighborhoodDim(bankerCount, consumerCount, neighborhoodCount);
 		
 		
 		/* *** Create grid *** */
@@ -240,9 +232,9 @@ public class WorldBuilder implements ContextBuilder<Object> {
 	}
 	
 	
-	private int[] getGridDim(int bankerCount, int consumerCount) {
+	private int[] getGridDim(int bankerCount, int consumerCount, int neighborhoodCount) {
 		int elements = neighborhoodCount;
-		int[] neighborhood = getNeighborhoodDim(bankerCount, consumerCount);
+		int[] neighborhood = getNeighborhoodDim(bankerCount, consumerCount, neighborhoodCount);
 		int[] grid = getDim(elements);
 
 		int x = neighborhood[0] * grid[0];
@@ -252,7 +244,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 	}
 	
 	
-	private int[] getNeighborhoodDim(int bankerCount, int consumerCount) {
+	private int[] getNeighborhoodDim(int bankerCount, int consumerCount, int neighborhoodCount) {
 		int elements = (bankerCount + consumerCount) / neighborhoodCount; 
 		if ((bankerCount % neighborhoodCount) != 0) {
 			elements++;
