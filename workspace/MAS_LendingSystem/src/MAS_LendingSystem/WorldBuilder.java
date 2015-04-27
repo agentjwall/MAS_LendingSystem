@@ -26,7 +26,10 @@ public class WorldBuilder implements ContextBuilder<Object> {
 	// network parameters
     public static final String PARAMETER_BANKER_COUNT = "bankerCount";
     public static final String PARAMETER_CONSUMER_COUNT = "consumerCount";
-
+    public static final String PARAMETER_NEIGHBORHOOD_COUNT = "neighborhoodCount";
+    public static final String PARAMETER_SHARED_NEIGHBORHOOD_PROBABILITY =  "sharedNeighborhoodProbability";
+    public static final String PARAMETER_NEIGHBORHOOD_CLUSTERING = "neighborhoodClustering";
+    
     // consumer parameters
     public static final String PARAMETER_COST_OF_LIVING = "costOfLiving";
     public static final String PARAMETER_MAX_INCOME = "maxIncome";
@@ -35,15 +38,20 @@ public class WorldBuilder implements ContextBuilder<Object> {
     public static final String PARAMETER_MEAN_SPENDING = "meanSpending";
     public static final String PARAMETER_CONSUMER_RISK = "meanConsumerRisk";
     public static final String PARAMETER_CONSUMER_DESIRE = "meanConsumerDesire";
-    
+    public static final String PARAMETER_AVG_SPLURGE_AMOUNT = "avgSplurgeAmount";
     
     // banker parameters
     public static final String PARAMETER_BANKER_RISK = "meanBankerRisk";
+    public static final String PARAMETER_MAX_BANKER_ASSETS = "maxBankerAssets";
+    public static final String PARAMETER_MIN_BANKER_ASSETS = "minBankerAssets"; 
 	    
     //TODO: add parameters
     public static final int neighborhoodCount = 1;
     public static final double sharedNeighborhoodProbability = 0.04;
     public static final int neighborhoodClustering = 1; //1 low, 2 med, 3 high
+    public static final int maxBankerAssets = 30000;
+    public static final int minBankerAssets = 20000;
+    public static final int avgSplurgeAmount = 19000;
     
 	public Context<Object> build(Context<Object> context) {
 		context.setId(Constants.CONTEXT_ID);
@@ -54,6 +62,9 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final int bankerCount = ((Integer) parameters.getValue(PARAMETER_BANKER_COUNT)).intValue();
 		final int consumerCount = ((Integer) parameters.getValue(PARAMETER_CONSUMER_COUNT)).intValue();
 		final int numYears = ((Integer) parameters.getValue(PARAMETER_NUM_YEARS)).intValue();
+		final int neighborhoodCount = ((Integer) parameters.getValue(PARAMETER_NEIGHBORHOOD_COUNT)).intValue();
+		final double sharedNeighborhoodProbability = ((Integer) parameters.getValue(PARAMETER_SHARED_NEIGHBORHOOD_PROBABILITY)).intValue();
+		final int neighborhoodClustering = ((Integer) parameters.getValue(PARAMETER_NEIGHBORHOOD_CLUSTERING)).intValue();
 		final double costOfLiving = ((Double) parameters.getValue(PARAMETER_COST_OF_LIVING)).doubleValue();
 		final double maxIncome = ((Double) parameters.getValue(PARAMETER_MAX_INCOME)).doubleValue();
 		final double meanAssets = ((Double) parameters.getValue(PARAMETER_MEAN_ASSETS)).doubleValue();
@@ -62,6 +73,9 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final double meanConsumerRisk = ((Double) parameters.getValue(PARAMETER_CONSUMER_RISK)).doubleValue();
 		final double meanConsumerDesire = ((Double) parameters.getValue(PARAMETER_CONSUMER_DESIRE)).doubleValue();
 		final double meanBankerRisk = ((Double) parameters.getValue(PARAMETER_BANKER_RISK)).doubleValue();
+		final int maxBankerAssets = ((Integer) parameters.getValue(PARAMETER_MAX_BANKER_ASSETS)).intValue();
+		final int minBankerAssets = ((Integer) parameters.getValue(PARAMETER_MIN_BANKER_ASSETS)).intValue();
+		final int avgSplurgeAmount = ((Integer) parameters.getValue(PARAMETER_AVG_SPLURGE_AMOUNT)).intValue();
 		
 		int consumersPerNeighborhood = consumerCount / neighborhoodCount;
 		int consumersPerNeighborhoodR = consumerCount - consumersPerNeighborhood * neighborhoodCount;
@@ -124,7 +138,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 				double spending = getNormalDist(costOfLiving, income, meanSpending);
 				double risk = getNormalDist(0, 1, meanRisk);
 				double desire = getNormalDist(0, 1, meanConsumerDesire);
-				Consumer c = new Consumer(income, spending, risk, desire);
+				Consumer c = new Consumer(income, spending, risk, desire, avgSplurgeAmount);
 				Cell cell = n.getEmptyCell();
 				cell.setAgent(c);
 				c.setUnderlyingCell(cell);
@@ -143,7 +157,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 			
 			for (int j=0; j < bankers; j++) {
 				double riskThreshold = getNormalDist(0, 1, meanBankerRisk);
-				double assets = getNormalDist(100000, 200000, meanAssets);
+				double assets = getNormalDist(minBankerAssets, maxBankerAssets, meanAssets);
 				Banker b = new Banker(assets, riskThreshold);
 				Cell  cell = n.getEmptyCell();
 				cell.setAgent(b);
