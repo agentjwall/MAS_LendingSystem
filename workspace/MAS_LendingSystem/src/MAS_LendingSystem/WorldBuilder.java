@@ -28,7 +28,6 @@ public class WorldBuilder implements ContextBuilder<Object> {
     public static final String PARAMETER_CONSUMER_COUNT = "consumerCount";
     public static final String PARAMETER_NEIGHBORHOOD_COUNT = "neighborhoodCount";
     public static final String PARAMETER_SHARED_NEIGHBORHOOD_PROBABILITY =  "sharedNeighborhoodProbability";
-    public static final String PARAMETER_NEIGHBORHOOD_CLUSTERING = "neighborhoodClustering";
     public static final String PARAMETER_NEIGHBORHOOD_INFLUENCE_CLUSTERED = "neighborhoodInfluenceClustered";
     public static final String PARAMETER_DESIRE_CLUSTERED = "desireClustered";
     
@@ -59,9 +58,8 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final int numYears = ((Integer) parameters.getValue(PARAMETER_NUM_YEARS)).intValue();
 		final int neighborhoodCount = ((Integer) parameters.getValue(PARAMETER_NEIGHBORHOOD_COUNT)).intValue();
 		final double sharedNeighborhoodProbability = ((Double) parameters.getValue(PARAMETER_SHARED_NEIGHBORHOOD_PROBABILITY)).intValue();
-		final int neighborhoodClustering = ((Integer) parameters.getValue(PARAMETER_NEIGHBORHOOD_CLUSTERING)).intValue();
-		final boolean neighborhoodInfluenceClustered = ((Boolean) parameters.getValue(PARAMETER_NEIGHBORHOOD_CLUSTERING)).booleanValue();
-		final boolean desireClustered = ((Boolean) parameters.getValue(PARAMETER_NEIGHBORHOOD_CLUSTERING)).booleanValue();
+		final boolean neighborhoodInfluenceClustered = ((Boolean) parameters.getValue(PARAMETER_NEIGHBORHOOD_INFLUENCE_CLUSTERED)).booleanValue();
+		final boolean desireClustered = ((Boolean) parameters.getValue(PARAMETER_DESIRE_CLUSTERED)).booleanValue();
 		final double neighborhoodInfluence = ((Double) parameters.getValue(PARAMETER_NEIGHBORHOOD_INFLUENCE)).doubleValue();
 		final double costOfLiving = ((Double) parameters.getValue(PARAMETER_COST_OF_LIVING)).doubleValue();
 		final double maxIncome = ((Double) parameters.getValue(PARAMETER_MAX_INCOME)).doubleValue();
