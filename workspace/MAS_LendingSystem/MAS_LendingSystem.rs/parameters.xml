@@ -54,12 +54,6 @@
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
 		/>
-				<parameter name="neighborhoodClustering" displayName="Neighborhood Clustering  (1 low, 2 med, 3 high)" type="int" 
-						defaultValue="1" 
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
-									
-		/>
 				<parameter name="costOfLiving" displayName="Cost of Living" type="double" 
 						defaultValue="20000.0" 
 						isReadOnly="false" 
