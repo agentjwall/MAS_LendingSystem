@@ -121,7 +121,7 @@ public class Consumer extends AgentClass {
 		
 		double payment = l.getPayment();
 		System.out.println(payment +" ("+l.principle+")");
-		boolean fail = (this.risk / 10) > RandomHelper.nextDoubleFromTo(0, 1);
+		boolean fail = (this.risk / 100) > RandomHelper.nextDoubleFromTo(0, 1);
 			this.cash -= payment;
 			l.makePayment(payment);
 		
@@ -197,11 +197,12 @@ public class Consumer extends AgentClass {
 	}
 		
 	private double desiredLoanAmount() {
+		 if (this.currentSplurge > 200000)System.out.println("Loan request: " + (this.currentSplurge - this.cash) + " (" + this.currentSplurge + "," + this.cash + ")");
 		return this.currentSplurge - this.cash;
 	}  
 	
 	private double desiredPaymentAmount() {
-		System.out.println("payment requested: " + this.disposableIncome() * Consumer.loanPaymentPercentage);
+		//System.out.println("payment requested: " + this.disposableIncome() * Consumer.loanPaymentPercentage);
 		
 		return this.disposableIncome() * Consumer.loanPaymentPercentage;
 		

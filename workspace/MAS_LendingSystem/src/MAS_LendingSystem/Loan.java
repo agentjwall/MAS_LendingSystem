@@ -41,6 +41,6 @@ public class Loan {
 	}
 
 	public void accrueInterest () {
-		this.principle = this.principle * (1 + Loan.interestRate) - this.payment;
+		this.principle = this.principle * (1 + (Loan.interestRate / 12)) - this.payment;
 	}
 }
