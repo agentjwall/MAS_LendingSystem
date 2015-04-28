@@ -32,6 +32,7 @@ public class Loan {
 	
 	public void makePayment(double payment) {
 		this.paymentsMade += payment;
+		this.principle -= payment;
 	}
 	
 	public double disbursePayment() {
@@ -41,6 +42,6 @@ public class Loan {
 	}
 
 	public void accrueInterest () {
-		this.principle = this.principle * (1 + (Loan.interestRate / 12)) - this.payment;
+		this.principle = this.principle * (1 + (Loan.interestRate / 12));
 	}
 }

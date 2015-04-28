@@ -31,6 +31,8 @@ public class Consumer extends AgentClass {
 	private Banker bankPending = null;
 	private Loan loanPending = null;
 	private Boolean loanAccepted = false;
+	private boolean loanSplurge = false;
+	private boolean cashSplurge = false;
 	
 	List<Double> observedSplurges = new ArrayList<Double>();
 	List<Loan> loans = new ArrayList<Loan>(); //Loans currently held by agent
@@ -53,9 +55,10 @@ public class Consumer extends AgentClass {
 		this.observedSplurges = this.receiveNeighborsSplurging();
 		this.currentSplurge = this.nextSplurgeAmount(this.currentSplurge);
 		this.deltaNetWorth = this.netWorth() - netWorth;
+		this.cashSplurge = false;
 		if (this.doesSplurge()) {
 			if (this.currentSplurge < this.cash) { //Pay for splurge purchase if possible
-				
+				this.cashSplurge = true;
 				this.cash -= this.currentSplurge;
 
 				this.assets += this.currentSplurge;
@@ -71,6 +74,7 @@ public class Consumer extends AgentClass {
 	}
 	
 	public void afterBanker() {
+		this.loanSplurge = false;
 		if (this.bankPending != null) {
 
 			if (this.loanPending != null) {
@@ -84,6 +88,7 @@ public class Consumer extends AgentClass {
 				this.observedSplurges = new ArrayList<Double>();
 				
 				// make the purchase!
+				this.loanSplurge = true;
 				this.assets += this.currentSplurge;
 				this.rejectedBanks.clear();
 			} else {
@@ -219,7 +224,7 @@ public class Consumer extends AgentClass {
 		}
 
 		for (Consumer c: consumers) {
-			if (c != this) {
+			if (c != this && c.isSplurging()) {
 				splurges.add(c.currentSplurge);
 			}
 		}
@@ -312,5 +317,13 @@ public class Consumer extends AgentClass {
 	
 	public double economicIndicator() {
 		return this.deltaNetWorth + this.spending + this.currentSplurge; 
+	}
+	
+	public boolean isSplurging() {
+		if (this.cashSplurge || this.loanSplurge) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
