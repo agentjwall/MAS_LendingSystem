@@ -111,19 +111,19 @@
 				<parameter name="neighborhoodInfluence" displayName="Neighborhood Influence (0-1)" type="double" 
 						defaultValue=".5" 
 						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
 		/>
-				<parameter name="neighborhoodInfluenceClustered" displayName="Neighborhood Influence Clustered (true/false)" type="boolean" 
+				<parameter name="neighborhoodInfluenceClustered" displayName="Neighborhood Influence Clustered" type="boolean" 
 						defaultValue="false" 
 						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+						converter="repast.simphony.parameter.StringConverterFactory$BooleanConverter"
 									
 		/>
 				<parameter name="desireClustered" displayName="Splurge Threshold Clustered" type="boolean" 
 						defaultValue="false" 
 						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+						converter="repast.simphony.parameter.StringConverterFactory$BooleanConverter"
 									
 		/>
 		</parameters>
