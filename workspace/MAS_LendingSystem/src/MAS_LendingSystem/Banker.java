@@ -85,26 +85,28 @@ public class Banker extends AgentClass {
 	private void monitorLoans() {
 		ArrayList<Loan> ls = new ArrayList<Loan>(this.loans);
 		for (Loan l: ls) {
-			this.acceptPayment(l);
-			this.handleDefault(l);
+			ls = this.acceptPayment(ls, l);
+			ls = this.handleDefault(ls, l);
 		}
 		this.loans = ls;
 	}
 	
-	private void acceptPayment(Loan l) {
+	private ArrayList<Loan> acceptPayment(ArrayList<Loan> loans, Loan l) {
 		this.assets += l.disbursePayment();
 		
 		if (l.principle <= 0) { //Loan is paid off
-			this.loans.remove(l);
+			loans.remove(l);
 		}
+		return loans;
 	}
 	
-	private void handleDefault(Loan l) {
+	private ArrayList<Loan> handleDefault(ArrayList<Loan> loans, Loan l) {
 		if (l.defaulted && l.principle > 0) {
 			System.out.println("Default: " + l.principle);
 			this.defaultedAssets += l.principle;
-			this.loans.remove(l);
+			loans.remove(l);
 		}
+		return loans;
 	}
 	
 	private double valueLoan(LoanRequest req) {
