@@ -197,7 +197,7 @@ public class Consumer extends AgentClass {
 	}
 		
 	private double desiredLoanAmount() {
-		 if (this.currentSplurge > 200000)System.out.println("Loan request: " + (this.currentSplurge - this.cash) + " (" + this.currentSplurge + "," + this.cash + ")");
+		System.out.println("Loan request: " + (this.currentSplurge - this.cash) + " (" + this.currentSplurge + "," + this.cash + ")");
 		return this.currentSplurge - this.cash;
 	}  
 	
