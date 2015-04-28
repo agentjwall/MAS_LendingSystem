@@ -21,11 +21,12 @@ public class Banker extends AgentClass {
 	public void processLoans() {
 		if (!this.defaulted) {
 			this.acceptLoanRequests(this.loanReqs);
-			this.monitorLoans();
 		}
+		
+		this.monitorLoans();
 	}
 	
-	// Banker accepts communication of a loan request from a consumer agent 
+	// Banker accepts communication of a loan request from a consumer agent
 	public void receiveLoanRequests(LoanRequest req) {
 		this.loanReqs.add(req);
 	}
