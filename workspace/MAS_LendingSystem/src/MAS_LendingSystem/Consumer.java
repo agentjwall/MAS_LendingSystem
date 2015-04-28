@@ -126,7 +126,7 @@ public class Consumer extends AgentClass {
 		
 		double payment = l.getPayment();
 		System.out.println(payment +" ("+l.principle+")");
-		boolean fail = false; // (this.risk / 100) > RandomHelper.nextDoubleFromTo(0, 1);
+		boolean fail = (this.risk / 50) > RandomHelper.nextDoubleFromTo(0, 1);
 		this.cash -= payment;
 		l.makePayment(payment);
 		
