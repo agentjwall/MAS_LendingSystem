@@ -14,7 +14,7 @@ import repast.simphony.context.Context;
 
 public class Consumer extends AgentClass {
 	static double percentDurable = .7; //0-1 Percent of goods bought that get added to net worth
-	static int maximumSplurge = 20;
+	static int maximumSplurge = 100;
 	static double loanPaymentPercentage = .2; //percent of disposable income that will be paid towards loans
 	
 	double income = 0; //Income gained per tick
@@ -159,16 +159,16 @@ public class Consumer extends AgentClass {
 	
 
 	private int splurgeDesire() {
-		return (int) (this.observedSplurges.size() * neighborhoodInfluence) + 1;
+		return (int) (this.observedSplurges.size() * this.neighborhoodInfluence) + 1;
 	}
 	
 	private double splurgeThreshold() {
-		return Consumer.maximumSplurge * this.desire + 1;
+		return Consumer.maximumSplurge * (1 - this.desire) + 1;
 	}
 	
 	private boolean doesSplurge() { 
 	//System.out.println(this.splurgeDesire()+" / "+this.splurgeThreshold());
-	if (this.splurgeThreshold() > 0 && RandomHelper.nextDoubleFromTo(0, 1) < (this.splurgeDesire() /  this.splurgeThreshold())) {
+	if (RandomHelper.nextDoubleFromTo(0, 1) < (this.splurgeDesire() /  this.splurgeThreshold())) {
 		//System.out.println("splurge");
 		return true; 
 	 } else {
