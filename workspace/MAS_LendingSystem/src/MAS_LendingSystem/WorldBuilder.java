@@ -56,7 +56,6 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final int numYears = ((Integer) parameters.getValue(PARAMETER_NUM_YEARS)).intValue();
 		final int neighborhoodCount = ((Integer) parameters.getValue(PARAMETER_NEIGHBORHOOD_COUNT)).intValue();
 		final double sharedNeighborhoodProbability = ((Double) parameters.getValue(PARAMETER_SHARED_NEIGHBORHOOD_PROBABILITY)).intValue();
-		final int neighborhoodClustering = ((Integer) parameters.getValue(PARAMETER_NEIGHBORHOOD_CLUSTERING)).intValue();
 		final double costOfLiving = ((Double) parameters.getValue(PARAMETER_COST_OF_LIVING)).doubleValue();
 		final double maxIncome = ((Double) parameters.getValue(PARAMETER_MAX_INCOME)).doubleValue();
 		final double meanAssets = ((Double) parameters.getValue(PARAMETER_MEAN_ASSETS)).doubleValue();
@@ -68,6 +67,9 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final int maxBankerAssets = ((Integer) parameters.getValue(PARAMETER_MAX_BANKER_ASSETS)).intValue();
 		final int minBankerAssets = ((Integer) parameters.getValue(PARAMETER_MIN_BANKER_ASSETS)).intValue();
 		final int avgSplurgeAmount = ((Integer) parameters.getValue(PARAMETER_AVG_SPLURGE_AMOUNT)).intValue();
+		final double neighborhoodInfluence = 0.5;
+		final boolean neighborhoodInfluenceClustered = false;
+		final boolean desireClustered = false;
 		
 		int consumersPerNeighborhood = consumerCount / neighborhoodCount;
 		int consumersPerNeighborhoodR = consumerCount - consumersPerNeighborhood * neighborhoodCount;
@@ -91,22 +93,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
 			//TODO: does this have to be the size of the grid or neighborhood?
 			Neighborhood n = new Neighborhood("neighborhood_"+i, false, gridDim); 
 			
-			//get cluster section
-			int cluster = RandomHelper.nextIntFromTo(1, neighborhoodClustering);
-			double meanRisk = meanConsumerRisk;
-			if (neighborhoodClustering == 2) {
-				if (cluster == 1) {
-					meanRisk = meanConsumerRisk / 3 * 2;
-				} else {
-					meanRisk =  1 - ((1 - meanConsumerRisk) / 3 * 2);
-				}
-			} else if (neighborhoodClustering == 3) {
-				if (cluster == 1) {
-					meanRisk = meanConsumerRisk / 2;
-				} else if (cluster == 3) {
-					meanRisk =  1 - ((1 - meanConsumerRisk) / 2);
-				}
-			}
+			
 			//System.out.println(meanRisk);
 			
 			for (int j=0; j < neighborhoodDim[0]; j++) {
@@ -125,12 +112,17 @@ public class WorldBuilder implements ContextBuilder<Object> {
 				consumersPerNeighborhoodR--;
 			}
 			
+			double meanDesire = getClustered(meanConsumerDesire, desireClustered);
+			double meanInfluence = getClustered(neighborhoodInfluence, neighborhoodInfluenceClustered);
+			
+			
 			for (int j=0; j < consumers; j++) {
 				double income = getNormalDist(costOfLiving, maxIncome, meanIncome);
 				double spending = getNormalDist(costOfLiving, income, meanSpending);
-				double risk = getNormalDist(0, 1, meanRisk);
-				double desire = getNormalDist(0, 1, meanConsumerDesire);
-				Consumer c = new Consumer(income, spending, risk, desire, avgSplurgeAmount);
+				double risk = getNormalDist(0, 1, meanConsumerRisk);
+				double desire = getNormalDist(0, 1, meanDesire);
+				double influence = getNormalDist(0, 1, meanInfluence);
+				Consumer c = new Consumer(income, spending, risk, desire, avgSplurgeAmount, influence);
 				Cell cell = n.getEmptyCell();
 				cell.setAgent(c);
 				c.setUnderlyingCell(cell);
@@ -285,5 +277,22 @@ public class WorldBuilder implements ContextBuilder<Object> {
         	return null;
         }
         return masterContext;
-	}	
+	}
+	
+	public double getClustered(double val, boolean isClustered) {
+		double output;
+		
+		if (isClustered) {
+			int cluster = RandomHelper.nextIntFromTo(0, 1);
+			
+			if (cluster == 1) {
+				output =  1 - ((1 - val) / 3 * 2);
+			} else {
+				output = val;
+			}
+		} else {
+			output = val;
+		}
+		return output;
+	}
 }

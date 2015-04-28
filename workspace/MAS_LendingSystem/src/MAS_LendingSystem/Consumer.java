@@ -26,6 +26,7 @@ public class Consumer extends AgentClass {
 	double risk = 0; //0-1 percent risk of defaulting
 	double desire = 0; //0-1 percent desire for more netWorth 
 	double assets = 0; //cash value of non-cash assets
+	double neighborhoodInfluence = 0;
 	
 	private Banker bankPending = null;
 	private Loan loanPending = null;
@@ -35,12 +36,13 @@ public class Consumer extends AgentClass {
 	List<Loan> loans = new ArrayList<Loan>(); //Loans currently held by agent
 	List<Banker> rejectedBanks = new ArrayList<Banker>();
 	
-	public Consumer(double income, double spending, double risk, double desire, int splurge) {
+	public Consumer(double income, double spending, double risk, double desire, int splurge, double neighborhoodInfluence) {
 		this.income = income;
 		this.spending = spending;
 		this.risk = risk;
 		this.desire = desire;
 		this.currentSplurge = splurge;
+		this.neighborhoodInfluence = neighborhoodInfluence;
 	}
 	
 	public void beforeBanker() {
@@ -157,7 +159,7 @@ public class Consumer extends AgentClass {
 	
 
 	private int splurgeDesire() {
-		return this.observedSplurges.size() + 1;
+		return (int) (this.observedSplurges.size() * neighborhoodInfluence) + 1;
 	}
 	
 	private double splurgeThreshold() {
