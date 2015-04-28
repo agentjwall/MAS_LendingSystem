@@ -38,8 +38,11 @@ public class Banker extends AgentClass {
 		} else {
 			reqs = new ArrayList<LoanRequest>(reqs_arg);
 		}
+		
+		System.out.println("Loan requests received: " + reqs.size());
 
 		boolean accept = true;
+		int i=0;
 		do {
 			LoanRequest l = null;
 			Double lVal = null;
@@ -61,11 +64,14 @@ public class Banker extends AgentClass {
 				l.requester.setLoanPending(newLoan);
 				l.requester.setBankPending(this);
 				this.loanReqs.remove(l);
+				i++;
 			} else {
 				accept = false;
 			}
 			
 		} while (accept);
+		
+		System.out.println(i + " Loans accepted");
 		
 		for (LoanRequest req: reqs) {
 			req.requester.setLoanAccepted(false);
