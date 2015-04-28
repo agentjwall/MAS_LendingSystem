@@ -43,7 +43,7 @@
 									
 		/>
 				<parameter name="avgSplurgeAmount" displayName="Average Splurge Amount" type="int" 
-						defaultValue="19000" 
+						defaultValue="10000" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
@@ -79,7 +79,7 @@
 									
 		/>
 				<parameter name="minBankerAssets" displayName="Min Banker Assets" type="int" 
-						defaultValue="20000" 
+						defaultValue="200000" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
@@ -91,7 +91,7 @@
 									
 		/>
 				<parameter name="maxBankerAssets" displayName="Max Banker Assets" type="int" 
-						defaultValue="30000" 
+						defaultValue="300000" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
@@ -104,6 +104,24 @@
 		/>
 				<parameter name="numYears" displayName="Years" type="int" 
 						defaultValue="20" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="neighborhoodInfluence" displayName="Neighborhood Influence (0-1)" type="double" 
+						defaultValue=".5" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="neighborhoodInfluenceClustered" displayName="Neighborhood Influence Clustered (true/false)" type="boolean" 
+						defaultValue="false" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="desireClustered" displayName="Splurge Threshold Clustered" type="boolean" 
+						defaultValue="false" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
