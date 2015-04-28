@@ -29,6 +29,8 @@ public class WorldBuilder implements ContextBuilder<Object> {
     public static final String PARAMETER_NEIGHBORHOOD_COUNT = "neighborhoodCount";
     public static final String PARAMETER_SHARED_NEIGHBORHOOD_PROBABILITY =  "sharedNeighborhoodProbability";
     public static final String PARAMETER_NEIGHBORHOOD_CLUSTERING = "neighborhoodClustering";
+    public static final String PARAMETER_NEIGHBORHOOD_INFLUENCE_CLUSTERED = "neighborhoodInfluenceClustered";
+    public static final String PARAMETER_DESIRE_CLUSTERED = "desireClustered";
     
     // consumer parameters
     public static final String PARAMETER_COST_OF_LIVING = "costOfLiving";
@@ -39,6 +41,7 @@ public class WorldBuilder implements ContextBuilder<Object> {
     public static final String PARAMETER_CONSUMER_RISK = "meanConsumerRisk";
     public static final String PARAMETER_CONSUMER_DESIRE = "meanConsumerDesire";
     public static final String PARAMETER_AVG_SPLURGE_AMOUNT = "avgSplurgeAmount";
+    public static final String PARAMETER_NEIGHBORHOOD_INFLUENCE = "neighborhoodInfluence";
     
     // banker parameters
     public static final String PARAMETER_BANKER_RISK = "meanBankerRisk";
@@ -56,6 +59,10 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final int numYears = ((Integer) parameters.getValue(PARAMETER_NUM_YEARS)).intValue();
 		final int neighborhoodCount = ((Integer) parameters.getValue(PARAMETER_NEIGHBORHOOD_COUNT)).intValue();
 		final double sharedNeighborhoodProbability = ((Double) parameters.getValue(PARAMETER_SHARED_NEIGHBORHOOD_PROBABILITY)).intValue();
+		final int neighborhoodClustering = ((Integer) parameters.getValue(PARAMETER_NEIGHBORHOOD_CLUSTERING)).intValue();
+		final boolean neighborhoodInfluenceClustered = ((Boolean) parameters.getValue(PARAMETER_NEIGHBORHOOD_CLUSTERING)).booleanValue();
+		final boolean desireClustered = ((Boolean) parameters.getValue(PARAMETER_NEIGHBORHOOD_CLUSTERING)).booleanValue();
+		final double neighborhoodInfluence = ((Double) parameters.getValue(PARAMETER_NEIGHBORHOOD_INFLUENCE)).doubleValue();
 		final double costOfLiving = ((Double) parameters.getValue(PARAMETER_COST_OF_LIVING)).doubleValue();
 		final double maxIncome = ((Double) parameters.getValue(PARAMETER_MAX_INCOME)).doubleValue();
 		final double meanAssets = ((Double) parameters.getValue(PARAMETER_MEAN_ASSETS)).doubleValue();
@@ -67,9 +74,6 @@ public class WorldBuilder implements ContextBuilder<Object> {
 		final int maxBankerAssets = ((Integer) parameters.getValue(PARAMETER_MAX_BANKER_ASSETS)).intValue();
 		final int minBankerAssets = ((Integer) parameters.getValue(PARAMETER_MIN_BANKER_ASSETS)).intValue();
 		final int avgSplurgeAmount = ((Integer) parameters.getValue(PARAMETER_AVG_SPLURGE_AMOUNT)).intValue();
-		final double neighborhoodInfluence = 0.5;
-		final boolean neighborhoodInfluenceClustered = false;
-		final boolean desireClustered = false;
 		
 		int consumersPerNeighborhood = consumerCount / neighborhoodCount;
 		int consumersPerNeighborhoodR = consumerCount - consumersPerNeighborhood * neighborhoodCount;
