@@ -119,7 +119,7 @@ public class Banker extends AgentClass {
 
 		//System.out.println("Risk c: " + riskC);
 		//System.out.println("risk threshold: " + this.riskThreshold);
-		return riskC < this.riskThreshold? (1 - riskC) * req.amount: 0;
+		return riskC < this.riskThreshold? riskC * req.amount: 0;
 	}
 	
 	public boolean getDefaulted() {
