@@ -10,8 +10,8 @@ import repast.simphony.valueLayer.ValueLayer;
 
 public class ScheduleDispatcher {
 	
-	public int prevPositiveBankAssets;
-	public int prevConsumerSpending;
+	public int prevPositiveBankAssets = 0;
+	public int prevConsumerSpending = 0;
 	public int monthsInDecline;
 	public double totalPercentChange;
 
@@ -76,20 +76,32 @@ public class ScheduleDispatcher {
 			int totalConsumerSpending = 0;
 			for (int i = 0; i < consumers.size(); i++) {
         	 	Consumer c = (Consumer) consumers.get(i);
-        	 	totalConsumerSpending += (c.spending + c.currentSplurge);
+        	 	totalConsumerSpending += c.spending;
+        	 	if(c.isSplurging()){
+        	 		totalConsumerSpending += c.currentSplurge;
+        	 	} 
          	}
-			double percentChangeCS = (totalConsumerSpending - prevConsumerSpending)/(prevConsumerSpending+1);
-		
+			double percentChangeCS;
+			if (prevConsumerSpending == 0){
+				percentChangeCS = 0;
+			}else{
+				percentChangeCS = (totalConsumerSpending - prevConsumerSpending)/(prevConsumerSpending);
+			}
 			// figure out if bank assets-bank defaulted assets has increased or decreased
 			int totalPositiveBankAssets = 0;
 			for (int i = 0; i < bankers.size(); i++) {
         	 	Banker b = (Banker) bankers.get(i);
         	 	totalPositiveBankAssets += (b.assets - b.defaultedAssets);
          	}
-			double percentChangeBA = (totalPositiveBankAssets - prevPositiveBankAssets)/(prevPositiveBankAssets+1);
-		
+			double percentChangeBA;
+			if (prevPositiveBankAssets == 0){
+				percentChangeBA = 0;
+			}else{
+				percentChangeBA = (totalPositiveBankAssets - prevPositiveBankAssets)/(prevPositiveBankAssets);
+			}
 			totalPercentChange = percentChangeCS + percentChangeBA;
-			
+			prevConsumerSpending = totalConsumerSpending;
+			prevPositiveBankAssets = totalPositiveBankAssets;
 		}
 		
 		public double getTotalPercentChange(){
