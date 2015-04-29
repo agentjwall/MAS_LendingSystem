@@ -1,20 +1,48 @@
 <repast.simphony.data2.engine.DataSetDescriptor>
-  <name>defaultedBankCount</name>
+  <name>DefaultInfo</name>
   <type>AGGREGATE</type>
   <inclTick>true</inclTick>
   <inclBatchRun>false</inclBatchRun>
   <inclRandomSeed>false</inclRandomSeed>
   <scheduleParams>
-    <start>1.0</start>
+    <start>0.0</start>
     <interval>1.0</interval>
     <priority>-Infinity</priority>
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>97034740</hashCode>
+    <hashCode>1611406781</hashCode>
   </scheduleParams>
   <atEnd>false</atEnd>
-  <methodDataSources class="linked-hash-map"/>
+  <methodDataSources class="linked-hash-map">
+    <entry>
+      <string>Assets</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>Assets</id>
+        <className>MAS_LendingSystem.Banker</className>
+        <methodName>getAssets</methodName>
+        <aggType>SUM</aggType>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>Is Defaulted</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>Is Defaulted</id>
+        <className>MAS_LendingSystem.Banker</className>
+        <methodName>getDefaulted</methodName>
+        <aggType>SUM</aggType>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>Defaulted Assets</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>Defaulted Assets</id>
+        <className>MAS_LendingSystem.Banker</className>
+        <methodName>getDefaultedAssets</methodName>
+        <aggType>SUM</aggType>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+  </methodDataSources>
   <countSources class="linked-hash-map"/>
   <customNADataSources class="linked-hash-map"/>
   <customAggDataSources class="linked-hash-map"/>

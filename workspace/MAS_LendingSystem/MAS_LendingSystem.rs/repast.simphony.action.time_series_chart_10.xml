@@ -1,8 +1,8 @@
 <repast.simphony.chart2.engine.TimeSeriesChartDescriptor>
-  <name>Defaulted Banks</name>
-  <dataSet>defaultedBankCount</dataSet>
+  <name>Defaulted Bank Count</name>
+  <dataSet>Defaulted Bank Count</dataSet>
   <xAxisLabel>Tick Count</xAxisLabel>
-  <yAxisLabel>getDefaultedMethod</yAxisLabel>
+  <yAxisLabel>Defaulted Bank Count</yAxisLabel>
   <chartTitle>Defaulted Banks</chartTitle>
   <type>TIME_SERIES</type>
   <background>
@@ -12,22 +12,22 @@
     <alpha>255</alpha>
   </background>
   <gridLineColor>
-    <red>0</red>
-    <green>0</green>
-    <blue>0</blue>
+    <red>255</red>
+    <green>255</green>
+    <blue>255</blue>
     <alpha>255</alpha>
   </gridLineColor>
   <showGrid>true</showGrid>
   <showLegend>true</showLegend>
   <seriesIds>
     <entry>
-      <string>getDefaultedMethod</string>
+      <string>Defaulted Bank Count</string>
       <SeriesData>
-        <label>getDefaultedMethod</label>
+        <label>Defaulted Bank Count</label>
         <color>
-          <red>255</red>
+          <red>0</red>
           <green>0</green>
-          <blue>51</blue>
+          <blue>255</blue>
           <alpha>255</alpha>
         </color>
       </SeriesData>

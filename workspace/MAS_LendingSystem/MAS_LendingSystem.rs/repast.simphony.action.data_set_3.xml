@@ -1,7 +1,6 @@
 <repast.simphony.data2.engine.DataSetDescriptor>
-  <name>Percent Change of the Economy</name>
-  <type>NON_AGGREGATE</type>
-  <sourceType>MAS_LendingSystem.ScheduleDispatcher</sourceType>
+  <name>Defaulted Bank Count</name>
+  <type>AGGREGATE</type>
   <inclTick>true</inclTick>
   <inclBatchRun>false</inclBatchRun>
   <inclRandomSeed>false</inclRandomSeed>
@@ -12,16 +11,17 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>-1477971698</hashCode>
+    <hashCode>1326289233</hashCode>
   </scheduleParams>
   <atEnd>false</atEnd>
   <methodDataSources class="linked-hash-map">
     <entry>
-      <string>TotalPercentChange</string>
+      <string>Defaulted Bank Count</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>TotalPercentChange</id>
-        <className>MAS_LendingSystem.ScheduleDispatcher</className>
-        <methodName>getTotalPercentChange</methodName>
+        <id>Defaulted Bank Count</id>
+        <className>MAS_LendingSystem.Banker</className>
+        <methodName>getDefaulted</methodName>
+        <aggType>SUM</aggType>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
   </methodDataSources>

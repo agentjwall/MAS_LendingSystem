@@ -1,13 +1,12 @@
 <repast.simphony.data2.engine.FileSinkDescriptor>
-  <name>Assets</name>
-  <dataSet>DefaultInfo</dataSet>
+  <name>Dafaulted Banks</name>
+  <dataSet>Defaulted Bank Count</dataSet>
   <delimiter>,</delimiter>
   <format>TABULAR</format>
   <sourceIds class="linked-hash-set">
-    <string>Assets</string>
-    <string>Defaulted Assets</string>
-    <string>tick</string>
+    <string>Is Defaulted</string>
+    <string>Defaulted Bank Count</string>
   </sourceIds>
-  <fileName>Assets.txt</fileName>
+  <fileName>DefaultedBanks.txt</fileName>
   <addTimeStamp>true</addTimeStamp>
 </repast.simphony.data2.engine.FileSinkDescriptor>
