@@ -45,7 +45,7 @@ public class ScheduleDispatcher {
          }
          
          //this.updateBackground(bankers, consumers);
-         		
+         this.calculateTotalPercentChangeOfEconomy(bankers, consumers);		
 	}
 	 
 	
@@ -71,17 +71,14 @@ public class ScheduleDispatcher {
 		}
 		
 		public void calculateTotalPercentChangeOfEconomy(IndexedIterable<Object> bankers, IndexedIterable<Object> consumers){
-			Context<Object> context = ScheduleDispatcher.getContext();
-			if (context == null) {
-					return;
-			}
+		
 			// figure out if consumer spending has increased or decreased
 			int totalConsumerSpending = 0;
 			for (int i = 0; i < consumers.size(); i++) {
         	 	Consumer c = (Consumer) consumers.get(i);
         	 	totalConsumerSpending += (c.spending + c.currentSplurge);
          	}
-			double percentChangeCS = (totalConsumerSpending - prevConsumerSpending)/prevConsumerSpending;
+			double percentChangeCS = (totalConsumerSpending - prevConsumerSpending)/(prevConsumerSpending+1);
 		
 			// figure out if bank assets-bank defaulted assets has increased or decreased
 			int totalPositiveBankAssets = 0;
@@ -89,7 +86,7 @@ public class ScheduleDispatcher {
         	 	Banker b = (Banker) bankers.get(i);
         	 	totalPositiveBankAssets += (b.assets - b.defaultedAssets);
          	}
-			double percentChangeBA = (totalPositiveBankAssets - prevPositiveBankAssets)/prevPositiveBankAssets;
+			double percentChangeBA = (totalPositiveBankAssets - prevPositiveBankAssets)/(prevPositiveBankAssets+1);
 		
 			totalPercentChange = percentChangeCS + percentChangeBA;
 			

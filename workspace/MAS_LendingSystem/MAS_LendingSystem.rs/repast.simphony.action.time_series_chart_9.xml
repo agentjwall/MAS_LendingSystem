@@ -1,9 +1,9 @@
 <repast.simphony.chart2.engine.TimeSeriesChartDescriptor>
-  <name>Defaulted Banks</name>
-  <dataSet>defaultedBankCount</dataSet>
+  <name>Time Series Chart</name>
+  <dataSet>Percent Change of the Economy</dataSet>
   <xAxisLabel>Tick Count</xAxisLabel>
-  <yAxisLabel>getDefaultedMethod</yAxisLabel>
-  <chartTitle>Defaulted Banks</chartTitle>
+  <yAxisLabel>Percent Change of the Economy</yAxisLabel>
+  <chartTitle>Percent Change of the Economy</chartTitle>
   <type>TIME_SERIES</type>
   <background>
     <red>192</red>
@@ -12,27 +12,23 @@
     <alpha>255</alpha>
   </background>
   <gridLineColor>
-    <red>0</red>
-    <green>0</green>
-    <blue>0</blue>
+    <red>255</red>
+    <green>255</green>
+    <blue>255</blue>
     <alpha>255</alpha>
   </gridLineColor>
   <showGrid>true</showGrid>
   <showLegend>true</showLegend>
   <seriesIds>
     <entry>
-      <string>getDefaultedMethod</string>
+      <string>TotalPercentChange</string>
       <SeriesData>
-        <label>getDefaultedMethod</label>
-        <color>
-          <red>255</red>
-          <green>0</green>
-          <blue>51</blue>
-          <alpha>255</alpha>
-        </color>
+        <label></label>
       </SeriesData>
     </entry>
   </seriesIds>
-  <dataValueIds/>
+  <dataValueIds>
+    <string>TotalPercentChange</string>
+  </dataValueIds>
   <plotRangeLength>-1</plotRangeLength>
 </repast.simphony.chart2.engine.TimeSeriesChartDescriptor>
