@@ -91,7 +91,7 @@ public class ScheduleDispatcher {
 			int totalPositiveBankAssets = 0;
 			for (int i = 0; i < bankers.size(); i++) {
         	 	Banker b = (Banker) bankers.get(i);
-        	 	totalPositiveBankAssets += (b.assets - b.defaultedAssets);
+        	 	totalPositiveBankAssets += b.getNetAssets();
          	}
 			double percentChangeBA;
 			if (prevPositiveBankAssets == 0){
