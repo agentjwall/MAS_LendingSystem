@@ -143,6 +143,19 @@ public class Banker extends AgentClass {
 		return this.defaultedAssets;
 	}
 	
+	public double getNetAssets() {
+		double netAssets = this.assets;
+		ArrayList<Loan> loans = new ArrayList<Loan>(this.loans);
+		
+		for (Loan l: loans) {
+			if (l.principle > 0) {
+				netAssets += l.principle;
+			}
+		}
+		
+		return netAssets;
+	}
+	
 
 
 }

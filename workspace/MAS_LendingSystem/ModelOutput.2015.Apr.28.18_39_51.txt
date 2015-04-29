@@ -1,0 +1,2 @@
+"Assets","Defaulted Assets","tick"
+1158752.4868018276,0.0,0.0

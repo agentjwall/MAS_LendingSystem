@@ -1,0 +1,2 @@
+"run","randomSeed","meanConsumerRisk","neighborhoodCount","costOfLiving","minBankerAssets","meanBankerRisk","meanForIncomeDist","bankerCount","consumerCount","sharedNeighborhoodProbability","meanSpending","neighborhoodInfluenceClustered","avgSplurgeAmount","desireClustered","neighborhoodInfluence","maxIncome","meanConsumerDesire","maxBankerAssets","numYears","meanAssets"
+1,1,0.5,12,20000.0,200000,0.1,0.5,5,200,0.04,0.5,"false",10000,"false",0.5,30000.0,0.5,300000,20,0.5
