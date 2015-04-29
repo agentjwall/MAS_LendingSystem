@@ -13,7 +13,7 @@
 									
 		/>
 				<parameter name="meanConsumerRisk" displayName="Mean Consumer Risk (0 to 1)" type="double" 
-						defaultValue="0.5" 
+						defaultValue="0.25" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
@@ -67,7 +67,7 @@
 									
 		/>
 				<parameter name="meanConsumerDesire" displayName="Mean Consumer Desire to Splurge" type="double" 
-						defaultValue="0.5" 
+						defaultValue="0.25" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
@@ -79,7 +79,7 @@
 									
 		/>
 				<parameter name="meanBankerRisk" displayName="Mean Bank Risk (0 to 1)" type="double" 
-						defaultValue="0.5" 
+						defaultValue="0.25" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
@@ -103,7 +103,7 @@
 									
 		/>
 				<parameter name="neighborhoodInfluence" displayName="Neighborhood Influence (0-1)" type="double" 
-						defaultValue=".5" 
+						defaultValue=".25" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
