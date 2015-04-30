@@ -61,84 +61,84 @@ plotMonthsInRecession <- function(data, numRuns, experimentNum, ylimMax = 100) {
 
 ## Experiment 1 section
 e1_runNumbers <- getRunNumbers(e1_tpc)
-
+e1_tpc_frame <- as.data.frame(matrix(NA, nrow=240))
 for (run in e1_runNumbers) {
   indexes <- getIndexesByRun(e1_tpc, run)
   tpc <- e1_tpc$TotalPercentChange[indexes]
   tpc_name <- paste("tpc", run, sep="_")
-  e1_tpc[[tpc_name]] <- tpc
+  e1_tpc_frame[[tpc_name]] <- tpc
 }
 
 ## Graph 1, 5, 9, 2, 6, 10
-plot(e1_tpc$tpc_1,type="l",col=1, xlim=c(0, 240), xlab="Tick", ylab="Total % Change in Economy",
+plot(e1_tpc_frame$tpc_1,type="l",col=1, xlim=c(0, 240), xlab="Tick", ylab="Total % Change in Economy",
      main="Experiment 1: Runs 1, 2, 5, 6, 9, and 10")
-lines(e1_tpc_force, col=2)
-lines(e1_tpc$tpc_5,col=2)
-lines(e1_tpc$tpc_9, col=3)
-lines(e1_tpc$tpc_2, col=4)
-lines(e1_tpc$tpc_6, col=5)
-lines(e1_tpc$tpc_12, col=2)
+lines(e1_tpc_frame$tpc_5,col=2)
+lines(e1_tpc_frame$tpc_9, col=3)
+lines(e1_tpc_frame$tpc_2, col=4)
+lines(e1_tpc_frame$tpc_6, col=5)
+lines(e1_tpc_frame$tpc_12, col=2)
 
 ## Graph 1, 5, and 9
-plot(e1_tpc$tpc_1,type="l",col=1, xlim=c(0, 240), xlab="Tick", ylab="Total % Change in Economy",
+plot(e1_tpc_frame$tpc_1,type="l",col=1, xlim=c(0, 240), xlab="Tick", ylab="Total % Change in Economy",
      main="Experiment 1: Runs 1, 5, and 9")
-lines(e1_tpc$tpc_5,col=2)
-lines(e1_tpc$tpc_9, col=4)
-monthsInRecession(e1_tpc$tpc_1)
+lines(e1_tpc_frame$tpc_5,col=2)
+lines(e1_tpc_frame$tpc_9, col=4)
+monthsInRecession(e1_tpc_frame$tpc_1)
 
 ## Months in Recession per experiment
-plotMonthsInRecession(e1_tpc, length(e1_runNumbers), 1, 80)
+plotMonthsInRecession(e1_tpc_frame, length(e1_runNumbers), 1, 80)
 
 
 ### Experiment 2 Section
 e2_runNumbers <- getRunNumbers(e2_tpc)
-
+e2_tpc_frame <- as.data.frame(matrix(NA, nrow=240))
 for (run in e2_runNumbers) {
   indexes <- getIndexesByRun(e2_tpc, run)
   tpc <- e2_tpc$TotalPercentChange[indexes]
   tpc_name <- paste("tpc", run, sep="_")
-  e2_tpc[[tpc_name]] <- tpc
+  e2_tpc_frame[[tpc_name]] <- tpc
 }
 
 e2Update_runNumbers <- getRunNumbers(e2_tpcUpdate)
-
+e2_tpcUpdate_frame <- as.data.frame(matrix(NA, nrow=240))
 for (run in e2Update_runNumbers) {
   indexes <- getIndexesByRun(e2_tpcUpdate, run)
   tpc <- e2_tpcUpdate$TotalPercentChange[indexes]
   tpc_name <- paste("tpc", run, sep="_")
-  e2_tpcUpdate[[tpc_name]] <- tpc
+  e2_tpcUpdate_frame[[tpc_name]] <- tpc
 }
 
 ## 1, 2, 3, 4
-plot(e2_tpc$tpc_1,type="l",col=1, xlim=c(0, 240), xlab="Tick", ylab="Total % Change in Economy",
+plot(e2_tpc_frame$tpc_1,type="l",col=1, xlim=c(0, 240), xlab="Tick", ylab="Total % Change in Economy",
      main="Experiment 2: Runs 1, 2, 3, and 4")
-lines(e2_tpc$tpc_2,col=2)
-lines(e2_tpc$tpc_3,col=3)
-lines(e2_tpc$tpc_4,col=4)
+lines(e2_tpc_frame$tpc_2,col=2)
+lines(e2_tpc_frame$tpc_3,col=3)
+lines(e2_tpc_frame$tpc_4,col=4)
 
 ## Months in Recession per experiment
-plotMonthsInRecession(e2_tpc, length(e2_runNumbers), 2, 80)
-plotMonthsInRecession(e2_tpcUpdate, length(e2Update_runNumbers), 2, 540)
+plotMonthsInRecession(e2_tpc_frame, length(e2_runNumbers), 2, 80)
+plotMonthsInRecession(e2_tpcUpdate_frame, length(e2Update_runNumbers), 2, 80)
 
 
 ### Experiment 3 Section
 e3_runNumbers <- getRunNumbers(e3_tpc)
+e3_tpc_frame <- as.data.frame(matrix(NA, nrow=240))
 
 for (run in e3_runNumbers) {
   indexes <- getIndexesByRun(e3_tpc, run)
   tpc <- e3_tpc$TotalPercentChange[indexes]
   tpc_name <- paste("tpc", run, sep="_")
-  e3_tpc[[tpc_name]] <- tpc
+  e3_tpc_frame[[tpc_name]] <- tpc[1:240]
+  
 }
-plot(e3_tpc$tpc_3,type="l",col=1, xlim=c(0, 240), xlab="Tick", ylab="Total % Change in Economy",
+plot(e3_tpc_frame$tpc_3,type="l",col=1, xlim=c(0, 240), xlab="Tick", ylab="Total % Change in Economy",
      main="Baseline Environment")
-plotMonthsInRecession(e3_tpc, length(e3_runNumbers), 3, 550)
+plotMonthsInRecession(e3_tpc_frame, length(e3_runNumbers), 3, 80)
 
 
 ### Experiment 4 Section
 e4_runNumbers <- getRunNumbers(e4_tpc)
-e4_matrix <- matrix(NA, nrow=240)
-e4_tpc_frame <- as.data.frame(e4_matrix)
+e4_tpc_frame <- as.data.frame(matrix(NA, nrow=240))
 for (run in e4_runNumbers) {
   indexes <- getIndexesByRun(e4_tpc, run)
   tpc <- e4_tpc$TotalPercentChange[indexes]
