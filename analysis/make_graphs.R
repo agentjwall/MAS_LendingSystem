@@ -3,7 +3,7 @@ e2_assets <- read.csv("Assets Output E2 600a.csv")
 e1_tpc <- read.csv("TPC Output E1 600agents.csv")
 e2_tpc <- read.csv("TPC Output E2 600a.csv")
 e3_tpc <- read.csv("TPC Output E3 600a.csv")
-
+e4_tpc <- read.csv("TPC E4.csv")
 
 ## helper function section
 
@@ -119,6 +119,21 @@ for (run in e3_runNumbers) {
   tpc_name <- paste("tpc", run, sep="_")
   e3_tpc[[tpc_name]] <- tpc
 }
+plot(e3_tpc$tpc_3,type="l",col=1, xlim=c(0, 240), xlab="Tick", ylab="Total % Change in Economy",
+     main="Baseline Environment")
 plotMonthsInRecession(e3_tpc, length(e3_runNumbers), 3, 550)
 
+
+### Experiment 4 Section
+e4_runNumbers <- getRunNumbers(e4_tpc)
+e4_matrix <- matrix(NA, nrow=240)
+e4_tpc_frame <- as.data.frame(e4_matrix)
+for (run in e4_runNumbers) {
+  indexes <- getIndexesByRun(e4_tpc, run)
+  tpc <- e4_tpc$TotalPercentChange[indexes]
+  tpc_name <- paste("tpc", run, sep="_")
+  e4_tpc_frame[[tpc_name]] <- tpc[1:240]
+}
+
+plotMonthsInRecession(e4_tpc_frame, length(e4_runNumbers), 4, 80)
 
