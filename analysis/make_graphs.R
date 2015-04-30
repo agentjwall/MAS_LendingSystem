@@ -1,4 +1,4 @@
-setwd("/Users//clottman//Dropbox//Junior Year//MAS//project");
+setwd("/Users//clottman//Documents//Code//MAS_LendingSystem");
 
 e1_assets <- read.csv("Assets Output E1 600a.csv")
 e2_assets <- read.csv("Assets Output E2 600a.csv")
@@ -31,7 +31,8 @@ for (run in runNumbers) {
 }
 
 ## Graph 1, 5, 9, 2, 6, 10
-plot(e1_tpc$tpc_1,type="l",col=1, xlim=c(0, 240), xlab="Tick", ylab="Total % Change in Economy")
+plot(e1_tpc$tpc_1,type="l",col=1, xlim=c(0, 240), xlab="Tick", ylab="Total % Change in Economy",
+     main="Experiment 1: Runs 1, 2, 5, 6, 9, and 10")
 lines(e1_tpc_force, col=2)
 lines(e1_tpc$tpc_5,col=2)
 lines(e1_tpc$tpc_9, col=3)
@@ -40,7 +41,8 @@ lines(e1_tpc$tpc_6, col=5)
 lines(e1_tpc$tpc_12, col=2)
 
 ## Graph 1, 5, and 9
-plot(e1_tpc$tpc_1,type="l",col=1, xlim=c(0, 240), xlab="Tick", ylab="Total % Change in Economy")
+plot(e1_tpc$tpc_1,type="l",col=1, xlim=c(0, 240), xlab="Tick", ylab="Total % Change in Economy",
+     main="Experiment 1: Runs 1, 5, and 9")
 lines(e1_tpc$tpc_5,col=2)
 lines(e1_tpc$tpc_9, col=4)
 
