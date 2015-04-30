@@ -46,7 +46,7 @@ monthsInRecession <- function(list) {
 runNumbers <- getRunNumbers(e1_tpc)
 
 for (run in runNumbers) {
-  indexes <- getIndexesByRun(e1_assets, run)
+  indexes <- getIndexesByRun(e1_tpc, run)
   tpc <- e1_tpc$total.percent.change[indexes]
   tpc_name <- paste("tpc", run, sep="_")
   run_name <- paste("run", run, sep="_")
