@@ -63,7 +63,7 @@ e1_runNumbers <- getRunNumbers(e1_tpc)
 
 for (run in e1_runNumbers) {
   indexes <- getIndexesByRun(e1_tpc, run)
-  tpc <- e1_tpc$total.percent.change[indexes]
+  tpc <- e1_tpc$TotalPercentChange[indexes]
   tpc_name <- paste("tpc", run, sep="_")
   e1_tpc[[tpc_name]] <- tpc
 }
@@ -94,7 +94,7 @@ e2_runNumbers <- getRunNumbers(e2_tpc)
 
 for (run in e2_runNumbers) {
   indexes <- getIndexesByRun(e2_tpc, run)
-  tpc <- e2_tpc$Total.Percent.Change[indexes]
+  tpc <- e2_tpc$TotalPercentChange[indexes]
   tpc_name <- paste("tpc", run, sep="_")
   e2_tpc[[tpc_name]] <- tpc
 }
