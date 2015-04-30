@@ -1,0 +1,15 @@
+<repast.simphony.data2.engine.FileSinkDescriptor>
+  <name>Assets</name>
+  <dataSet>Asset Info</dataSet>
+  <delimiter>,</delimiter>
+  <format>TABULAR</format>
+  <sourceIds class="linked-hash-set">
+    <string>Assets</string>
+    <string>Defaulted Assets</string>
+    <string>Net Assets</string>
+    <string>Remaining Bank Assets</string>
+    <string>Defaulted Bank Count</string>
+  </sourceIds>
+  <fileName>Assets.txt</fileName>
+  <addTimeStamp>true</addTimeStamp>
+</repast.simphony.data2.engine.FileSinkDescriptor>

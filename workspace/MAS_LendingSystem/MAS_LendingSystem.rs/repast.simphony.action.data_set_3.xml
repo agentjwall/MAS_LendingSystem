@@ -1,5 +1,5 @@
 <repast.simphony.data2.engine.DataSetDescriptor>
-  <name>Defaulted Bank Count</name>
+  <name>Asset Info</name>
   <type>AGGREGATE</type>
   <inclTick>true</inclTick>
   <inclBatchRun>false</inclBatchRun>
@@ -15,6 +15,33 @@
   </scheduleParams>
   <atEnd>false</atEnd>
   <methodDataSources class="linked-hash-map">
+    <entry>
+      <string>Net Assets</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>Net Assets</id>
+        <className>MAS_LendingSystem.Banker</className>
+        <methodName>getNetAssets</methodName>
+        <aggType>SUM</aggType>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>Remaining Bank Assets</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>Remaining Bank Assets</id>
+        <className>MAS_LendingSystem.Banker</className>
+        <methodName>getAssets</methodName>
+        <aggType>SUM</aggType>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>Defaulted Assets</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>Defaulted Assets</id>
+        <className>MAS_LendingSystem.Banker</className>
+        <methodName>getDefaultedAssets</methodName>
+        <aggType>SUM</aggType>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
     <entry>
       <string>Defaulted Bank Count</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
