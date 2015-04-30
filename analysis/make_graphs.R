@@ -2,6 +2,8 @@ e1_assets <- read.csv("Assets Output E1 600a.csv")
 e2_assets <- read.csv("Assets Output E2 600a.csv")
 e1_tpc <- read.csv("TPC Output E1 600agents.csv")
 e2_tpc <- read.csv("TPC Output E2 600a.csv")
+e3_tpc <- read.csv("TPC Output E3 600a.csv")
+
 
 ## helper function section
 
@@ -41,7 +43,7 @@ monthsInRecession <- function(list) {
   monthsInRecession
 }
 
-plotMonthsInRecession <- function(data, numRuns, experimentNum) {
+plotMonthsInRecession <- function(data, numRuns, experimentNum, ylimMax = 100) {
   recessionData <- vector()
   for (i in 1:numRuns) {
     col_name <- paste("tpc", i, sep="_")
@@ -50,7 +52,7 @@ plotMonthsInRecession <- function(data, numRuns, experimentNum) {
   xnum <- 1:numRuns
   bpLabel <- paste("Months in Recession per Run (Experiment ", experimentNum, ")", sep="")
   bp2 <- barplot(recessionData, names=xnum, main=bpLabel,
-                 ylab="months", xlab="run", ylim=c(0,80), col=4)
+                 ylab="months", xlab="run", ylim=c(0, ylimMax), col=4)
   text(x = bp2, y = recessionData, label = recessionData, pos = 3, cex = 0.8, col = 4)
 }
 
@@ -84,7 +86,7 @@ lines(e1_tpc$tpc_9, col=4)
 monthsInRecession(e1_tpc$tpc_1)
 
 ## Months in Recession per experiment
-plotMonthsInRecession(e1_tpc, length(e1_runNumbers), 1)
+plotMonthsInRecession(e1_tpc, length(e1_runNumbers), 1, 80)
 
 
 ### Experiment 2 Section
@@ -105,6 +107,18 @@ lines(e2_tpc$tpc_3,col=3)
 lines(e2_tpc$tpc_4,col=4)
 
 ## Months in Recession per experiment
-plotMonthsInRecession(e2_tpc, length(e2_runNumbers), 2)
+plotMonthsInRecession(e2_tpc, length(e2_runNumbers), 2, 80)
+
+
+### Experiment 3 Section
+e3_runNumbers <- getRunNumbers(e3_tpc)
+
+for (run in e3_runNumbers) {
+  indexes <- getIndexesByRun(e3_tpc, run)
+  tpc <- e3_tpc$TotalPercentChange[indexes]
+  tpc_name <- paste("tpc", run, sep="_")
+  e3_tpc[[tpc_name]] <- tpc
+}
+plotMonthsInRecession(e3_tpc, length(e3_runNumbers), 3, 550)
 
 
