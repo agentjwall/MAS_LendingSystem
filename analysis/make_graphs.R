@@ -90,15 +90,6 @@ plotMonthsInRecession(e1_tpc_frame, length(e1_runNumbers), 1, 80)
 
 
 ### Experiment 2 Section
-e2_runNumbers <- getRunNumbers(e2_tpc)
-e2_tpc_frame <- as.data.frame(matrix(NA, nrow=240))
-for (run in e2_runNumbers) {
-  indexes <- getIndexesByRun(e2_tpc, run)
-  tpc <- e2_tpc$TotalPercentChange[indexes]
-  tpc_name <- paste("tpc", run, sep="_")
-  e2_tpc_frame[[tpc_name]] <- tpc
-}
-
 e2Update_runNumbers <- getRunNumbers(e2_tpcUpdate)
 e2_tpcUpdate_frame <- as.data.frame(matrix(NA, nrow=240))
 for (run in e2Update_runNumbers) {
@@ -116,7 +107,6 @@ lines(e2_tpc_frame$tpc_3,col=3)
 lines(e2_tpc_frame$tpc_4,col=4)
 
 ## Months in Recession per experiment
-plotMonthsInRecession(e2_tpc_frame, length(e2_runNumbers), 2, 80)
 plotMonthsInRecession(e2_tpcUpdate_frame, length(e2Update_runNumbers), 2, 80)
 
 
