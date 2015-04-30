@@ -72,7 +72,6 @@ for (run in e1_runNumbers) {
 ## Graph 1, 5, 9, 2, 6, 10
 plot(e1_tpc$tpc_1,type="l",col=1, xlim=c(0, 240), xlab="Tick", ylab="Total % Change in Economy",
      main="Experiment 1: Runs 1, 2, 5, 6, 9, and 10")
-lines(e1_tpc_force, col=2)
 lines(e1_tpc$tpc_5,col=2)
 lines(e1_tpc$tpc_9, col=3)
 lines(e1_tpc$tpc_2, col=4)
