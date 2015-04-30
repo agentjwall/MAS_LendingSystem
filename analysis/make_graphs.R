@@ -18,7 +18,6 @@ getIndexesByRun <- function(list, desiredRun) {
 
 monthsInRecession <- function(list) {
   recessionConstant <- 3
-  
   monthsDecreasing <- 0
   monthsInRecession <- 0
   stopAt <- length(list) - 1
@@ -41,7 +40,20 @@ monthsInRecession <- function(list) {
   }
   monthsInRecession
 }
-                      
+
+plotMonthsInRecession <- function(data, numRuns, experimentNum) {
+  recessionData <- vector()
+  for (i in 1:numRuns) {
+    col_name <- paste("tpc", i, sep="_")
+    recessionData[i] <- monthsInRecession(data[[col_name]])
+  }
+  xnum <- 1:numRuns
+  bpLabel <- paste("Months in Recession per Run (Experiment ", experimentNum, ")", sep="")
+  bp2 <- barplot(recessionData, names=xnum, main=bpLabel,
+                 ylab="months", xlab="run", ylim=c(0,80), col=4)
+  text(x = bp2, y = recessionData, label = recessionData, pos = 3, cex = 0.8, col = 4)
+}
+
 ## execution section
 
 ## Experiment 1 section
@@ -72,15 +84,8 @@ lines(e1_tpc$tpc_9, col=4)
 monthsInRecession(e1_tpc$tpc_1)
 
 ## Months in Recession per experiment
-recessionData <- vector()
-for (i in 1:12) {
-  col_name <- paste("tpc", i, sep="_")
-  recessionData[i] <- monthsInRecession(e1_tpc[[col_name]])
-}
-xnum <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
-bp1 <- barplot(recessionData, names=xnum, main="Months in Recession per Run (Experiment 1)",
-        ylab="months", xlab="run", ylim=c(0,80), col=4)
-text(x = bp1, y = recessionData, label = recessionData, pos = 3, cex = 0.8, col = 4)
+plotMonthsInRecession(e1_tpc, length(e1_runNumbers), 1)
+
 
 ### Experiment 2 Section
 e2_runNumbers <- getRunNumbers(e2_tpc)
@@ -100,13 +105,6 @@ lines(e2_tpc$tpc_3,col=3)
 lines(e2_tpc$tpc_4,col=4)
 
 ## Months in Recession per experiment
-recessionData <- vector()
-for (i in 1:8) {
-  col_name <- paste("tpc", i, sep="_")
-  recessionData[i] <- monthsInRecession(e2_tpc[[col_name]])
-}
-xnum <- c(1, 2, 3, 4, 5, 6, 7, 8)
-bp2 <- barplot(recessionData, names=xnum, main="Months in Recession per Run (Experiment 2)",
-        ylab="months", xlab="run", ylim=c(0,80), col=4)
-text(x = bp2, y = recessionData, label = recessionData, pos = 3, cex = 0.8, col = 4)
+plotMonthsInRecession(e2_tpc, length(e2_runNumbers), 2)
+
 
