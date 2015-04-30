@@ -43,13 +43,14 @@ monthsInRecession <- function(list) {
 }
                       
 ## execution section
-runNumbers <- getRunNumbers(e1_tpc)
 
-for (run in runNumbers) {
+## Experiment 1 section
+e1_runNumbers <- getRunNumbers(e1_tpc)
+
+for (run in e1_runNumbers) {
   indexes <- getIndexesByRun(e1_tpc, run)
   tpc <- e1_tpc$total.percent.change[indexes]
   tpc_name <- paste("tpc", run, sep="_")
-  run_name <- paste("run", run, sep="_")
   e1_tpc[[tpc_name]] <- tpc
 }
 
@@ -77,5 +78,35 @@ for (i in 1:12) {
   recessionData[i] <- monthsInRecession(e1_tpc[[col_name]])
 }
 xnum <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
-barplot(recessionData, names=xnum, main="Months In Recession per Experiment",
-        ylab="months", xlab="experiment", col=4)
+bp1 <- barplot(recessionData, names=xnum, main="Months in Recession per Run (Experiment 1)",
+        ylab="months", xlab="run", ylim=c(0,80), col=4)
+text(x = bp1, y = recessionData, label = recessionData, pos = 3, cex = 0.8, col = 4)
+
+### Experiment 2 Section
+e2_runNumbers <- getRunNumbers(e2_tpc)
+
+for (run in e2_runNumbers) {
+  indexes <- getIndexesByRun(e2_tpc, run)
+  tpc <- e2_tpc$Total.Percent.Change[indexes]
+  tpc_name <- paste("tpc", run, sep="_")
+  e2_tpc[[tpc_name]] <- tpc
+}
+
+## 1, 2, 3, 4
+plot(e2_tpc$tpc_1,type="l",col=1, xlim=c(0, 240), xlab="Tick", ylab="Total % Change in Economy",
+     main="Experiment 2: Runs 1, 2, 3, and 4")
+lines(e2_tpc$tpc_2,col=2)
+lines(e2_tpc$tpc_3,col=3)
+lines(e2_tpc$tpc_4,col=4)
+
+## Months in Recession per experiment
+recessionData <- vector()
+for (i in 1:8) {
+  col_name <- paste("tpc", i, sep="_")
+  recessionData[i] <- monthsInRecession(e2_tpc[[col_name]])
+}
+xnum <- c(1, 2, 3, 4, 5, 6, 7, 8)
+bp2 <- barplot(recessionData, names=xnum, main="Months in Recession per Run (Experiment 2)",
+        ylab="months", xlab="run", ylim=c(0,80), col=4)
+text(x = bp2, y = recessionData, label = recessionData, pos = 3, cex = 0.8, col = 4)
+
