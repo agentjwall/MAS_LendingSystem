@@ -1,5 +1,3 @@
-setwd("/Users//clottman//Documents//Code//MAS_LendingSystem");
-
 e1_assets <- read.csv("Assets Output E1 600a.csv")
 e2_assets <- read.csv("Assets Output E2 600a.csv")
 e1_tpc <- read.csv("TPC Output E1 600agents.csv")
